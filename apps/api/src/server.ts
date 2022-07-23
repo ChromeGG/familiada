@@ -64,7 +64,7 @@ export async function startServer() {
   })
 
   try {
-    const port = process.env.PORT ?? 3005
+    const port = process.env.PORT ?? 3333
     await server.listen(port, '0.0.0.0')
   } catch (err) {
     server.log.error(err)
