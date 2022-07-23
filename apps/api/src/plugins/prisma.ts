@@ -1,6 +1,6 @@
-import fp from 'fastify-plugin'
-import { FastifyPluginAsync } from 'fastify'
 import { PrismaClient } from '@prisma/client'
+import { FastifyPluginAsync } from 'fastify'
+import fp from 'fastify-plugin'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -8,7 +8,7 @@ declare module 'fastify' {
   }
 }
 
-const prismaPlugin: FastifyPluginAsync = fp(async (server, options) => {
+const prismaPlugin: FastifyPluginAsync = fp(async (server, _options) => {
   const prisma = new PrismaClient({
     log: ['error', 'warn'],
   })

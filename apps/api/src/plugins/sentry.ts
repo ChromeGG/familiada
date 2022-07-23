@@ -1,6 +1,6 @@
-import fp from 'fastify-plugin'
-import { FastifyPluginAsync } from 'fastify'
 import * as Sentry from '@sentry/node'
+import { FastifyPluginAsync } from 'fastify'
+import fp from 'fastify-plugin'
 
 const shutdownPlugin: FastifyPluginAsync = fp(async (server, options) => {
   Sentry.init({

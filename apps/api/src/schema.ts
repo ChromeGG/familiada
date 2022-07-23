@@ -1,3 +1,4 @@
+import { DateTimeResolver } from 'graphql-scalars'
 import {
   intArg,
   makeSchema,
@@ -10,7 +11,6 @@ import {
   enumType,
   booleanArg,
 } from 'nexus'
-import { DateTimeResolver } from 'graphql-scalars'
 import { User } from 'nexus-prisma'
 
 export const DateTime = asNexusMethod(DateTimeResolver, 'date')
@@ -21,8 +21,7 @@ const Query = objectType({
     t.nonNull.list.nonNull.field('allUsers', {
       type: 'User',
       resolve: async (_parent, _args, context, _info) => {
-        const users = await context.prisma.user.findMany()
-        return users
+        return await context.prisma.user.findMany()
       },
     })
 

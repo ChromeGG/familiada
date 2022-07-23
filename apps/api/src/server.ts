@@ -1,3 +1,4 @@
+import AltairFastify from 'altair-fastify-plugin'
 import fastify, {
   FastifyInstance,
   FastifyReply,
@@ -5,12 +6,12 @@ import fastify, {
   FastifyServerOptions,
 } from 'fastify'
 import mercurius from 'mercurius'
-import { schema } from './schema'
-import AltairFastify from 'altair-fastify-plugin'
-import shutdownPlugin from './plugins/shutdown'
-import prismaPlugin from './plugins/prisma'
+
 import { Context } from './context'
+import prismaPlugin from './plugins/prisma'
+import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
+import { schema } from './schema'
 
 export function createServer(opts: FastifyServerOptions = {}): FastifyInstance {
   const server = fastify(opts)
