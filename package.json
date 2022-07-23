@@ -18,8 +18,8 @@
     "turbo": "latest"
   },
   "engines": {
-    "npm": ">=7.0.0",
-    "node": ">=14.0.0"
+    "npm": ">=8.0.0",
+    "node": "18.6.0"
   },
   "dependencies": {},
   "packageManager": "pnpm@7.5.2"

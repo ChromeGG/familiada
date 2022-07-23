@@ -31,6 +31,8 @@ export function createServer(opts: FastifyServerOptions = {}): FastifyInstance {
       }
     },
   })
+
+  // @ts-ignore: It's working, fix later
   server.register(AltairFastify, {
     path: '/altair',
     baseURL: '/altair/',
