@@ -17,19 +17,19 @@ enum TeamColor {
 }
 
 model User {
-  id     BigInt @id @default(autoincrement())
+  id     Int @id @default(autoincrement())
   name   String
   team   Team   @relation(fields: [id], references: [id])
-  teamId BigInt
+  teamId Int
 }
 
 model Team {
-  id               BigInt    @id @default(autoincrement())
+  id               Int    @id @default(autoincrement())
   teamColor        TeamColor
   User             User[]
   Game             Game      @relation(fields: [gameId], references: [id])
   gameId           String
-  answearingUserId BigInt?
+  answearingUserId Int?
   score            Int
 }
 
@@ -51,7 +51,7 @@ enum GameStaus {
 
 model GamesQuestions {
   question   Question @relation(fields: [questionId], references: [id])
-  questionId BigInt
+  questionId Int
   Game       Game     @relation(fields: [gameId], references: [id])
   gameId     String
 
@@ -59,21 +59,21 @@ model GamesQuestions {
 }
 
 model Question {
-  id             BigInt           @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   text           String
   GamesQuestions GamesQuestions[]
 }
 
 model Answer {
-  id       BigInt    @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   label    String
   points   Int
   variants Variant[]
 }
 
 model Variant {
-  id       BigInt @id @default(autoincrement())
+  id       Int @id @default(autoincrement())
   text     String
   answer   Answer @relation(fields: [answerId], references: [id])
-  answerId BigInt @unique
+  answerId Int @unique
 }
