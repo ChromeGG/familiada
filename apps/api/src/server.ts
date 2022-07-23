@@ -1,4 +1,3 @@
-// require('./opentelemetry')
 import fastify, {
   FastifyInstance,
   FastifyReply,
@@ -9,7 +8,6 @@ import mercurius from 'mercurius'
 import { schema } from './schema'
 import AltairFastify from 'altair-fastify-plugin'
 import shutdownPlugin from './plugins/shutdown'
-// import openTelemetryPlugin from '@autotelic/fastify-opentelemetry'
 import prismaPlugin from './plugins/prisma'
 import { Context } from './context'
 import statusPlugin from './plugins/status'
@@ -18,12 +16,6 @@ export function createServer(opts: FastifyServerOptions = {}): FastifyInstance {
   const server = fastify(opts)
 
   server.register(shutdownPlugin)
-  // server.register(openTelemetryPlugin, {
-  //   wrapRoutes: true,
-  //   ignoreRoutes: tracingIgnoreRoutes,
-  //   formatSpanName: (serviceName, request) =>
-  //     `${request.url} - ${request.method}`,
-  // })
   server.register(statusPlugin)
   server.register(prismaPlugin)
 

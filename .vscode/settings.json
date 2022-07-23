@@ -1,3 +1,6 @@
 {
-  "cSpell.words": ["fastify"]
+  "cSpell.words": ["fastify"],
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
 }

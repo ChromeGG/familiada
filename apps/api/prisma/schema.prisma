@@ -1,5 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 generator nexusPrisma {
@@ -11,33 +11,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model User {
-//   id       Int       @id @default(autoincrement())
-//   email    String    @unique
-//   name     String?
-//   posts    Post[]
-//   comments Comment[]
-// }
+enum TeamColor {
+  RED
+  BLUE
+}
 
-// model Post {
-//   id        Int       @id @default(autoincrement())
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime  @updatedAt
-//   title     String
-//   content   String?
-//   likes     Int       @default(0)
-//   published Boolean   @default(false)
-//   author    User?     @relation(fields: [authorId], references: [id])
-//   authorId  Int?
-//   comments  Comment[]
-// }
+model User {
+  id     BigInt @id @default(autoincrement())
+  name   String
+  team   Team   @relation(fields: [id], references: [id])
+  teamId BigInt
+}
 
-// model Comment {
-//   id        Int      @id @default(autoincrement())
-//   createdAt DateTime @default(now())
-//   comment   String
-//   postId    Int
-//   post      Post     @relation(fields: [postId], references: [id])
-//   author    User     @relation(fields: [authorId], references: [id])
-//   authorId  Int
-// }
+model Team {
+  id               BigInt    @id @default(autoincrement())
+  teamColor        TeamColor
+  User             User[]
+  Game             Game      @relation(fields: [gameId], references: [id])
+  gameId           String
+  answearingUserId BigInt?
+  score            Int
+}
+
+model Game {
+  id             String           @id @unique
+  status         GameStaus        @default(LOBBY)
+  team           Team[]
+  rounds         Int
+  currentRound   Int
+  currentScore   Int
+  GamesQuestions GamesQuestions[]
+}
+
+enum GameStaus {
+  LOBBY
+  RUNNING
+  FINISHED
+}
+
+model GamesQuestions {
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId BigInt
+  Game       Game     @relation(fields: [gameId], references: [id])
+  gameId     String
+
+  @@id([gameId, questionId])
+}
+
+model Question {
+  id             BigInt           @id @default(autoincrement())
+  text           String
+  GamesQuestions GamesQuestions[]
+}
+
+model Answer {
+  id       BigInt    @id @default(autoincrement())
+  label    String
+  points   Int
+  variants Variant[]
+}
+
+model Variant {
+  id       BigInt @id @default(autoincrement())
+  text     String
+  answer   Answer @relation(fields: [answerId], references: [id])
+  answerId BigInt @unique
+}

@@ -15,17 +15,11 @@ The project is written in TypeScript and attempts to maintain a high degree of t
 
 Play with a deployed version of this API: https://fastify-prisma.up.railway.app/altair
 
-## Deploy it! 🚢
-
-[![Deploy on Railway 🚊](https://railway.app/button.svg)](https://railway.app/new?template=https%3A%2F%2Fgithub.com%2F2color%2Ffastify-graphql-nexus-prisma&plugins=postgresql&envs=SENTRY_DSN&optionalEnvs=SENTRY_DSN)
-
 ## DB Schema
 
 The database schema is defined using the [Prisma schema](./prisma/schema.prisma) which defines 3 models:
 
-- User
-- Post
-- Comment
+- TODO
 
 ## GraphQL schema
 
@@ -47,7 +41,7 @@ The relevant files are:
 1. clone repo
 2. create `.env` file and define `DATABASE_URL` and `SENTRY_DSN`
 3. `npm install`
-4. `npm run migrate:dev` to run shcema migrations with [Prisma Migrate](https://www.prisma.io/migrate)
+4. `npm run migrate:dev` to run schema migrations with [Prisma Migrate](https://www.prisma.io/migrate)
 5. `npm run dev` to start dev server and run the API
 
 ### Example trace
