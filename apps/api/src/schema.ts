@@ -12,7 +12,6 @@ import {
 } from 'nexus'
 import { DateTimeResolver } from 'graphql-scalars'
 import { User, Post, Comment } from 'nexus-prisma'
-import { Prisma } from '@prisma/client'
 
 export const DateTime = asNexusMethod(DateTimeResolver, 'date')
 
@@ -22,13 +21,7 @@ const Query = objectType({
     t.nonNull.list.nonNull.field('allUsers', {
       type: 'User',
       resolve: async (_parent, _args, context, info) => {
-        // const { tracer } = context.request.openTelemetry()
-        // const childSpan = tracer.startSpan(`prisma`).setAttributes({
-        //   'prisma.model': 'user',
-        //   'prisma.action': 'findMany',
-        // })
         const users = await context.prisma.user.findMany()
-        // childSpan.end()
         return users
       },
     })
@@ -41,7 +34,6 @@ const Query = objectType({
         },
       }),
       resolve: (_parent, _args, context) => {
-        // context.prisma.$executeRaw('')
         return { up: true }
       },
     })
@@ -52,15 +44,9 @@ const Query = objectType({
         id: nonNull(intArg()),
       },
       resolve: async (_parent, args, context, info) => {
-        // const { tracer } = context.request.openTelemetry()
-        // const childSpan = tracer.startSpan(`prisma`).setAttributes({
-        //   'prisma.model': 'post',
-        //   'prisma.action': 'findUnique',
-        // })
         const posts = await context.prisma.post.findUnique({
           where: { id: args.id || undefined },
         })
-        // childSpan.end()
         return posts
       },
     })
@@ -85,11 +71,6 @@ const Query = objectType({
               ],
             }
           : {}
-        // const { tracer } = context.request.openTelemetry()
-        // const childSpan = tracer.startSpan(`prisma`).setAttributes({
-        //   'prisma.model': 'post',
-        //   'prisma.action': 'findMany',
-        // })
         const feed = context.prisma.post.findMany({
           where: {
             published: args.published ?? true,
@@ -99,7 +80,6 @@ const Query = objectType({
           skip: args.skip || undefined,
           orderBy: args.orderBy || undefined,
         })
-        // childSpan.end()
         return feed
       },
     })
@@ -114,11 +94,6 @@ const Query = objectType({
         ),
       },
       resolve: async (_parent, args, context, info) => {
-        // const { tracer } = context.request.openTelemetry()
-        // const childSpan = tracer.startSpan(`prisma`).setAttributes({
-        //   'prisma.model': 'post',
-        //   'prisma.action': 'findMany',
-        // })
         const drafts = await context.prisma.user
           .findUnique({
             where: {
@@ -131,7 +106,6 @@ const Query = objectType({
               published: false,
             },
           })
-        // childSpan.end()
         return drafts
       },
     })
@@ -154,11 +128,7 @@ const Mutation = objectType({
         const postData = args.data.posts?.map((post) => {
           return { title: post.title, content: post.content || undefined }
         })
-        // const { tracer } = context.request.openTelemetry()
-        // const childSpan = tracer.startSpan(`prisma`).setAttributes({
-        //   'prisma.model': 'user',
-        //   'prisma.action': 'create',
-        // })
+
         try {
           const user = await context.prisma.user.create({
             data: {
@@ -171,11 +141,8 @@ const Mutation = objectType({
           })
           return user
         } catch (e) {
-          // childSpan.setAttribute('error', true)
-          // childSpan.setAttribute('prisma.error', e.toString())
           throw e
         } finally {
-          // childSpan.end()
         }
       },
     })
@@ -191,11 +158,6 @@ const Mutation = objectType({
         authorEmail: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        // const { tracer } = context.request.openTelemetry()
-        // const childSpan = tracer.startSpan(`prisma`).setAttributes({
-        //   'prisma.model': 'post',
-        //   'prisma.action': 'create',
-        // })
         const draft = await context.prisma.post.create({
           data: {
             title: args.data.title,
@@ -205,7 +167,6 @@ const Mutation = objectType({
             },
           },
         })
-        // childSpan.end()
         return draft
       },
     })
@@ -222,11 +183,6 @@ const Mutation = objectType({
         postId: nonNull(intArg()),
       },
       resolve: async (_, args, context) => {
-        // const { tracer } = context.request.openTelemetry()
-        // const childSpan = tracer.startSpan(`prisma`).setAttributes({
-        //   'prisma.model': 'comment',
-        //   'prisma.action': 'create',
-        // })
         const comment = await context.prisma.comment.create({
           data: {
             comment: args.data.comment,
@@ -238,7 +194,6 @@ const Mutation = objectType({
             },
           },
         })
-        // childSpan.end()
         return comment
       },
     })
@@ -249,11 +204,6 @@ const Mutation = objectType({
         id: nonNull(intArg()),
       },
       resolve: async (_, args, context) => {
-        // const { tracer } = context.request.openTelemetry()
-        // const childSpan = tracer.startSpan(`prisma`).setAttributes({
-        //   'prisma.model': 'post',
-        //   'prisma.action': 'update',
-        // })
         const post = await context.prisma.post.update({
           data: {
             likes: {
@@ -264,7 +214,6 @@ const Mutation = objectType({
             id: args.id,
           },
         })
-        // childSpan.end()
         return post
       },
     })
@@ -276,16 +225,10 @@ const Mutation = objectType({
         published: nonNull(booleanArg()),
       },
       resolve: async (_, args, context) => {
-        // const { tracer } = context.request.openTelemetry()
-        // const childSpan = tracer.startSpan(`prisma`).setAttributes({
-        //   'prisma.model': 'post',
-        //   'prisma.action': 'update',
-        // })
         const post = await context.prisma.post.update({
           where: { id: args.id },
           data: { published: args.published },
         })
-        // childSpan.end()
         return post
       },
     })
@@ -296,15 +239,9 @@ const Mutation = objectType({
         id: nonNull(intArg()),
       },
       resolve: async (_, args, context) => {
-        // const { tracer } = context.request.openTelemetry()
-        // const childSpan = tracer.startSpan(`prisma`).setAttributes({
-        //   'prisma.model': 'post',
-        //   'prisma.action': 'delete',
-        // })
         const post = await context.prisma.post.delete({
           where: { id: args.id },
         })
-        // childSpan.end()
         return post
       },
     })
