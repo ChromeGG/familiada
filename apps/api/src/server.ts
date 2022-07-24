@@ -8,13 +8,18 @@ import fastify, {
 import mercurius from 'mercurius'
 
 import { Context } from './context'
+import { envPlugin, envOptions } from './plugins/env'
 import prismaPlugin from './plugins/prisma'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
 import { schema } from './schema'
 
-export function createServer(opts: FastifyServerOptions = {}): FastifyInstance {
+export async function createServer(
+  opts: FastifyServerOptions = {}
+): Promise<FastifyInstance> {
   const server = fastify(opts)
+
+  await server.register(envPlugin, envOptions).after()
 
   server.register(shutdownPlugin)
   server.register(statusPlugin)
@@ -33,7 +38,7 @@ export function createServer(opts: FastifyServerOptions = {}): FastifyInstance {
     },
   })
 
-  // @ts-ignore: It's working, fix later
+  // @ts-ignore: It's working, fix it later
   server.register(AltairFastify, {
     path: '/altair',
     baseURL: '/altair/',
@@ -51,18 +56,21 @@ export function createServer(opts: FastifyServerOptions = {}): FastifyInstance {
 }
 
 export async function startServer() {
-  const server = createServer({
+  const server = await createServer({
     logger: {
       level: 'info',
     },
+    // TODO use typed config
     disableRequestLogging: process.env.ENABLE_REQUEST_LOGGING !== 'true',
   })
 
-  try {
-    const port = process.env.PORT ?? 3333
-    await server.listen(port, '0.0.0.0')
-  } catch (err) {
-    server.log.error(err)
-    process.exit(1)
+  const start = async () => {
+    try {
+      await server.listen({ host: '0.0.0.0', port: server.config.PORT })
+    } catch (err) {
+      server.log.error(err)
+      process.exit(1)
+    }
   }
+  return start()
 }

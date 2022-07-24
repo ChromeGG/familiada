@@ -18,6 +18,7 @@ importers:
 
   apps/api:
     specifiers:
+      '@fastify/env': 4.0.0
       '@prisma/client': 4.1.0
       '@sentry/node': 6.2.5
       '@sentry/tracing': 6.2.5
@@ -39,7 +40,10 @@ importers:
       ts-node: 10.9.1
       ts-node-dev: 2.0.0
       typescript: 4.7.4
+      zod: ^3.17.10
+      zod-to-json-schema: ^3.17.0
     dependencies:
+      '@fastify/env': 4.0.0
       '@prisma/client': 4.1.0_prisma@4.1.0
       '@sentry/node': 6.2.5
       '@sentry/tracing': 6.2.5
@@ -52,6 +56,8 @@ importers:
       mercurius: 10.1.0
       nexus: 1.3.0_graphql@16.5.0
       nexus-prisma: 0.35.0_6multjnoiwaa2jphc5ytfnrbvm
+      zod: 3.17.10
+      zod-to-json-schema: 3.17.0_zod@3.17.10
     devDependencies:
       '@types/jest': 28.1.6
       '@types/node': 18.0.6
@@ -490,6 +496,13 @@ packages:
 
   /@fastify/deepmerge/1.1.0:
     resolution: {integrity: sha512-E8Hfdvs1bG6u0N4vN5Nty6JONUfTdOciyD5rn8KnEsLKIenvOVcr210BQR9t34PRkNyjqnMLGk3e0BsaxRdL+g==}
+    dev: false
+
+  /@fastify/env/4.0.0:
+    resolution: {integrity: sha512-ZpvEH6E2dhYaDgxlyQSmTpVDhKFXRF6DH7N9sNsjpn+GIWDbIYTiYf3ttr0wGXgBWIc0bJFpTFTjlNmP2VaZ/w==}
+    dependencies:
+      env-schema: 4.0.0
+      fastify-plugin: 3.0.1
     dev: false
 
   /@fastify/error/3.0.0:
@@ -2001,6 +2014,11 @@ packages:
     dependencies:
       esutils: 2.0.3
 
+  /dotenv-expand/8.0.3:
+    resolution: {integrity: sha512-SErOMvge0ZUyWd5B0NXMQlDkN+8r+HhVUsxgOO7IoPDOdDRD2JjExpN6y3KnFR66jsJMwSn1pqIivhU5rcJiNg==}
+    engines: {node: '>=12'}
+    dev: false
+
   /dotenv/16.0.1:
     resolution: {integrity: sha512-1K6hR6wtk2FviQ4kEiSjFiH5rpzEVi8WW0x96aztHVMhEspNpc4DVOUTEHtEva5VThQ8IaBX1Pe4gSzpVVUsKQ==}
     engines: {node: '>=12'}
@@ -2053,6 +2071,14 @@ packages:
       graceful-fs: 4.2.10
       tapable: 2.2.1
     dev: true
+
+  /env-schema/4.0.0:
+    resolution: {integrity: sha512-hM5OwjrUPxxrCjC1Ykf+wPld2lbnN3/m9Y9wuMPt0jmYluJpAV3OXc1HiliZxFkxLzw2FcrSOXdw/3uI7PYCFA==}
+    dependencies:
+      ajv: 8.11.0
+      dotenv: 16.0.1
+      dotenv-expand: 8.0.3
+    dev: false
 
   /error-ex/1.3.2:
     resolution: {integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==}
@@ -5596,3 +5622,15 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  /zod-to-json-schema/3.17.0_zod@3.17.10:
+    resolution: {integrity: sha512-Ioxmh41HTo4xAip7DPy79ysvGibPnDxzGoPNcNT+1dxwLjeXf/BruRnj7sRJAe2p4z8vTx6d62CXigEPTz6DqQ==}
+    peerDependencies:
+      zod: ^3.14.4
+    dependencies:
+      zod: 3.17.10
+    dev: false
+
+  /zod/3.17.10:
+    resolution: {integrity: sha512-IHXnQYQuOOOL/XgHhgl8YjNxBHi3xX0mVcHmqsvJgcxKkEczPshoWdxqyFwsARpf41E0v9U95WUROqsHHxt0UQ==}
+    dev: false

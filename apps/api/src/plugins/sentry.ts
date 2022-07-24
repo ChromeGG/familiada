@@ -2,8 +2,9 @@ import * as Sentry from '@sentry/node'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 
-const shutdownPlugin: FastifyPluginAsync = fp(async (server, options) => {
+const shutdownPlugin: FastifyPluginAsync = fp(async (server, _options) => {
   Sentry.init({
+    // TODO use envs from .config
     dsn: process.env.SENTRY_DSN,
     environment: process.env.NODE_ENV,
     enabled: !!process.env.SENTRY_DSN,
@@ -12,7 +13,7 @@ const shutdownPlugin: FastifyPluginAsync = fp(async (server, options) => {
     tracesSampleRate: 1,
   })
 
-  server.addHook('onError', (request, reply, error, done) => {
+  server.addHook('onError', (request, _reply, error, done) => {
     Sentry.withScope((scope) => {
       scope.setTags({
         path: request?.raw.url ?? 'Not available',
