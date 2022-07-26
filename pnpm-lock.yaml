@@ -19,6 +19,7 @@ importers:
   apps/api:
     specifiers:
       '@fastify/env': 4.0.0
+      '@fastify/helmet': ^9.1.0
       '@prisma/client': 4.1.0
       '@sentry/node': 6.2.5
       '@sentry/tracing': 6.2.5
@@ -44,6 +45,7 @@ importers:
       zod-to-json-schema: ^3.17.0
     dependencies:
       '@fastify/env': 4.0.0
+      '@fastify/helmet': 9.1.0
       '@prisma/client': 4.1.0_prisma@4.1.0
       '@sentry/node': 6.2.5
       '@sentry/tracing': 6.2.5
@@ -513,6 +515,13 @@ packages:
     resolution: {integrity: sha512-9pCi6c6tmGt/qfuf2koZQuSIG6ckP9q3mz+JoMmAq9eQ4EtA92sWoK7E0LJUn2FFTS/hp5kag+4+dWsV5ZfcXg==}
     dependencies:
       fast-json-stringify: 5.1.0
+    dev: false
+
+  /@fastify/helmet/9.1.0:
+    resolution: {integrity: sha512-wAtu/38t90vH46GdLM6pVi8tM1HZXb6PRdLTNBo9pudSfSw5i5Ogm8Hq1Nx337WjgSOeU6MefaTd+1avlOlCDQ==}
+    dependencies:
+      fastify-plugin: 3.0.1
+      helmet: 5.1.1
     dev: false
 
   /@fastify/static/6.4.1:
@@ -3033,6 +3042,11 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+
+  /helmet/5.1.1:
+    resolution: {integrity: sha512-/yX0oVZBggA9cLJh8aw3PPCfedBnbd7J2aowjzsaWwZh7/UFY0nccn/aHAggIgWUFfnykX8GKd3a1pSbrmlcVQ==}
+    engines: {node: '>=12.0.0'}
+    dev: false
 
   /homedir-polyfill/1.0.3:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}

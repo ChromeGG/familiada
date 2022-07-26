@@ -1,3 +1,4 @@
+import fastifyHelmet from '@fastify/helmet'
 import AltairFastify from 'altair-fastify-plugin'
 import fastify, {
   FastifyInstance,
@@ -24,6 +25,7 @@ export async function createServer(
   server.register(shutdownPlugin)
   server.register(statusPlugin)
   server.register(prismaPlugin)
+  server.register(fastifyHelmet)
 
   server.register(mercurius, {
     schema,
