@@ -1,13 +1,12 @@
 {
+  "extends": "tsconfig/base.json",
   "compilerOptions": {
     "sourceMap": true,
     "outDir": "dist",
     "rootDir": "src",
-    "strict": true,
     "lib": ["esnext"],
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true
+    "types": ["jest", "node"]
   },
-  "include": ["src/**/*"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }
