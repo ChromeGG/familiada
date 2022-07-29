@@ -1,12 +1,12 @@
 import { FastifyInstance } from 'fastify'
 
-import { createServer } from '../src/server'
+import { createFastify } from '../src/server'
 
 describe('api endpoints', () => {
   let server: FastifyInstance
 
   afterAll(async () => {
-    server = await createServer({ logger: false })
+    server = await createFastify({ logger: false })
     await server.close()
   })
 

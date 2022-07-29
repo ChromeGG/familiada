@@ -1,5 +1,12 @@
 {
-  "cSpell.words": ["familiada", "fastify", "graphiql", "mercurius", "pnpm"],
+  "cSpell.words": [
+    "familiada",
+    "fastify",
+    "graphiql",
+    "mercurius",
+    "pnpm",
+    "pothos"
+  ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   }
