@@ -1,6 +1,7 @@
 import fastifyHelmet from '@fastify/helmet'
 import { createServer } from '@graphql-yoga/node'
 import SchemaBuilder from '@pothos/core'
+import { PrismaClient } from '@prisma/client'
 import fastify, {
   FastifyInstance,
   FastifyReply,
@@ -8,13 +9,19 @@ import fastify, {
   FastifyServerOptions,
 } from 'fastify'
 
-import { Context } from './context'
 import { envPlugin, envOptions } from './plugins/env'
 import prismaPlugin from './plugins/prisma'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
 
-const builder = new SchemaBuilder({})
+interface Context {
+  prisma: PrismaClient
+  request: FastifyRequest
+  reply: FastifyReply
+  user: boolean
+}
+
+const builder = new SchemaBuilder<{ Context: Context }>({})
 
 builder.queryType({
   fields: (t) => ({
@@ -22,7 +29,9 @@ builder.queryType({
       args: {
         name: t.arg.string(),
       },
-      resolve: (parent, { name }) => `hello, ${name || 'World'}`,
+      resolve: async (_parent, { name }) => {
+        return `hello, ${name || 'World'}`
+      },
     }),
   }),
 })
@@ -63,6 +72,12 @@ export async function startServer() {
       warn: (...args) => args.forEach((arg) => server.log.warn(arg)),
       error: (...args) => args.forEach((arg) => server.log.error(arg)),
     },
+    context: async ({ req, reply }): Promise<Context> => ({
+      prisma: new PrismaClient(),
+      request: req,
+      reply,
+      user: true, // TODO add implementation
+    }),
   })
 
   server.route({
