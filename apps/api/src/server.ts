@@ -26,6 +26,7 @@ builder.queryType({
     }),
   }),
 })
+
 export async function createFastify(
   opts: FastifyServerOptions = {}
 ): Promise<FastifyInstance> {
@@ -54,44 +55,7 @@ export async function startServer() {
     req: FastifyRequest
     reply: FastifyReply
   }>({
-    schema: {
-      typeDefs: /* GraphQL */ `
-        scalar File
-        type Query {
-          hello: String
-          isFastify: Boolean
-        }
-        type Mutation {
-          hello: String
-          getFileName(file: File!): String
-        }
-        type Subscription {
-          countdown(from: Int!, interval: Int): Int!
-        }
-      `,
-      resolvers: {
-        Query: {
-          hello: () => 'world',
-          isFastify: (_, __, context) => !!context.req && !!context.reply,
-        },
-        Mutation: {
-          hello: () => 'world',
-          getFileName: (root, { file }: { file: File }) => file.name,
-        },
-        Subscription: {
-          countdown: {
-            async *subscribe(_, { from, interval }) {
-              for (let i = from; i >= 0; i--) {
-                await new Promise((resolve) =>
-                  setTimeout(resolve, interval ?? 1000)
-                )
-                yield { countdown: i }
-              }
-            },
-          },
-        },
-      },
-    },
+    schema: builder.toSchema({}),
     // Integrate Fastify Logger to Yoga
     logging: {
       debug: (...args) => args.forEach((arg) => server.log.debug(arg)),
@@ -120,12 +84,10 @@ export async function startServer() {
 
       return reply
     },
-    // schema: builder.toSchema({}),
   })
 
   const start = async () => {
     try {
-      console.log(111)
       await server.listen({ host: '127.0.0.1', port: 3333 })
     } catch (err) {
       server.log.error(err)
