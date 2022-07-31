@@ -11,7 +11,78 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TeamColor {
+  RED
+  BLUE
+}
+
 model User {
   id     Int    @id @default(autoincrement())
   name   String
+  team   Team   @relation(fields: [id], references: [id])
+  teamId Int
+}
+
+model Team {
+  id               Int       @id @default(autoincrement())
+  teamColor        TeamColor
+  User             User[]
+  Game             Game      @relation(fields: [gameId], references: [id])
+  gameId           String
+  answearingUserId Int?
+  score            Int
+}
+
+model Game {
+  id             String           @id @unique
+  status         GameStaus        @default(LOBBY)
+  team           Team[]
+  rounds         Int
+  currentRound   Int
+  currentScore   Int
+  GamesQuestions GamesQuestions[]
+}
+
+enum GameStaus {
+  LOBBY
+  RUNNING
+  FINISHED
+}
+
+model GamesQuestions {
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId Int
+  Game       Game     @relation(fields: [gameId], references: [id])
+  gameId     String
+
+  @@id([gameId, questionId])
+}
+
+enum Language {
+  PL
+  EN
+}
+
+model Question {
+  id             Int              @id @default(autoincrement())
+  text           String
+  language       Language
+  GamesQuestions GamesQuestions[]
+  answer         Answer[]
+}
+
+model Answer {
+  id         Int       @id @default(autoincrement())
+  label      String
+  points     Int
+  variants   Variant[]
+  Question   Question? @relation(fields: [questionId], references: [id])
+  questionId Int?
+}
+
+model Variant {
+  id       Int    @id @default(autoincrement())
+  text     String
+  answer   Answer @relation(fields: [answerId], references: [id])
+  answerId Int    @unique
 }

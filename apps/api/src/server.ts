@@ -1,6 +1,8 @@
 import fastifyHelmet from '@fastify/helmet'
 import { createServer } from '@graphql-yoga/node'
 import SchemaBuilder from '@pothos/core'
+import PrismaPlugin from '@pothos/plugin-prisma'
+import type PrismaTypes from '@pothos/plugin-prisma/generated'
 import { PrismaClient } from '@prisma/client'
 import fastify, {
   FastifyInstance,
@@ -21,7 +23,10 @@ interface Context {
   user: boolean
 }
 
-const builder = new SchemaBuilder<{ Context: Context }>({})
+const builder = new SchemaBuilder<{
+  Context: Context
+  PrismaTypes: PrismaTypes
+}>({ plugins: [PrismaPlugin], prisma: { client: new PrismaClient() } })
 
 builder.queryType({
   fields: (t) => ({
@@ -33,6 +38,29 @@ builder.queryType({
         return `hello, ${name || 'World'}`
       },
     }),
+    user: t.prismaField({
+      type: 'User',
+      args: {
+        id: t.arg.int({ required: true }),
+      },
+      resolve: async (query, root, args, { prisma }, info) => {
+        console.log('~ query', query)
+        return prisma.user.findUnique({
+          // the `query` argument will add in `include`s or `select`s to
+          // resolve as much of the request in a single query as possible
+          ...query,
+          where: { id: args.id },
+        })
+      },
+      nullable: true,
+    }),
+  }),
+})
+
+builder.prismaObject('User', {
+  fields: (t) => ({
+    id: t.exposeID('id'),
+    name: t.exposeString('name'),
   }),
 })
 

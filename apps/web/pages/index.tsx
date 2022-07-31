@@ -12,19 +12,20 @@ const client = new ApolloClient({
 })
 
 export default function Web() {
-  client
-    .subscribe({
-      subscription: gql`
-        subscription {
-          countdown(from: 10, interval: 5)
-        }
-      `,
-    })
-    .then((result) => console.log(result))
-    .catch((err) => console.error(err))
+  // client
+  //   .subscribe({
+  //     subscription: gql`
+  //       subscription {
+  //         countdown(from: 10, interval: 5)
+  //       }
+  //     `,
+  //   })
+  //   .then((result) => console.log(result))
+  //   .catch((err) => console.error(err))
   return (
     <div>
       <h1>Web</h1>
+
       {/* <Button /> */}
     </div>
   )
