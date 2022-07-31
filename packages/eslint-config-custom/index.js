@@ -15,6 +15,7 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   rules: {
+    curly: 'error',
     '@typescript-eslint/ban-ts-comment': [
       'error',
       { 'ts-ignore': 'allow-with-description', minimumDescriptionLength: 5 },
