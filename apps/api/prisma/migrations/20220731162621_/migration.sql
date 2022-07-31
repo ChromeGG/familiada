@@ -2,7 +2,7 @@
 CREATE TYPE "TeamColor" AS ENUM ('RED', 'BLUE');
 
 -- CreateEnum
-CREATE TYPE "GameStaus" AS ENUM ('LOBBY', 'RUNNING', 'FINISHED');
+CREATE TYPE "GameStatus" AS ENUM ('LOBBY', 'RUNNING', 'FINISHED');
 
 -- CreateEnum
 CREATE TYPE "Language" AS ENUM ('PL', 'EN');
@@ -30,7 +30,7 @@ CREATE TABLE "Team" (
 -- CreateTable
 CREATE TABLE "Game" (
     "id" TEXT NOT NULL,
-    "status" "GameStaus" NOT NULL DEFAULT 'LOBBY',
+    "status" "GameStatus" NOT NULL DEFAULT 'LOBBY',
     "rounds" INTEGER NOT NULL,
     "currentRound" INTEGER NOT NULL,
     "currentScore" INTEGER NOT NULL,

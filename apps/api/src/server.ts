@@ -1,3 +1,4 @@
+import { useGraphQlJit } from '@envelop/graphql-jit'
 import fastifyHelmet from '@fastify/helmet'
 import { createServer } from '@graphql-yoga/node'
 import SchemaBuilder from '@pothos/core'
@@ -63,6 +64,17 @@ builder.prismaObject('Player', {
   }),
 })
 
+enum GameStatus {
+  LOBBY,
+  RUNNING,
+  FINISHED,
+}
+
+enum TeamColor {
+  RED,
+  BLUE,
+}
+
 export async function createFastify(
   opts: FastifyServerOptions = {}
 ): Promise<FastifyInstance> {
@@ -103,6 +115,8 @@ export async function startServer() {
       reply,
       player: true, // TODO add implementation
     }),
+    graphiql: false,
+    plugins: [useGraphQlJit()],
   })
 
   server.route({

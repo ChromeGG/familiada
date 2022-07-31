@@ -35,7 +35,7 @@ model Team {
 
 model Game {
   id             String           @id @unique
-  status         GameStaus        @default(LOBBY)
+  status         GameStatus       @default(LOBBY)
   team           Team[]
   rounds         Int
   currentRound   Int
@@ -43,7 +43,7 @@ model Game {
   GamesQuestions GamesQuestions[]
 }
 
-enum GameStaus {
+enum GameStatus {
   LOBBY
   RUNNING
   FINISHED
