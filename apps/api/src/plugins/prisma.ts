@@ -1,26 +1,17 @@
 import { PrismaClient } from '@prisma/client'
-import { FastifyPluginAsync } from 'fastify'
-import fp from 'fastify-plugin'
 
-declare module 'fastify' {
-  interface FastifyInstance {
-    prisma: PrismaClient
-  }
+interface CustomNodeJsGlobal extends Global {
+  prisma: PrismaClient
 }
 
-const prismaPlugin: FastifyPluginAsync = fp(async (server, _options) => {
-  const prisma = new PrismaClient({
-    log: ['error', 'warn'],
-  })
+// Prevent multiple instances of Prisma Client in development
+declare const global: CustomNodeJsGlobal
 
-  await prisma.$connect()
+const globalPrisma =
+  global.prisma || new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 
-  server.decorate('prisma', prisma)
+if (process.env.NODE_ENV === 'development') {
+  global.prisma = globalPrisma
+}
 
-  server.addHook('onClose', async (server) => {
-    server.log.info('disconnecting Prisma from DB')
-    await server.prisma.$disconnect()
-  })
-})
-
-export default prismaPlugin
+export const prisma = globalPrisma

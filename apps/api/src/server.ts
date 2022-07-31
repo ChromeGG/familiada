@@ -12,7 +12,7 @@ import fastify, {
 } from 'fastify'
 
 import { envPlugin, envOptions } from './plugins/env'
-import prismaPlugin from './plugins/prisma'
+import { prisma } from './plugins/prisma'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
 
@@ -20,13 +20,13 @@ interface Context {
   prisma: PrismaClient
   request: FastifyRequest
   reply: FastifyReply
-  user: boolean
+  player: boolean
 }
 
 const builder = new SchemaBuilder<{
   Context: Context
   PrismaTypes: PrismaTypes
-}>({ plugins: [PrismaPlugin], prisma: { client: new PrismaClient() } })
+}>({ plugins: [PrismaPlugin], prisma: { client: prisma } })
 
 builder.queryType({
   fields: (t) => ({
@@ -38,26 +38,25 @@ builder.queryType({
         return `hello, ${name || 'World'}`
       },
     }),
-    user: t.prismaField({
-      type: 'User',
+    player: t.prismaField({
+      type: 'Player',
       args: {
         id: t.arg.int({ required: true }),
       },
       resolve: async (query, root, args, { prisma }, info) => {
         console.log('~ query', query)
-        return prisma.user.findUnique({
-          // the `query` argument will add in `include`s or `select`s to
+        return prisma.player.findUniqueOrThrow({
+          // ? the `query` argument will add in `include`s or `select`s to
           // resolve as much of the request in a single query as possible
           ...query,
           where: { id: args.id },
         })
       },
-      nullable: true,
     }),
   }),
 })
 
-builder.prismaObject('User', {
+builder.prismaObject('Player', {
   fields: (t) => ({
     id: t.exposeID('id'),
     name: t.exposeString('name'),
@@ -73,7 +72,6 @@ export async function createFastify(
 
   server.register(shutdownPlugin)
   server.register(statusPlugin)
-  server.register(prismaPlugin)
   server.register(fastifyHelmet)
 
   return server
@@ -93,7 +91,6 @@ export async function startServer() {
     reply: FastifyReply
   }>({
     schema: builder.toSchema({}),
-    // Integrate Fastify Logger to Yoga
     logging: {
       debug: (...args) => args.forEach((arg) => server.log.debug(arg)),
       info: (...args) => args.forEach((arg) => server.log.info(arg)),
@@ -101,10 +98,10 @@ export async function startServer() {
       error: (...args) => args.forEach((arg) => server.log.error(arg)),
     },
     context: async ({ req, reply }): Promise<Context> => ({
-      prisma: new PrismaClient(),
+      prisma,
       request: req,
       reply,
-      user: true, // TODO add implementation
+      player: true, // TODO add implementation
     }),
   })
 
@@ -112,7 +109,6 @@ export async function startServer() {
     url: '/graphql',
     method: ['GET', 'POST', 'OPTIONS'],
     handler: async (req, reply) => {
-      // Second parameter adds Fastify's `req` and `reply` to the GraphQL Context
       const response = await graphQLServer.handleIncomingMessage(req, {
         req,
         reply,
@@ -122,7 +118,6 @@ export async function startServer() {
       })
 
       reply.status(response.status)
-
       reply.send(response.body)
 
       return reply

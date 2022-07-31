@@ -8,12 +8,12 @@ CREATE TYPE "GameStaus" AS ENUM ('LOBBY', 'RUNNING', 'FINISHED');
 CREATE TYPE "Language" AS ENUM ('PL', 'EN');
 
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "Player" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "teamId" INTEGER NOT NULL,
 
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Player_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -21,7 +21,7 @@ CREATE TABLE "Team" (
     "id" SERIAL NOT NULL,
     "teamColor" "TeamColor" NOT NULL,
     "gameId" TEXT NOT NULL,
-    "answearingUserId" INTEGER,
+    "answearingPlayerId" INTEGER,
     "score" INTEGER NOT NULL,
 
     CONSTRAINT "Team_pkey" PRIMARY KEY ("id")
@@ -81,7 +81,7 @@ CREATE UNIQUE INDEX "Game_id_key" ON "Game"("id");
 CREATE UNIQUE INDEX "Variant_answerId_key" ON "Variant"("answerId");
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_id_fkey" FOREIGN KEY ("id") REFERENCES "Team"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Player" ADD CONSTRAINT "Player_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Team" ADD CONSTRAINT "Team_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES "Game"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

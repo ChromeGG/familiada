@@ -16,21 +16,21 @@ enum TeamColor {
   BLUE
 }
 
-model User {
+model Player {
   id     Int    @id @default(autoincrement())
   name   String
-  team   Team   @relation(fields: [id], references: [id])
+  team   Team   @relation(fields: [teamId], references: [id])
   teamId Int
 }
 
 model Team {
-  id               Int       @id @default(autoincrement())
-  teamColor        TeamColor
-  User             User[]
-  Game             Game      @relation(fields: [gameId], references: [id])
-  gameId           String
-  answearingUserId Int?
-  score            Int
+  id                 Int       @id @default(autoincrement())
+  teamColor          TeamColor
+  Player             Player[]
+  Game               Game      @relation(fields: [gameId], references: [id])
+  gameId             String
+  answearingPlayerId Int?
+  score              Int
 }
 
 model Game {

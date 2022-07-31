@@ -1,6 +1,9 @@
 {
   "name": "api",
   "license": "MIT",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn --transpile-only src/index",
     "dev:pretty": "pnpm run dev | pino-pretty",
@@ -21,10 +24,8 @@
     "@fastify/helmet": "9.1.0",
     "@graphql-yoga/node": "2.13.5",
     "@pothos/core": "3.13.0",
-    "@pothos/plugin-prisma": "^3.17.0",
-    "@prisma/client": "4.1.0",
-    "@sentry/node": "6.2.5",
-    "@sentry/tracing": "6.2.5",
+    "@pothos/plugin-prisma": "3.17.0",
+    "@prisma/client": "4.1.1",
     "dotenv": "16.0.1",
     "fastify": "4.3.0",
     "fastify-plugin": "4.0.0",
@@ -35,10 +36,10 @@
   },
   "devDependencies": {
     "@types/jest": "28.1.6",
-    "@types/node": "18.6.1",
+    "@types/node": "18.6.3",
     "eslint": "8.20.0",
     "jest": "28.1.3",
-    "prisma": "4.1.0",
+    "prisma": "4.1.1",
     "ts-jest": "28.0.7",
     "ts-node": "10.9.1",
     "ts-node-dev": "2.0.0",
