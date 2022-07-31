@@ -20,12 +20,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "@envelop/generic-auth": "4.3.1",
     "@envelop/graphql-jit": "4.4.1",
     "@fastify/env": "4.0.0",
     "@fastify/helmet": "9.1.0",
     "@graphql-yoga/node": "2.13.5",
     "@pothos/core": "3.13.0",
     "@pothos/plugin-prisma": "3.17.0",
+    "@pothos/plugin-scope-auth": "3.11.0",
     "@prisma/client": "4.1.1",
     "dotenv": "16.0.1",
     "fastify": "4.3.0",

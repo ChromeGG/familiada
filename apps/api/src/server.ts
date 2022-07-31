@@ -1,9 +1,16 @@
+import {
+  ResolveUserFn,
+  useGenericAuth,
+  ValidateUserFn,
+} from '@envelop/generic-auth'
 import { useGraphQlJit } from '@envelop/graphql-jit'
 import fastifyHelmet from '@fastify/helmet'
 import { createServer } from '@graphql-yoga/node'
 import SchemaBuilder from '@pothos/core'
 import PrismaPlugin from '@pothos/plugin-prisma'
 import type PrismaTypes from '@pothos/plugin-prisma/generated'
+import ScopeAuthPlugin from '@pothos/plugin-scope-auth'
+
 import { PrismaClient } from '@prisma/client'
 import fastify, {
   FastifyInstance,
@@ -19,7 +26,7 @@ import statusPlugin from './plugins/status'
 
 interface Context {
   prisma: PrismaClient
-  request: FastifyRequest
+  req: FastifyRequest
   reply: FastifyReply
   player: boolean
 }
@@ -27,7 +34,18 @@ interface Context {
 const builder = new SchemaBuilder<{
   Context: Context
   PrismaTypes: PrismaTypes
-}>({ plugins: [PrismaPlugin], prisma: { client: prisma } })
+  AuthScopes: {
+    public: boolean
+  }
+}>({
+  plugins: [ScopeAuthPlugin, PrismaPlugin],
+  authScopes: async (context) => ({
+    public: !!context.player,
+    player: true, // todo player.role?
+    isModerator: false, // todo get from player
+  }),
+  prisma: { client: prisma },
+})
 
 builder.queryType({
   fields: (t) => ({
@@ -89,6 +107,32 @@ export async function createFastify(
   return server
 }
 
+// TODO ? infer it from Prisma/Pothos?
+type UserType = {
+  id: number
+  name: string
+}
+
+const resolveUserFn: ResolveUserFn<UserType, Context> = async (context) => {
+  // Here you can implement any custom sync/async code, and use the context built so far in Envelop and the HTTP request
+  // to find the current user.
+  // Common practice is to use a JWT token here, validate it, and use the payload as-is, or fetch the user from an external services.
+  // Make sure to either return `null` or the user object.
+
+  try {
+    const userId = context.req.headers.userid
+    return await context.prisma.player.findFirstOrThrow(parseInt(userId))
+  } catch (e) {
+    console.error('Failed to validate token')
+
+    return null
+  }
+}
+
+const validateUser: ValidateUserFn<UserType> = async (params) => {
+  /* ... */
+}
+
 export async function startServer() {
   const server = await createFastify({
     logger: {
@@ -109,14 +153,23 @@ export async function startServer() {
       warn: (...args) => args.forEach((arg) => server.log.warn(arg)),
       error: (...args) => args.forEach((arg) => server.log.error(arg)),
     },
-    context: async ({ req, reply }): Promise<Context> => ({
-      prisma,
-      request: req,
-      reply,
-      player: true, // TODO add implementation
-    }),
+    context: async ({ req, reply }): Promise<Context> => {
+      const userId = req.headers.userid
+      const user = await prisma.player.findFirst(parseInt(userId))
+      console.log('~ user', user)
+
+      return {
+        prisma,
+        req,
+        reply,
+        player: true,
+      }
+    },
     graphiql: false,
-    plugins: [useGraphQlJit()],
+    plugins: [
+      useGenericAuth({ mode: 'resolve-only', resolveUserFn }),
+      useGraphQlJit(),
+    ],
   })
 
   server.route({
