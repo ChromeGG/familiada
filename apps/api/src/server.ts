@@ -17,6 +17,7 @@ import { envPlugin, envOptions } from './plugins/env'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
 import { prisma } from './prisma'
+import { schema } from './schema'
 
 type UserType = {
   id: number
@@ -29,43 +30,6 @@ export interface Context {
   reply: FastifyReply
   player: UserType
 }
-
-builder.queryType({
-  fields: (t) => ({
-    hello: t.string({
-      args: {
-        name: t.arg.string(),
-      },
-      resolve: async (_parent, { name }) => {
-        return `hello, ${name || 'World'}`
-      },
-      authScopes: {
-        player: false,
-      },
-    }),
-    player: t.prismaField({
-      type: 'Player',
-      args: {
-        id: t.arg.int({ required: true }),
-      },
-      resolve: async (query, root, args, { prisma, player }, info) => {
-        return prisma.player.findUniqueOrThrow({
-          // ? the `query` argument will add in `include`s or `select`s to
-          // resolve as much of the request in a single query as possible
-          ...query,
-          where: { id: args.id },
-        })
-      },
-    }),
-  }),
-})
-
-builder.prismaObject('Player', {
-  fields: (t) => ({
-    id: t.exposeID('id'),
-    name: t.exposeString('name'),
-  }),
-})
 
 enum GameStatus {
   LOBBY,
@@ -105,7 +69,7 @@ export async function startServer() {
     req: FastifyRequest
     reply: FastifyReply
   }>({
-    schema: builder.toSchema({}),
+    schema,
     logging: {
       debug: (...args) => args.forEach((arg) => server.log.debug(arg)),
       info: (...args) => args.forEach((arg) => server.log.info(arg)),

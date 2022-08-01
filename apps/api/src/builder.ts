@@ -22,7 +22,7 @@ export const builder = new SchemaBuilder<{
   }),
   prisma: { client: prisma },
   scopeAuthOptions: {
-    unauthorizedError: (parent, context, info, result) => {
+    unauthorizedError: (_parent, _context, _info, _result) => {
       // TODO make it more descriptive
       return new AuthError()
     },
