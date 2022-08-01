@@ -1,58 +1,34 @@
 import { useGraphQlJit } from '@envelop/graphql-jit'
 import fastifyHelmet from '@fastify/helmet'
 import { createServer } from '@graphql-yoga/node'
-import SchemaBuilder from '@pothos/core'
-import PrismaPlugin from '@pothos/plugin-prisma'
-import type PrismaTypes from '@pothos/plugin-prisma/generated'
-import ScopeAuthPlugin from '@pothos/plugin-scope-auth'
 
-import { PrismaClient } from '@prisma/client'
-import fastify, {
+import type { PrismaClient } from '@prisma/client'
+import type {
   FastifyInstance,
   FastifyReply,
   FastifyRequest,
   FastifyServerOptions,
 } from 'fastify'
+import fastify from 'fastify'
 
-import { AuthError } from './errors/AuthError'
+import { builder } from './builder'
 
 import { envPlugin, envOptions } from './plugins/env'
-import { prisma } from './plugins/prisma'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
+import { prisma } from './prisma'
 
 type UserType = {
   id: number
   name: string
 }
 
-interface Context {
+export interface Context {
   prisma: PrismaClient
   req: FastifyRequest
   reply: FastifyReply
   player: UserType
 }
-
-const builder = new SchemaBuilder<{
-  Context: Context
-  PrismaTypes: PrismaTypes
-  AuthScopes: {
-    public: boolean
-    player: boolean
-  }
-}>({
-  plugins: [ScopeAuthPlugin, PrismaPlugin],
-  authScopes: async (context) => ({
-    public: !context.player,
-    player: !!context.player,
-  }),
-  prisma: { client: prisma },
-  scopeAuthOptions: {
-    unauthorizedError: (parent, context, info, result) => {
-      return new AuthError()
-    },
-  },
-})
 
 builder.queryType({
   fields: (t) => ({
