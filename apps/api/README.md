@@ -1,4 +1,6 @@
-# GraphQL Server with Fastify, Mercurius, Prisma, and Nexus Example
+# GraphQL Server with Fastify, GraphQL Yoga, Pothos and Prisma
+
+## TODO: Update all these things
 
 This repo shows how to build a GraphQL server with TypeScript and the following technologies:
 
@@ -12,7 +14,7 @@ The project is written in TypeScript and attempts to maintain a high degree of t
 
 The database schema is defined using the [Prisma schema](./prisma/schema.prisma) which defines 3 models:
 
-- TODO
+
 
 ## GraphQL schema
 
