@@ -18,7 +18,6 @@ importers:
 
   apps/api:
     specifiers:
-      '@envelop/generic-auth': 4.3.1
       '@envelop/graphql-jit': 4.4.1
       '@fastify/env': 4.0.0
       '@fastify/helmet': 9.1.0
@@ -45,7 +44,6 @@ importers:
       zod: 3.17.10
       zod-to-json-schema: 3.17.1
     dependencies:
-      '@envelop/generic-auth': 4.3.1_qciwwkyeyjvqkpfd3albhegkya
       '@envelop/graphql-jit': 4.4.1_qciwwkyeyjvqkpfd3albhegkya
       '@fastify/env': 4.0.0
       '@fastify/helmet': 9.1.0
@@ -511,28 +509,6 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       '@envelop/types': 2.3.0_graphql@16.5.0
-      graphql: 16.5.0
-    dev: false
-
-  /@envelop/extended-validation/1.7.1_qciwwkyeyjvqkpfd3albhegkya:
-    resolution: {integrity: sha512-jEkIq6kqFvFwvxJlFETK5dDvLmJKPeyeSPjkysPwHAa+WuQVnawSPFwwxl0wshW4aOyIlayV9U4pEBbQm42/YQ==}
-    peerDependencies:
-      '@envelop/core': ^2.4.1
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      '@envelop/core': 2.4.1_graphql@16.5.0
-      '@graphql-tools/utils': 8.9.0_graphql@16.5.0
-      graphql: 16.5.0
-    dev: false
-
-  /@envelop/generic-auth/4.3.1_qciwwkyeyjvqkpfd3albhegkya:
-    resolution: {integrity: sha512-G/WcCYWmeP/+ezCL1UMx63+1FIDlydLL6rQ3HruR8VJwcKuPh3mRwUUukv/qlC9PzlVEx9C7rBPTdw7AjmCFhg==}
-    peerDependencies:
-      '@envelop/core': ^2.4.1
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      '@envelop/core': 2.4.1_graphql@16.5.0
-      '@envelop/extended-validation': 1.7.1_qciwwkyeyjvqkpfd3albhegkya
       graphql: 16.5.0
     dev: false
 

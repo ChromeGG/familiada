@@ -1,8 +1,3 @@
-import {
-  ResolveUserFn,
-  useGenericAuth,
-  ValidateUserFn,
-} from '@envelop/generic-auth'
 import { useGraphQlJit } from '@envelop/graphql-jit'
 import fastifyHelmet from '@fastify/helmet'
 import { createServer } from '@graphql-yoga/node'
@@ -19,16 +14,23 @@ import fastify, {
   FastifyServerOptions,
 } from 'fastify'
 
+import { AuthError } from './errors/AuthError'
+
 import { envPlugin, envOptions } from './plugins/env'
 import { prisma } from './plugins/prisma'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
 
+type UserType = {
+  id: number
+  name: string
+}
+
 interface Context {
   prisma: PrismaClient
   req: FastifyRequest
   reply: FastifyReply
-  player: boolean
+  player: UserType
 }
 
 const builder = new SchemaBuilder<{
@@ -36,15 +38,20 @@ const builder = new SchemaBuilder<{
   PrismaTypes: PrismaTypes
   AuthScopes: {
     public: boolean
+    player: boolean
   }
 }>({
   plugins: [ScopeAuthPlugin, PrismaPlugin],
   authScopes: async (context) => ({
-    public: !!context.player,
-    player: true, // todo player.role?
-    isModerator: false, // todo get from player
+    public: !context.player,
+    player: !!context.player,
   }),
   prisma: { client: prisma },
+  scopeAuthOptions: {
+    unauthorizedError: (parent, context, info, result) => {
+      return new AuthError()
+    },
+  },
 })
 
 builder.queryType({
@@ -56,14 +63,16 @@ builder.queryType({
       resolve: async (_parent, { name }) => {
         return `hello, ${name || 'World'}`
       },
+      authScopes: {
+        player: false,
+      },
     }),
     player: t.prismaField({
       type: 'Player',
       args: {
         id: t.arg.int({ required: true }),
       },
-      resolve: async (query, root, args, { prisma }, info) => {
-        console.log('~ query', query)
+      resolve: async (query, root, args, { prisma, player }, info) => {
         return prisma.player.findUniqueOrThrow({
           // ? the `query` argument will add in `include`s or `select`s to
           // resolve as much of the request in a single query as possible
@@ -107,32 +116,6 @@ export async function createFastify(
   return server
 }
 
-// TODO ? infer it from Prisma/Pothos?
-type UserType = {
-  id: number
-  name: string
-}
-
-const resolveUserFn: ResolveUserFn<UserType, Context> = async (context) => {
-  // Here you can implement any custom sync/async code, and use the context built so far in Envelop and the HTTP request
-  // to find the current user.
-  // Common practice is to use a JWT token here, validate it, and use the payload as-is, or fetch the user from an external services.
-  // Make sure to either return `null` or the user object.
-
-  try {
-    const userId = context.req.headers.userid
-    return await context.prisma.player.findFirstOrThrow(parseInt(userId))
-  } catch (e) {
-    console.error('Failed to validate token')
-
-    return null
-  }
-}
-
-const validateUser: ValidateUserFn<UserType> = async (params) => {
-  /* ... */
-}
-
 export async function startServer() {
   const server = await createFastify({
     logger: {
@@ -155,21 +138,24 @@ export async function startServer() {
     },
     context: async ({ req, reply }): Promise<Context> => {
       const userId = req.headers.userid
-      const user = await prisma.player.findFirst(parseInt(userId))
-      console.log('~ user', user)
+      let user
+      if (userId) {
+        const user = await prisma.player.findUniqueOrThrow({
+          where: { id: parseInt(userId) },
+          include: { team: true },
+        })
+        console.log('~ user', user)
+      }
 
       return {
         prisma,
         req,
         reply,
-        player: true,
+        player: user,
       }
     },
     graphiql: false,
-    plugins: [
-      useGenericAuth({ mode: 'resolve-only', resolveUserFn }),
-      useGraphQlJit(),
-    ],
+    plugins: [useGraphQlJit()],
   })
 
   server.route({
