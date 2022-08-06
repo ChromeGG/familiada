@@ -21,7 +21,7 @@ CREATE TABLE "Team" (
     "id" SERIAL NOT NULL,
     "teamColor" "TeamColor" NOT NULL,
     "gameId" TEXT NOT NULL,
-    "answearingPlayerId" INTEGER,
+    "answeringPlayerId" INTEGER,
     "score" INTEGER NOT NULL,
 
     CONSTRAINT "Team_pkey" PRIMARY KEY ("id")

@@ -24,13 +24,13 @@ model Player {
 }
 
 model Team {
-  id                 Int       @id @default(autoincrement())
-  teamColor          TeamColor
-  Player             Player[]
-  Game               Game      @relation(fields: [gameId], references: [id])
-  gameId             String
-  answearingPlayerId Int?
-  score              Int
+  id                Int       @id @default(autoincrement())
+  teamColor         TeamColor
+  Player            Player[]
+  Game              Game      @relation(fields: [gameId], references: [id])
+  gameId            String
+  answeringPlayerId Int?
+  score             Int
 }
 
 model Game {

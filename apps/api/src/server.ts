@@ -11,8 +11,6 @@ import type {
 } from 'fastify'
 import fastify from 'fastify'
 
-import { builder } from './builder'
-
 import { envPlugin, envOptions } from './plugins/env'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
@@ -29,17 +27,7 @@ export interface Context {
   req: FastifyRequest
   reply: FastifyReply
   player: UserType
-}
-
-enum GameStatus {
-  LOBBY,
-  RUNNING,
-  FINISHED,
-}
-
-enum TeamColor {
-  RED,
-  BLUE,
+  // pubSub: typeof pubSub
 }
 
 export async function createFastify(
@@ -91,11 +79,17 @@ export async function startServer() {
         prisma,
         req,
         reply,
+        // pubSub,
         player: user,
       }
     },
-    graphiql: false,
-    plugins: [useGraphQlJit()],
+    cors: {
+      origin: 'http://localhost:3000',
+      credentials: true,
+      methods: ['POST', 'GET'],
+    },
+    graphiql: true,
+    // plugins: [useGraphQlJit()],
   })
 
   server.route({
