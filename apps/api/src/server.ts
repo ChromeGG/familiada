@@ -1,6 +1,14 @@
 import { useGraphQlJit } from '@envelop/graphql-jit'
 import fastifyHelmet from '@fastify/helmet'
-import { createServer } from '@graphql-yoga/node'
+import type { YogaInitialContext } from '@graphql-yoga/node'
+import {
+  pipe,
+  Repeater,
+  createPubSub,
+  map,
+  createServer,
+  useExtendContext,
+} from '@graphql-yoga/node'
 
 import type { PrismaClient } from '@prisma/client'
 import type {
@@ -21,14 +29,15 @@ type UserType = {
   id: number
   name: string
 }
-
-export interface Context {
+export interface Context extends YogaInitialContext {
   prisma: PrismaClient
   req: FastifyRequest
   reply: FastifyReply
   player: UserType
-  // pubSub: typeof pubSub
+  pubSub: typeof pubSub
 }
+
+const pubSub = createPubSub()
 
 export async function createFastify(
   opts: FastifyServerOptions = {}
@@ -39,9 +48,78 @@ export async function createFastify(
 
   server.register(shutdownPlugin)
   server.register(statusPlugin)
-  server.register(fastifyHelmet)
+  // server.register(fastifyHelmet)
 
   return server
+}
+const typeDefs = /* GraphQL */ `
+  type Query {
+    """
+    Simple field that return a "Hello world!" string.
+    """
+    hello: String!
+  }
+
+  type Subscription {
+    """
+    Count up from 0 to Infinity.
+    """
+    counter: Int!
+    """
+    Subscribe to the global counter that can be incremented with the 'incrementGlobalCounter' mutation.
+    """
+    globalCounter: Int!
+  }
+
+  type Mutation {
+    """
+    Increment the global counter by one. Returns the current global counter value after incrementing.
+    """
+    incrementGlobalCounter: Int!
+  }
+`
+let globalCounter = 0
+const resolvers: Resolvers<Context> = {
+  Query: {
+    hello: () => `Hello world!`,
+  },
+  Subscription: {
+    counter: {
+      async *subscribe() {
+        let counter = 0
+
+        // count up until the subscription is terminated
+        while (true) {
+          yield counter++
+          await wait(1000)
+        }
+      },
+      resolve: (payload: any) => payload,
+    },
+    globalCounter: {
+      // Merge initial value with source stream of new values
+      subscribe: (_, _args, context) =>
+        pipe(
+          Repeater.merge([
+            // cause an initial event so the globalCounter is streamed to the client
+            // upon initiating the subscription
+            undefined,
+            // event stream for future updates
+            context.pubSub.subscribe('globalCounter:changed'),
+          ]),
+          // map all events to the latest globalCounter
+          map(() => globalCounter)
+        ),
+      resolve: (payload: any) => payload,
+    },
+  },
+  Mutation: {
+    incrementGlobalCounter: (_source, _args, context) => {
+      globalCounter++
+      context.pubSub.publish('globalCounter:changed')
+      return globalCounter
+    },
+  },
 }
 
 export async function startServer() {
@@ -79,17 +157,21 @@ export async function startServer() {
         prisma,
         req,
         reply,
-        // pubSub,
         player: user,
       }
     },
     cors: {
-      origin: 'http://localhost:3000',
+      origin: [
+        'http://localhost:3000',
+        'http://localhost:3333',
+        'https://www.graphql-yoga.com',
+        'https://unpkg.com',
+      ],
       credentials: true,
-      methods: ['POST', 'GET'],
+      methods: ['POST', 'GET', 'OPTIONS'],
     },
     graphiql: true,
-    // plugins: [useGraphQlJit()],
+    plugins: [useGraphQlJit(), useExtendContext(() => ({ pubSub }))],
   })
 
   server.route({

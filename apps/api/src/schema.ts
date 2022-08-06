@@ -1,50 +1,55 @@
-import { createPubSub } from '@graphql-yoga/node'
+import { createPubSub, map, pipe, Repeater } from '@graphql-yoga/node'
 
 import { builder } from './builder'
 
 import './player/player-schema'
-// import { teamQueries } from './team/team-schema'
 
 builder.queryType({
   fields: (t) => ({
     hello: t.string({
-      args: {
-        name: t.arg.string(),
-      },
-      resolve: async (_parent, { name }) => {
+      resolve: async (_parent) => {
         return 'asd'
       },
     }),
-    // ...teamQueries(t),
   }),
 })
 
 builder.mutationType({
   fields: (t) => ({
-    doMutation: t.int({
-      resolve: (_, __, ___) => {
-        return 1
+    updateSubscription: t.float({
+      resolve: (_, __, context) => {
+        globalCounter++
+        context.pubSub.publish('mySubscription:changed')
+        console.log('WTF')
+        return globalCounter
       },
     }),
   }),
 })
+let globalCounter = 0
 
 builder.subscriptionType({
   fields: (t) => ({
-    players: t.int({
+    mySubscription: t.float({
       args: {
-        from: t.arg.int({ required: true }),
+        from: t.arg.float(),
       },
-      resolve: () => {
+      resolve: (payload) => {
+        console.log(payload)
         return Math.floor(Math.random() * 11)
       },
-      subscribe: async function* (_, { from }, ___) {
-        // return pubSub.subscribe('players', 123)
-        for (true; true; ) {
-          await new Promise((resolve) => setTimeout(resolve, 1000))
-          yield 55
-        }
-      },
+      subscribe: (_, { from }, context) =>
+        pipe(
+          Repeater.merge([
+            // cause an initial event so the globalCounter is streamed to the client
+            // upon initiating the subscription
+            undefined,
+            // event stream for future updates
+            context.pubSub.subscribe('mySubscription:changed'),
+          ]),
+          // map all events to the latest globalCounter
+          map(() => globalCounter)
+        ),
     }),
   }),
 })
