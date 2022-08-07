@@ -5,6 +5,29 @@ import { builder } from './builder'
 import './player/player-schema'
 import './team/team-schema'
 import './games/game-schema'
+import { GraphQLOperationalError } from './errors/GraphQLOperationalError'
+import { LengthError } from './errors/LengthError'
+
+const ErrorInterface = builder
+  .interfaceRef<GraphQLOperationalError>('Error')
+  .implement({
+    fields: (t) => ({
+      message: t.exposeString('message'),
+    }),
+  })
+
+builder.objectType(GraphQLOperationalError, {
+  name: 'BaseError',
+  interfaces: [ErrorInterface],
+})
+
+builder.objectType(LengthError, {
+  name: 'LengthError',
+  interfaces: [ErrorInterface],
+  fields: (t) => ({
+    minLength: t.exposeInt('minLength'),
+  }),
+})
 
 builder.queryType({
   fields: (t) => ({

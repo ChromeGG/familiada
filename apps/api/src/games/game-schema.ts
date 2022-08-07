@@ -3,6 +3,7 @@ import type { toZod } from 'tozod'
 import { z } from 'zod'
 
 import { builder } from '../builder'
+import { LengthError } from '../errors/LengthError'
 
 import { createGame } from './games-service'
 
@@ -39,10 +40,11 @@ builder.mutationFields((t) => {
           validate: { schema: createGameValidation },
         }),
       },
-      authScopes: {
-        public: true,
+      errors: {
+        types: [LengthError],
       },
       resolve: async (root, args, context) => {
+        // throw new LengthError(5)
         return true //createGame(context, args)
         // return prisma.player.create({})
       },

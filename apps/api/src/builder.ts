@@ -1,10 +1,12 @@
 import SchemaBuilder from '@pothos/core'
+import ErrorsPlugin from '@pothos/plugin-errors'
 import PrismaPlugin from '@pothos/plugin-prisma'
 import type PrismaTypes from '@pothos/plugin-prisma/generated'
 import ScopeAuthPlugin from '@pothos/plugin-scope-auth'
 import ValidationPlugin from '@pothos/plugin-validation'
 
 import { AuthError } from './errors/AuthError'
+import { GraphQLOperationalError } from './errors/GraphQLOperationalError'
 import { prisma } from './prisma'
 import type { Context } from './server'
 
@@ -17,11 +19,14 @@ export const builder = new SchemaBuilder<{
     player: boolean
   }
 }>({
-  plugins: [PrismaPlugin, ScopeAuthPlugin, ValidationPlugin],
+  plugins: [ErrorsPlugin, PrismaPlugin, ScopeAuthPlugin, ValidationPlugin],
   authScopes: async (context) => ({
     public: true,
     player: !!context.player,
   }),
+  errorOptions: {
+    defaultTypes: [GraphQLOperationalError],
+  },
   prisma: { client: prisma },
   scopeAuthOptions: {
     unauthorizedError: (_parent, _context, _info, _result) => {
