@@ -2,6 +2,7 @@ import SchemaBuilder from '@pothos/core'
 import PrismaPlugin from '@pothos/plugin-prisma'
 import type PrismaTypes from '@pothos/plugin-prisma/generated'
 import ScopeAuthPlugin from '@pothos/plugin-scope-auth'
+import ValidationPlugin from '@pothos/plugin-validation'
 
 import { AuthError } from './errors/AuthError'
 import { prisma } from './prisma'
@@ -16,9 +17,9 @@ export const builder = new SchemaBuilder<{
     player: boolean
   }
 }>({
-  plugins: [PrismaPlugin, ScopeAuthPlugin],
+  plugins: [PrismaPlugin, ScopeAuthPlugin, ValidationPlugin],
   authScopes: async (context) => ({
-    public: !context.player,
+    public: true,
     player: !!context.player,
   }),
   prisma: { client: prisma },

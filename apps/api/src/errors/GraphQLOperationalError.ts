@@ -1,5 +1,5 @@
 import { GraphQLYogaError } from '@graphql-yoga/node'
-import { GraphQLErrorExtensions } from 'graphql'
+import type { GraphQLErrorExtensions } from 'graphql'
 
 export class GraphQLOperationalError extends GraphQLYogaError {
   isOperational = true

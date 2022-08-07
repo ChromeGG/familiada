@@ -23,8 +23,10 @@ importers:
       '@fastify/helmet': 9.1.0
       '@graphql-yoga/node': 2.13.5
       '@pothos/core': 3.13.0
+      '@pothos/plugin-errors': 3.5.0
       '@pothos/plugin-prisma': 3.17.0
       '@pothos/plugin-scope-auth': 3.11.0
+      '@pothos/plugin-validation': 3.5.0
       '@prisma/client': 4.1.1
       '@types/jest': 28.1.6
       '@types/node': 18.6.3
@@ -36,6 +38,7 @@ importers:
       graphql-scalars: 1.17.0
       jest: 28.1.3
       prisma: 4.1.1
+      tozod: ^3.0.0
       ts-jest: 28.0.7
       ts-node: 10.9.1
       ts-node-dev: 2.0.0
@@ -49,14 +52,17 @@ importers:
       '@fastify/helmet': 9.1.0
       '@graphql-yoga/node': 2.13.5_graphql@16.5.0
       '@pothos/core': 3.13.0_graphql@16.5.0
+      '@pothos/plugin-errors': 3.5.0_d45oi43uzjj34y4thgehxdtd5u
       '@pothos/plugin-prisma': 3.17.0_lu36cn2rkz7akck2io2rs2j2ly
       '@pothos/plugin-scope-auth': 3.11.0_d45oi43uzjj34y4thgehxdtd5u
+      '@pothos/plugin-validation': 3.5.0_4vmnmv62cq5bmrmanlqmfr5ix4
       '@prisma/client': 4.1.1_prisma@4.1.1
       dotenv: 16.0.1
       fastify: 4.3.0
       fastify-plugin: 4.0.0
       graphql: 16.5.0
       graphql-scalars: 1.17.0_graphql@16.5.0
+      tozod: 3.0.0_zod@3.17.10
       zod: 3.17.10
       zod-to-json-schema: 3.17.1_zod@3.17.10
     devDependencies:
@@ -1151,6 +1157,16 @@ packages:
       graphql: 16.5.0
     dev: false
 
+  /@pothos/plugin-errors/3.5.0_d45oi43uzjj34y4thgehxdtd5u:
+    resolution: {integrity: sha512-R8UpCtyMljbAM8Y8nNMdUtOk7cwBZSMp10bgO6WFeIqTIgH1jI1Z9B+45N2FVEcMpUUg2C2tgYiwXkYYZaHgKA==}
+    peerDependencies:
+      '@pothos/core': '*'
+      graphql: '>=15.1.0'
+    dependencies:
+      '@pothos/core': 3.13.0_graphql@16.5.0
+      graphql: 16.5.0
+    dev: false
+
   /@pothos/plugin-prisma/3.17.0_lu36cn2rkz7akck2io2rs2j2ly:
     resolution: {integrity: sha512-M2WfPRx+rsgLi0N0GVTf2FoiLyHGnt7KahpK+sa/GDOhbmEOVOqEmii1MHIqFKh87z+nNSibt527oJ/HYTd99Q==}
     hasBin: true
@@ -1177,6 +1193,18 @@ packages:
     dependencies:
       '@pothos/core': 3.13.0_graphql@16.5.0
       graphql: 16.5.0
+    dev: false
+
+  /@pothos/plugin-validation/3.5.0_4vmnmv62cq5bmrmanlqmfr5ix4:
+    resolution: {integrity: sha512-ZEz6uKF+o10mzEMxJ1D3wqDh/HSsUaLmsurbwidFqqC/NXR80pJ6J+SUbQHg11ZqIC6d5HMmMA+rH0LovPV4SQ==}
+    peerDependencies:
+      '@pothos/core': '*'
+      graphql: '>=15.1.0'
+      zod: '*'
+    dependencies:
+      '@pothos/core': 3.13.0_graphql@16.5.0
+      graphql: 16.5.0
+      zod: 3.17.10
     dev: false
 
   /@prisma/client/4.1.1_prisma@4.1.1:
@@ -5047,6 +5075,14 @@ packages:
     engines: {node: '>=8.0'}
     dependencies:
       is-number: 7.0.0
+
+  /tozod/3.0.0_zod@3.17.10:
+    resolution: {integrity: sha512-R03/moNPEGgWKoTdCsEJuyEoP6NtXyhWg9L9lJhF2XyCR2Ce9XE+yXaswaVmqyBpHsRPC2Pk38mK8Ex7iHaXcg==}
+    peerDependencies:
+      zod: ^3.0.0-alpha.2
+    dependencies:
+      zod: 3.17.10
+    dev: false
 
   /tr46/0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}

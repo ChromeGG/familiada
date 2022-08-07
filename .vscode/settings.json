@@ -4,6 +4,7 @@
     "fastify",
     "graphiql",
     "mercurius",
+    "pino",
     "pnpm",
     "pothos",
     "Requiredness"

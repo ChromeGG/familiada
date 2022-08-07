@@ -4,6 +4,7 @@ import { builder } from './builder'
 
 import './player/player-schema'
 import './team/team-schema'
+import './games/game-schema'
 
 builder.queryType({
   fields: (t) => ({

@@ -2,9 +2,9 @@ import type { GraphQLErrorExtensions } from 'graphql'
 
 import { GraphQLOperationalError } from './GraphQLOperationalError'
 
-export class AuthError extends GraphQLOperationalError {
+export class ValidationError extends GraphQLOperationalError {
   constructor(
-    message = 'You are not authorized',
+    message = 'Validation Error',
     extensions?: GraphQLErrorExtensions
   ) {
     super(message, extensions)
