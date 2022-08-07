@@ -10,6 +10,7 @@ import type { Context } from './server'
 export const builder = new SchemaBuilder<{
   Context: Context
   PrismaTypes: PrismaTypes
+  DefaultInputFieldRequiredness: true
   AuthScopes: {
     public: boolean
     player: boolean
@@ -27,4 +28,5 @@ export const builder = new SchemaBuilder<{
       return new AuthError()
     },
   },
+  defaultInputFieldRequiredness: true,
 })

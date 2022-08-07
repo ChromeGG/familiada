@@ -5,7 +5,8 @@
     "graphiql",
     "mercurius",
     "pnpm",
-    "pothos"
+    "pothos",
+    "Requiredness"
   ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
