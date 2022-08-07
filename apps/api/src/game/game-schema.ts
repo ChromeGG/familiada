@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { builder } from '../builder'
 import { LengthError } from '../errors/LengthError'
 
-import { createGame } from './games-service'
+import { createGame } from './game-service'
 
 const CreateGameInput = builder.inputType('CreateGameInput', {
   fields: (t) => ({
@@ -33,6 +33,12 @@ const createGameValidation: toZod<CreateGameInputType> = z.object({
 
 builder.mutationFields((t) => {
   return {
+    joinToGame: t.float({
+      resolve: (_, __, context) => {
+        context.pubSub.publish('players:changed')
+        return 0
+      },
+    }),
     createGame: t.boolean({
       args: {
         gameInput: t.arg({
@@ -44,7 +50,6 @@ builder.mutationFields((t) => {
         types: [LengthError],
       },
       resolve: async (root, args, context) => {
-        // throw new LengthError(5)
         return true //createGame(context, args)
         // return prisma.player.create({})
       },

@@ -1,78 +1,13 @@
-import { createPubSub, map, pipe, Repeater } from '@graphql-yoga/node'
-
 import { builder } from './builder'
 
 import './player/player-schema'
 import './team/team-schema'
-import './games/game-schema'
-import { GraphQLOperationalError } from './errors/GraphQLOperationalError'
-import { LengthError } from './errors/LengthError'
+import './game/game-schema'
+import './errors/error-schema'
 
-const ErrorInterface = builder
-  .interfaceRef<GraphQLOperationalError>('Error')
-  .implement({
-    fields: (t) => ({
-      message: t.exposeString('message'),
-    }),
-  })
-
-builder.objectType(GraphQLOperationalError, {
-  name: 'BaseError',
-  interfaces: [ErrorInterface],
-})
-
-builder.objectType(LengthError, {
-  name: 'LengthError',
-  interfaces: [ErrorInterface],
-  fields: (t) => ({
-    minLength: t.exposeInt('minLength'),
-  }),
-})
-
-builder.queryType({
-  fields: (t) => ({
-    hello: t.string({
-      resolve: async (_parent) => {
-        return 'asd'
-      },
-    }),
-  }),
-})
-
-builder.mutationType({
-  fields: (t) => ({
-    updateSubscription: t.float({
-      resolve: (_, __, context) => {
-        context.pubSub.publish('players:changed')
-        return 0
-      },
-    }),
-  }),
-})
-
-builder.subscriptionType({
-  fields: (t) => ({
-    // ...playerSubscriptions(t)
-    // players: t.float({
-    //   args: {
-    //     gameId: t.arg.id(),
-    //   },
-    //   // FIXME
-    //   resolve: (payload: any) => payload,
-    //   subscribe: (_, { gameId }, context) =>
-    //     pipe(
-    //       Repeater.merge([
-    //         // cause an initial event so the globalCounter is streamed to the client
-    //         // upon initiating the subscription
-    //         11,
-    //         // event stream for future updates
-    //         context.pubSub.subscribe('players:changed'),
-    //       ]),
-    //       // map all events to the latest globalCounter
-    //       map(() => Math.random() * 5)
-    //     ),
-    // }),
-  }),
-})
+// required to enable queries, mutations and subscriptions
+builder.queryType({})
+builder.mutationType({})
+builder.subscriptionType({})
 
 export const schema = builder.toSchema({})

@@ -18,6 +18,7 @@ builder.subscriptionFields((t) => {
         gameId: t.arg.string(),
       },
       subscribe: (_, { gameId }, { pubSub }) =>
+        // the raw pubSub.subscribe was not working ...
         pipe(
           Repeater.merge([
             // cause an initial event so the globalCounter is streamed to the client
