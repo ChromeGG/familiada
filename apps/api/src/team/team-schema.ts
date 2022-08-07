@@ -1,7 +1,12 @@
 import type PrismaTypes from '@pothos/plugin-prisma/generated'
+import { TeamColor } from '@prisma/client'
 
 import { builder } from '../builder'
 import type { Context } from '../server'
+
+export const TeamColorGql = builder.enumType(TeamColor, {
+  name: 'TemColor',
+})
 
 builder.queryFields((t) => {
   return {
