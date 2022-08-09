@@ -1,22 +1,21 @@
-import type PrismaTypes from '@pothos/plugin-prisma/generated'
 import { TeamColor } from '@prisma/client'
 
 import { builder } from '../builder'
 import type { Context } from '../server'
 
 export const TeamColorGql = builder.enumType(TeamColor, {
-  name: 'TemColor',
+  name: 'TeamColor',
 })
 
 builder.queryFields((t) => {
   return {
     test: t.field({
       args: {
-        asd: t.arg.string({ required: true }),
+        asd: t.arg({ required: true, type: TeamColorGql }),
       },
-      type: 'String',
+      type: TeamColorGql,
       resolve: (root, _) => {
-        return 'asd'
+        return TeamColor.BLUE
       },
     }),
   }

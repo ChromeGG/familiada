@@ -1,7 +1,7 @@
 import { builder } from '../builder'
 
+import { AlreadyExistError } from './AlreadyExistError'
 import { GraphQLOperationalError } from './GraphQLOperationalError'
-import { LengthError } from './LengthError'
 
 const ErrorInterface = builder
   .interfaceRef<GraphQLOperationalError>('Error')
@@ -16,10 +16,7 @@ builder.objectType(GraphQLOperationalError, {
   interfaces: [ErrorInterface],
 })
 
-builder.objectType(LengthError, {
-  name: 'LengthError',
+builder.objectType(AlreadyExistError, {
+  name: 'AlreadyExistError',
   interfaces: [ErrorInterface],
-  fields: (t) => ({
-    minLength: t.exposeInt('minLength'),
-  }),
 })
