@@ -19,7 +19,7 @@ enum TeamColor {
 model Player {
   id     Int    @id @default(autoincrement())
   name   String
-  team   Team   @relation(fields: [teamId], references: [id])
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId Int
 }
 
@@ -27,7 +27,7 @@ model Team {
   id                Int       @id @default(autoincrement())
   teamColor         TeamColor
   Player            Player[]
-  Game              Game      @relation(fields: [gameId], references: [id])
+  Game              Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId            String
   answeringPlayerId Int?
   score             Int
@@ -52,7 +52,7 @@ enum GameStatus {
 model GamesQuestions {
   question   Question @relation(fields: [questionId], references: [id])
   questionId Int
-  Game       Game     @relation(fields: [gameId], references: [id])
+  Game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId     String
 
   @@id([gameId, questionId])
@@ -76,13 +76,13 @@ model Answer {
   label      String
   points     Int
   variants   Variant[]
-  Question   Question? @relation(fields: [questionId], references: [id])
+  Question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId Int?
 }
 
 model Variant {
   id       Int    @id @default(autoincrement())
   text     String
-  answer   Answer @relation(fields: [answerId], references: [id])
+  answer   Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
   answerId Int
 }
