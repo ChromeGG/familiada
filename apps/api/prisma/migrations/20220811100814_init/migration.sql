@@ -77,9 +77,6 @@ CREATE TABLE "Variant" (
 -- CreateIndex
 CREATE UNIQUE INDEX "Game_id_key" ON "Game"("id");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Variant_answerId_key" ON "Variant"("answerId");
-
 -- AddForeignKey
 ALTER TABLE "Player" ADD CONSTRAINT "Player_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 

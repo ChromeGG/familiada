@@ -84,5 +84,5 @@ model Variant {
   id       Int    @id @default(autoincrement())
   text     String
   answer   Answer @relation(fields: [answerId], references: [id])
-  answerId Int    @unique
+  answerId Int
 }
