@@ -68,7 +68,7 @@ builder.mutationFields((t) => {
         types: [AlreadyExistError],
       },
       resolve: async (root, args, context) => {
-        return createGame(context, args)
+        return createGame(args, context)
       },
     }),
   }

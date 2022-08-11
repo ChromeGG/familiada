@@ -8,7 +8,8 @@
     "pnpm",
     "pothos",
     "Requiredness",
-    "tozod"
+    "tozod",
+    "Requiredness"
   ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
