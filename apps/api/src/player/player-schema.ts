@@ -2,11 +2,11 @@ import { pipe, Repeater, map } from '@graphql-yoga/node'
 
 import { builder } from '../builder'
 
-builder.prismaObject('Player', {
+export const Player = builder.prismaObject('Player', {
   fields: (t) => ({
     id: t.exposeID('id'),
     name: t.exposeString('name'),
-    team: t.relation('team'),
+    // team: t.relation('team'),
   }),
 })
 

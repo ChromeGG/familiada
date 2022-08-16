@@ -1,4 +1,4 @@
-import { raw } from '@prisma/client/runtime'
+import { GameStatus, TeamColor } from '@prisma/client'
 
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 import type { Context } from '../server'
@@ -9,7 +9,6 @@ export const createGame = async (
   { gameInput }: CreateGameArgs,
   { prisma, pubSub }: Context
 ) => {
-  console.log(gameInput.gameId)
   const isExistingGame = await prisma.game.findUnique({
     where: { id: gameInput.gameId },
   })
@@ -21,18 +20,42 @@ export const createGame = async (
   const { gameId, playerName, playerTeam } = gameInput
 
   const numberOfRounds = 3
-  // await prisma.game.create({
-  //   data: { id: gameId, currentScore: 0, currentRound: 0, rounds: 3 },
-  // })
-
-  const questions = await prisma.question.findMany({
-    orderBy: raw`random()`,
-    take: 3,
+  // const questions = await prisma.$executeRaw`SELECT * FROM "Question" order by random() LIMIT ${numberOfRounds};`
+  const game = await prisma.game.create({
+    include: { team: true },
+    data: {
+      id: gameId,
+      currentScore: 0,
+      currentRound: 0,
+      rounds: numberOfRounds,
+      status: GameStatus.LOBBY,
+      team: {
+        createMany: {
+          data: [
+            { score: 0, teamColor: TeamColor.RED },
+            { score: 0, teamColor: TeamColor.BLUE },
+          ],
+        },
+      },
+    },
   })
+  console.log('~ game', game)
 
-  await prisma.$executeRaw(
-    `SELECT * FROM "Question" order by random() LIMIT 3;`
-  )
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { id: teamId } = game.team.find(
+    ({ teamColor }) => teamColor === playerTeam
+  )!
 
-  return true
+  return prisma.player.create({
+    data: { name: playerName, teamId },
+  })
+}
+export const joinToGame = async (
+  { gameInput }: CreateGameArgs,
+  { prisma, pubSub }: Context
+) => {
+  // TODO: throw error if player already exist?
+  const gamez = await prisma.game.findFirstOrThrow({
+    where: { id: gameInput.gameId },
+  })
 }
