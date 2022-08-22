@@ -2,10 +2,7 @@ import { useGraphQlJit } from '@envelop/graphql-jit'
 import fastifyHelmet from '@fastify/helmet'
 import type { YogaInitialContext } from '@graphql-yoga/node'
 import {
-  pipe,
-  Repeater,
   createPubSub,
-  map,
   createServer,
   useExtendContext,
 } from '@graphql-yoga/node'
@@ -62,6 +59,7 @@ export async function startServer() {
     disableRequestLogging: process.env.ENABLE_REQUEST_LOGGING !== 'true',
   })
 
+  // TODO refactor it to the separate file like graphqlServer.ts?
   const graphQLServer = createServer<{
     req: FastifyRequest
     reply: FastifyReply
@@ -74,6 +72,7 @@ export async function startServer() {
       error: (...args) => args.forEach((arg) => server.log.error(arg)),
     },
     context: async ({ req, reply }): Promise<Context> => {
+      // TODO probably user should be obtained from other place
       const userId = req.headers.userid
       let user
       if (userId) {
@@ -92,6 +91,7 @@ export async function startServer() {
       }
     },
     cors: {
+      // TODO check that, this should be given from .env
       origin: ['http://localhost:3000', 'http://localhost:3333'],
       credentials: true,
       methods: ['POST', 'GET', 'OPTIONS'],
@@ -121,6 +121,7 @@ export async function startServer() {
 
   const start = async () => {
     try {
+      // TODO this should be given from .env
       await server.listen({ host: '127.0.0.1', port: 3333 })
     } catch (err) {
       server.log.error(err)

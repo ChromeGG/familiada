@@ -1,6 +1,5 @@
 import { GraphQLYogaError } from '@graphql-yoga/node'
 import type { GraphQLErrorExtensions } from 'graphql'
-import { z } from 'zod'
 
 export class GraphQLOperationalError extends GraphQLYogaError {
   isOperational = true
@@ -8,9 +7,3 @@ export class GraphQLOperationalError extends GraphQLYogaError {
     super(message, extensions)
   }
 }
-
-// const xxx: typeof GraphQLOperationalError
-
-// const a  = new xxx()
-
-// a.

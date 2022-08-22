@@ -21,6 +21,8 @@ export const createGame = async (
 
   const numberOfRounds = 3
   // const questions = await prisma.$executeRaw`SELECT * FROM "Question" order by random() LIMIT ${numberOfRounds};`
+  // TODO this should be in transaction block
+  // https://www.prisma.io/docs/guides/performance-and-optimization/prisma-client-transactions-guide#independent-writes
   const game = await prisma.game.create({
     include: { team: true },
     data: {
@@ -39,13 +41,14 @@ export const createGame = async (
       },
     },
   })
-  console.log('~ game', game)
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { id: teamId } = game.team.find(
     ({ teamColor }) => teamColor === playerTeam
   )!
 
+  // TODO check if user exists and trow error
+  // TODO this should be realized by user service method
   return prisma.player.create({
     data: { name: playerName, teamId },
   })

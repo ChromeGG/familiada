@@ -17,6 +17,7 @@ module.exports = {
   rules: {
     curly: 'error',
     '@typescript-eslint/consistent-type-imports': 'error',
+    'jest/valid-title': 'off',
     '@typescript-eslint/ban-ts-comment': [
       'error',
       { 'ts-ignore': 'allow-with-description', minimumDescriptionLength: 5 },

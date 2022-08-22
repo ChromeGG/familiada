@@ -1,22 +1,20 @@
 {
   "name": "api",
   "license": "MIT",
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  },
   "scripts": {
+    "build": "pnpm -s run clean && pnpm -s run generate && tsc",
+    "clean": "rm -rf dist",
+    "db:push": "prisma db push --preview-feature",
     "dev": "ts-node-dev --no-notify --respawn --transpile-only src/index",
     "dev:pretty": "pnpm run dev | pino-pretty",
-    "start": "node dist/index",
-    "clean": "rm -rf dist",
-    "build": "pnpm -s run clean && pnpm -s run generate && tsc",
     "generate": "pnpm -s run generate:prisma",
     "generate:prisma": "prisma generate",
-    "db:push": "prisma db push --preview-feature",
-    "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
+    "migrate:dev": "prisma migrate dev",
     "migrate:reset": "prisma migrate reset",
-    "test": "jest"
+    "migrate:test:dev": "dotenv -e .env.test -- pnpm prisma db push",
+    "start": "node dist/index",
+    "test": "NODE_ENV=test node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js 2>&1"
   },
   "dependencies": {
     "@envelop/graphql-jit": "4.4.2",
@@ -39,6 +37,7 @@
     "zod-to-json-schema": "3.17.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "7.4.0",
     "@types/jest": "28.1.6",
     "@types/node": "18.7.1",
     "eslint": "8.21.0",
@@ -48,9 +47,13 @@
     "ts-node": "10.9.1",
     "ts-node-dev": "2.0.0",
     "tsconfig": "workspace:*",
+    "type-fest": "2.18.1",
     "typescript": "4.7.4"
   },
   "engines": {
     "node": "18.6.0"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }

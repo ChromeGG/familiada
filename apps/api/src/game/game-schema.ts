@@ -22,6 +22,9 @@ import { createGame } from './game-service'
 // 2. Refactor inputs and validations to the separate files
 // 3. Write test framework
 // 4. Write a global error handler (are Prisma 404 operational?)
+// 5. How logger should looks (probably file instead of context)?
+// 6. Rename prisma to db
+// 7. enum TeamColor should be given from our file, not from prisma
 
 const CreateGameInput = builder.inputType('CreateGameInput', {
   fields: (t) => ({

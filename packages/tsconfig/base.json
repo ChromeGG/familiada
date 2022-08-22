@@ -2,7 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
-    "target": "ES2021",
+    "target": "es2022",
+    "module": "ESNext",
     "composite": false,
     "declaration": true,
     "declarationMap": true,

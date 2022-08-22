@@ -3,10 +3,10 @@
   "compilerOptions": {
     "sourceMap": true,
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "lib": ["esnext"],
     "types": ["jest", "node"]
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "jest.config.js"],
   "exclude": ["node_modules"]
 }
