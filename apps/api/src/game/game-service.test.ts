@@ -11,7 +11,7 @@ const { integrationContext, Tester } = await integrationSetup()
 
 describe('game-service.ts', () => {
   describe(createGame.name, () => {
-    test('Should create a game', async () => {
+    test('Should create a game two teams and the player', async () => {
       const input: CreateGameArgs = {
         gameInput: {
           gameId: 'MyGameId',
@@ -22,13 +22,38 @@ describe('game-service.ts', () => {
 
       await createGame(input, integrationContext)
 
-      const dbState = await integrationContext.prisma.game.findFirst()
-      expect(dbState).toEqual({
+      const dbGame = await Tester.db.game.findFirst()
+      const [dbRedTeam, dbBlueTeam] = await Tester.db.team.findMany({orderBy: { teamColor: 'asc' }})
+      const dbPlayer = await Tester.db.player.findFirst()
+
+      expect(dbGame).toEqual({
         id: input.gameInput.gameId,
         status: GameStatus.LOBBY,
         rounds: 3,
         currentRound: 0,
         currentScore: 0,
+      })
+
+      expect(dbRedTeam).toEqual({
+        answeringPlayerId: null,
+        gameId: input.gameInput.gameId,
+        id: expect.any(Number),
+        score: 0,
+        teamColor: TeamColor.RED,
+      })
+
+      expect(dbBlueTeam).toEqual({
+        answeringPlayerId: null,
+        gameId: input.gameInput.gameId,
+        id: expect.any(Number),
+        score: 0,
+        teamColor: TeamColor.BLUE,
+      })
+
+      expect(dbPlayer).toEqual({
+        id: expect.any(Number),
+        name: input.gameInput.playerName,
+        teamId: dbBlueTeam.id
       })
     })
 
