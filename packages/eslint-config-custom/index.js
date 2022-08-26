@@ -12,8 +12,13 @@ module.exports = {
   ],
   env: {
     jest: true,
+    es2021: true,
+    node: true,
   },
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    sourceType: 'module',
+  },
   rules: {
     curly: 'error',
     '@typescript-eslint/consistent-type-imports': 'error',

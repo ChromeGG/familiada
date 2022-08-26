@@ -71,10 +71,10 @@ export async function startServer() {
       warn: (...args) => args.forEach((arg) => server.log.warn(arg)),
       error: (...args) => args.forEach((arg) => server.log.error(arg)),
     },
-    context: async ({ req, reply }): Promise<Context> => {
+    context: async ({ request, req, reply }): Promise<Context> => {
       // TODO probably user should be obtained from other place
-      const userId = req.headers.userid
-      let user
+      const userId = req.headers.userid as string
+      let user: any
       if (userId) {
         const user = await prisma.player.findUniqueOrThrow({
           where: { id: parseInt(userId) },
@@ -86,8 +86,10 @@ export async function startServer() {
       return {
         prisma,
         req,
+        pubSub,
+        request,
         reply,
-        player: user,
+        player: user!,
       }
     },
     cors: {

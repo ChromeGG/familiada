@@ -23,7 +23,9 @@ describe('game-service.ts', () => {
       await createGame(input, integrationContext)
 
       const dbGame = await Tester.db.game.findFirst()
-      const [dbRedTeam, dbBlueTeam] = await Tester.db.team.findMany({orderBy: { teamColor: 'asc' }})
+      const [dbRedTeam, dbBlueTeam] = await Tester.db.team.findMany({
+        orderBy: { teamColor: 'asc' },
+      })
       const dbPlayer = await Tester.db.player.findFirst()
 
       expect(dbGame).toEqual({
@@ -53,7 +55,7 @@ describe('game-service.ts', () => {
       expect(dbPlayer).toEqual({
         id: expect.any(Number),
         name: input.gameInput.playerName,
-        teamId: dbBlueTeam.id
+        teamId: dbBlueTeam.id,
       })
     })
 
