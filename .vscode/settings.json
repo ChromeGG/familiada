@@ -9,7 +9,7 @@
     "pothos",
     "Requiredness",
     "tozod",
-    "Requiredness"
+    "turborepo"
   ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"

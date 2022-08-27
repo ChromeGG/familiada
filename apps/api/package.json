@@ -4,6 +4,7 @@
   "type": "module",
   "repository": "https://github.com/ChromeGG/familiada",
   "scripts": {
+    "postinstall": "pnpm prisma generate",
     "build": "pnpm -s run clean && pnpm -s run generate && tsc",
     "clean": "rm -rf dist",
     "db:push": "prisma db push --preview-feature",
