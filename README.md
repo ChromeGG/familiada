@@ -28,6 +28,8 @@ Each package/app is:
 3. Run `docker-compose up`
 4. Run `pnpm run dev`
 
+TODO: add note/script about DB migrations
+
 ```bash
 # api
 http://127.0.0.1:3333/
