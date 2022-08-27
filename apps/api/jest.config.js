@@ -6,7 +6,7 @@ export default {
   setupFiles: ['<rootDir>/jest.setup.ts'],
   extensionsToTreatAsEsm: ['.ts'],
   moduleFileExtensions: ['js', 'ts'],
-  testMatch: ['**/src/**/*.test.ts', '**/tests/**/*.test.ts'],
+  modulePathIgnorePatterns: ['dist'],
   globals: {
     'ts-jest': {
       useESM: true,

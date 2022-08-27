@@ -1,4 +1,4 @@
-# GraphQL Server with Fastify, GraphQL Yoga, Pothos and Prisma
+# API
 
 A GraphQL server with the following technologies:
 
@@ -18,5 +18,7 @@ Useful commands:
 # (re)generate prisma client 
 pnpm prisma generate
 
+# run test 
+pnm run test <pattern>
 ```
 
