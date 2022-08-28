@@ -3,7 +3,7 @@ import fastifyHelmet from '@fastify/helmet'
 import type { YogaInitialContext } from '@graphql-yoga/node'
 import {
   createPubSub,
-  createServer,
+  createServer as createGraphqlServer,
   useExtendContext,
 } from '@graphql-yoga/node'
 
@@ -36,7 +36,7 @@ export interface Context extends YogaInitialContext {
 
 const pubSub = createPubSub()
 
-export async function createFastify(
+export async function createHttpServer(
   opts: FastifyServerOptions = {}
 ): Promise<FastifyInstance> {
   const server = fastify(opts)
@@ -50,8 +50,8 @@ export async function createFastify(
   return server
 }
 
-export async function startServer() {
-  const server = await createFastify({
+export async function createServer() {
+  const server = await createHttpServer({
     logger: {
       level: 'info',
     },
@@ -60,7 +60,7 @@ export async function startServer() {
   })
 
   // TODO refactor it to the separate file like graphqlServer.ts?
-  const graphQLServer = createServer<{
+  const graphQLServer = createGraphqlServer<{
     req: FastifyRequest
     reply: FastifyReply
   }>({
@@ -94,7 +94,7 @@ export async function startServer() {
     },
     cors: {
       // TODO check that, this should be given from .env
-      origin: ['http://localhost:3000', 'http://localhost:3333'],
+      origin: ['http://localhost:8080', 'http://localhost:3000'],
       credentials: true,
       methods: ['POST', 'GET', 'OPTIONS'],
     },
@@ -121,14 +121,5 @@ export async function startServer() {
     },
   })
 
-  const start = async () => {
-    try {
-      // TODO this should be given from .env
-      await server.listen({ host: '127.0.0.1', port: 3333 })
-    } catch (err) {
-      server.log.error(err)
-      process.exit(1)
-    }
-  }
-  return start()
+  return server
 }

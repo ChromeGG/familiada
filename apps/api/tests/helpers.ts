@@ -1,7 +1,8 @@
 import { prisma } from '../src/prisma'
 import type { Context } from '../src/server'
+import { createServer } from '../src/server'
 
-import { getTester } from './tester'
+import { getTester, getFunctionalTester } from './tester'
 
 const truncateAllTables = async () => {
   const tableNames = await prisma.$queryRaw<
@@ -32,6 +33,24 @@ export const integrationSetup = async () => {
 
   return {
     Tester: await getTester(testingContext),
+    integrationContext: testingContext,
+  }
+}
+
+export const functionalSetup = async () => {
+  afterEach(async () => {
+    await truncateAllTables()
+  })
+
+  const testingContext = <Context>{
+    prisma,
+  }
+  const server = await createServer()
+
+  // const sendGraphql = () => server.inject({ method: 'POST', url: '/graphql', payload: {} })
+
+  return {
+    Tester: await getFunctionalTester(testingContext, server),
     integrationContext: testingContext,
   }
 }

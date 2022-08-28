@@ -5,8 +5,6 @@
     "target": "ES2022",
     "module": "ES2022",
     "composite": false,
-    "declaration": true,
-    "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "inlineSources": false,

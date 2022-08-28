@@ -1,12 +1,12 @@
 import SchemaBuilder from '@pothos/core'
 import ErrorsPlugin from '@pothos/plugin-errors'
 import PrismaPlugin from '@pothos/plugin-prisma'
-import type PrismaTypes from '@pothos/plugin-prisma/generated'
 import ScopeAuthPlugin from '@pothos/plugin-scope-auth'
 import ValidationPlugin from '@pothos/plugin-validation'
 
 import { AuthError } from './errors/AuthError'
 import { GraphQLOperationalError } from './errors/GraphQLOperationalError'
+import type PrismaTypes from './generated/pothos-types'
 import { prisma } from './prisma'
 import type { Context } from './server'
 
