@@ -1,0 +1,5 @@
+# VSC graphql types and queries prompting
+projects:
+  default:
+    schema: http://localhost:3000/graphql
+  
