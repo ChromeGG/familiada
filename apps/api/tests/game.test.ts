@@ -32,4 +32,28 @@ describe('Game', () => {
       },
     })
   })
+
+  // TODO should I test error mechanism in separation? Probably yes
+  test('Should handle error if game already exist', async () => {
+    await Tester.createGame({ gameInput: { gameId: 'EXIST' } })
+
+    const response = await Tester.sendGraphql({
+      query: `#graphql
+        mutation {
+          createGame(gameInput: {gameId: "EXIST", playerName: "Player1", playerTeam: RED}) {
+           ... on AlreadyExistError {
+             message
+           }
+          }
+        }`,
+    })
+
+    expect(response.json()).toEqual({
+      data: {
+        createGame: {
+          message: 'This resource already exists',
+        },
+      },
+    })
+  })
 })
