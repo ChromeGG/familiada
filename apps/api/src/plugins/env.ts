@@ -1,5 +1,7 @@
 import envPluginFastify from '@fastify/env'
+// TODO try to import it from ./validation (namespace error)
 import { z } from 'zod'
+
 import zodToJsonSchema from 'zod-to-json-schema'
 
 declare module 'fastify' {

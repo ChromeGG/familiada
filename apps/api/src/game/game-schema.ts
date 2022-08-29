@@ -52,9 +52,9 @@ builder.mutationFields((t) => {
         // return 0
       },
     }),
-    joinToGame2: t.withAuth({ player: true }).float({
+    sendAnswer: t.withAuth({ player: true }).float({
       resolve: (_, __, context) => {
-        context.pubSub.publish('players:changed')
+        // context.pubSub.publish('players:changed')
         // context.player is available because of withAuth({player: true})
         console.log('~ context.player123', context.player)
         return 0
