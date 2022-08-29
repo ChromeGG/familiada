@@ -7,7 +7,7 @@ import {
   useExtendContext,
 } from '@graphql-yoga/node'
 
-import type { PrismaClient } from '@prisma/client'
+import type { Player, PrismaClient, Team } from '@prisma/client'
 import type {
   FastifyInstance,
   FastifyReply,
@@ -22,15 +22,16 @@ import statusPlugin from './plugins/status'
 import { prisma } from './prisma'
 import { schema } from './schema'
 
-type UserType = {
-  id: number
-  name: string
+// TODO should I import Player from /player/types instead of direct import from prisma?
+export interface AuthenticatedPlayer extends Player {
+  team: Team
 }
+
 export interface Context extends YogaInitialContext {
   prisma: PrismaClient
   req: FastifyRequest
   reply: FastifyReply
-  player: UserType
+  // player: UserType
   pubSub: typeof pubSub
 }
 
@@ -71,16 +72,15 @@ export async function createServer() {
       warn: (...args) => args.forEach((arg) => server.log.warn(arg)),
       error: (...args) => args.forEach((arg) => server.log.error(arg)),
     },
-    context: async ({ request, req, reply }): Promise<Context> => {
+    context: async ({ request, req, reply }) => {
       // TODO probably user should be obtained from other place
       const userId = req.headers.userid as string
-      let user: any
+      let user: AuthenticatedPlayer | undefined
       if (userId) {
-        const user = await prisma.player.findUniqueOrThrow({
+        user = await prisma.player.findUniqueOrThrow({
           where: { id: parseInt(userId) },
           include: { team: true },
         })
-        console.log('~ user', user)
       }
 
       return {
@@ -89,7 +89,7 @@ export async function createServer() {
         pubSub,
         request,
         reply,
-        player: user!,
+        player: user,
       }
     },
     cors: {

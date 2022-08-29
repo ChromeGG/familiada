@@ -16,6 +16,14 @@ const CreateGameInput = builder.inputType('CreateGameInput', {
   }),
 })
 
+const JoinToGameInput = builder.inputType('JoinToGameInput', {
+  fields: (t) => ({
+    gameId: t.id(),
+    playerName: t.string(),
+    playerTeam: t.field({ type: TeamColorGql }),
+  }),
+})
+
 // could be useful in future
 // type ShapeFromInput<T> = T extends InputRef<infer U> ? U : never
 // type CreateGameInputType = ShapeFromInput<typeof CreateGameInput>
@@ -37,20 +45,18 @@ builder.mutationFields((t) => {
       validate: {
         schema: createGameValidation,
       },
-      authScopes: {
-        player: true,
-      },
       resolve: (_, __, context) => {
-        console.log('~ context.player', context.player)
         return true
         // return joinToGame()
         // context.pubSub.publish('players:changed')
         // return 0
       },
     }),
-    joinToGame2: t.float({
+    joinToGame2: t.withAuth({ player: true }).float({
       resolve: (_, __, context) => {
         context.pubSub.publish('players:changed')
+        // context.player is available because of withAuth({player: true})
+        console.log('~ context.player123', context.player)
         return 0
       },
     }),
