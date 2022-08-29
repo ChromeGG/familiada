@@ -72,6 +72,7 @@ describe('game-service.ts', () => {
         },
         integrationContext
       )
+
       await expect(createGameFunc).rejects.toThrow(
         new AlreadyExistError('This resource already exists')
       )
