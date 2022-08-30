@@ -1,31 +1,12 @@
-import { faker } from '@faker-js/faker'
-
-import type { Game } from '@prisma/client'
-import { TeamColor } from '@prisma/client'
 import type { FastifyInstance, InjectOptions } from 'fastify'
 
-import type { PartialDeep } from 'type-fest'
-
-import type { CreateGameArgs } from '../src/game/game-schema'
-
-import { createGame } from '../src/game/game-service'
 import type { Context } from '../src/server'
+
+import { getGameTester } from './helpers/game'
 
 export const getTester = async (context: Context) => {
   return {
-    createGame: async ({
-      gameInput = {},
-    }: PartialDeep<CreateGameArgs>): ReturnType<typeof createGame> => {
-      const { gameId, playerName, playerTeam } = gameInput
-      const input = <CreateGameArgs>{
-        gameInput: {
-          gameId: gameId || faker.random.word(),
-          playerName: playerName || faker.name.firstName(),
-          playerTeam: playerTeam || TeamColor.RED,
-        },
-      }
-      return createGame(input, context)
-    },
+    ...getGameTester(context),
     db: context.prisma,
   }
 }

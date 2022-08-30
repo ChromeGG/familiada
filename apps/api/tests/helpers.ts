@@ -47,8 +47,6 @@ export const functionalSetup = async () => {
   }
   const server = await createServer()
 
-  // const sendGraphql = () => server.inject({ method: 'POST', url: '/graphql', payload: {} })
-
   return {
     Tester: await getFunctionalTester(testingContext, server),
     integrationContext: testingContext,
