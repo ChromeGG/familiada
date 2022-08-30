@@ -11,7 +11,7 @@ const { integrationContext, Tester } = await integrationSetup()
 
 describe('game-service.ts', () => {
   describe(createGame.name, () => {
-    test('Should create a game two teams and the player', async () => {
+    test('Should create a game with two teams and the player', async () => {
       const input: CreateGameArgs = {
         gameInput: {
           gameId: 'MyGameId',
@@ -37,17 +37,17 @@ describe('game-service.ts', () => {
       })
 
       expect(dbRedTeam).toEqual({
+        id: expect.any(Number),
         answeringPlayerId: null,
         gameId: input.gameInput.gameId,
-        id: expect.any(Number),
         score: 0,
         teamColor: TeamColor.RED,
       })
 
       expect(dbBlueTeam).toEqual({
+        id: expect.any(Number),
         answeringPlayerId: null,
         gameId: input.gameInput.gameId,
-        id: expect.any(Number),
         score: 0,
         teamColor: TeamColor.BLUE,
       })

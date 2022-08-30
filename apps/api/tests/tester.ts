@@ -6,7 +6,7 @@ import { getGameTester } from './helpers/game'
 
 export const getTester = async (context: Context) => {
   return {
-    ...getGameTester(context),
+    ...(await getGameTester(context)),
     db: context.prisma,
   }
 }
