@@ -36,6 +36,14 @@ const createGameArgs = builder.args((t) => ({
 
 export type CreateGameArgs = InputShapeFromFields<typeof createGameArgs>
 
+const Game = builder.prismaObject('Game', {
+  fields: (t) => ({
+    id: t.exposeID('id'),
+    // TODO this should be an enum
+    status: t.exposeString('status'),
+  }),
+})
+
 builder.mutationFields((t) => {
   return {
     joinToGame: t.boolean({
@@ -65,7 +73,7 @@ builder.mutationFields((t) => {
       validate: {
         schema: createGameValidation,
       },
-      type: Player,
+      type: Game,
       errors: {
         types: [AlreadyExistError],
       },

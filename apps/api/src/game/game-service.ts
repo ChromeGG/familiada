@@ -49,9 +49,11 @@ export const createGame = async (
 
   // TODO check if user exists and trow error
   // TODO this should be realized by user service method
-  return prisma.player.create({
+  await prisma.player.create({
     data: { name: playerName, teamId },
   })
+
+  return game
 }
 export const joinToGame = async (
   { gameInput }: CreateGameArgs,

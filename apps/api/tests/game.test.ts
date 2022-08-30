@@ -1,3 +1,5 @@
+import { GameStatus } from '@prisma/client'
+
 import { functionalSetup } from './helpers'
 
 const { Tester } = await functionalSetup()
@@ -11,7 +13,7 @@ describe('Game', () => {
             ... on MutationCreateGameSuccess {
               data {
                 id
-                name
+                status
               }
             }
            ... on AlreadyExistError {
@@ -26,7 +28,7 @@ describe('Game', () => {
         createGame: {
           data: {
             id: expect.any(String),
-            name: 'Player1',
+            status: GameStatus.LOBBY,
           },
         },
       },

@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 
+import type { Game } from '@prisma/client'
 import { TeamColor } from '@prisma/client'
 import type { FastifyInstance, InjectOptions } from 'fastify'
 
