@@ -31,7 +31,6 @@ export interface Context extends YogaInitialContext {
   prisma: PrismaClient
   req: FastifyRequest
   reply: FastifyReply
-  // player: UserType
   pubSub: typeof pubSub
 }
 
@@ -42,7 +41,7 @@ export async function createHttpServer(
 ): Promise<FastifyInstance> {
   const server = fastify(opts)
 
-  // await server.register(envPlugin, envOptions).after()
+  await server.register(envPlugin, envOptions).after()
 
   server.register(shutdownPlugin)
   server.register(statusPlugin)
@@ -56,8 +55,6 @@ export async function createServer() {
     logger: {
       level: 'info',
     },
-    // TODO use typed config
-    disableRequestLogging: process.env.ENABLE_REQUEST_LOGGING !== 'true',
   })
 
   // TODO refactor it to the separate file like graphqlServer.ts?
@@ -93,8 +90,7 @@ export async function createServer() {
       }
     },
     cors: {
-      // TODO check that, this should be given from .env
-      origin: ['http://localhost:8080', 'http://localhost:3000'],
+      origin: server.config.CORS_ORIGINS.split(','),
       credentials: true,
       methods: ['POST', 'GET', 'OPTIONS'],
     },
