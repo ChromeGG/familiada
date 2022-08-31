@@ -1,4 +1,5 @@
 import SchemaBuilder from '@pothos/core'
+import ComplexityPlugin from '@pothos/plugin-complexity'
 import ErrorsPlugin from '@pothos/plugin-errors'
 import PrismaPlugin from '@pothos/plugin-prisma'
 import ScopeAuthPlugin from '@pothos/plugin-scope-auth'
@@ -22,7 +23,13 @@ export const builder = new SchemaBuilder<{
     player: Context & { player: AuthenticatedPlayer }
   }
 }>({
-  plugins: [ScopeAuthPlugin, ErrorsPlugin, PrismaPlugin, ValidationPlugin],
+  plugins: [
+    ScopeAuthPlugin,
+    ErrorsPlugin,
+    PrismaPlugin,
+    ValidationPlugin,
+    ComplexityPlugin,
+  ],
   authScopes: () => ({
     public: true,
     player: true,

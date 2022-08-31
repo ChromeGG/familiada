@@ -25,6 +25,7 @@ importers:
       '@fastify/helmet': 9.1.0
       '@graphql-yoga/node': 2.13.6
       '@pothos/core': 3.13.0
+      '@pothos/plugin-complexity': 3.9.1
       '@pothos/plugin-errors': 3.6.0
       '@pothos/plugin-prisma': 3.21.2
       '@pothos/plugin-scope-auth': 3.11.2
@@ -56,6 +57,7 @@ importers:
       '@fastify/helmet': 9.1.0
       '@graphql-yoga/node': 2.13.6_graphql@16.5.0
       '@pothos/core': 3.13.0_graphql@16.5.0
+      '@pothos/plugin-complexity': 3.9.1_d45oi43uzjj34y4thgehxdtd5u
       '@pothos/plugin-errors': 3.6.0_d45oi43uzjj34y4thgehxdtd5u
       '@pothos/plugin-prisma': 3.21.2_hefxii4s6xccpucghzc3vsdgii
       '@pothos/plugin-scope-auth': 3.11.2_d45oi43uzjj34y4thgehxdtd5u
@@ -1204,6 +1206,16 @@ packages:
     peerDependencies:
       graphql: '>=15.1.0'
     dependencies:
+      graphql: 16.5.0
+    dev: false
+
+  /@pothos/plugin-complexity/3.9.1_d45oi43uzjj34y4thgehxdtd5u:
+    resolution: {integrity: sha512-cB/SNVCmywAdCYIQUU/fIBkiD9bw1s6n9lCy/WDsQ00lyAKWF5U4m/UOj2gmDlSGckTW8KTyaXd7MBroFrNG9A==}
+    peerDependencies:
+      '@pothos/core': '*'
+      graphql: '>=15.1.0'
+    dependencies:
+      '@pothos/core': 3.13.0_graphql@16.5.0
       graphql: 16.5.0
     dev: false
 
