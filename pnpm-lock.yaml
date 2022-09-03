@@ -33,7 +33,7 @@ importers:
       '@prisma/client': 4.2.1
       '@types/jest': 28.1.8
       '@types/node': 18.7.13
-      dotenv: 16.0.1
+      dotenv: 16.0.2
       eslint: 8.21.0
       fastify: 4.4.0
       fastify-plugin: 4.1.0
@@ -63,7 +63,7 @@ importers:
       '@pothos/plugin-scope-auth': 3.11.2_d45oi43uzjj34y4thgehxdtd5u
       '@pothos/plugin-validation': 3.5.1_4flzeyc2lrmay5u3bkvnmojgiy
       '@prisma/client': 4.2.1_prisma@4.2.1
-      dotenv: 16.0.1
+      dotenv: 16.0.2
       fastify: 4.4.0
       fastify-plugin: 4.1.0
       graphql: 16.5.0
@@ -2323,8 +2323,8 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /dotenv/16.0.1:
-    resolution: {integrity: sha512-1K6hR6wtk2FviQ4kEiSjFiH5rpzEVi8WW0x96aztHVMhEspNpc4DVOUTEHtEva5VThQ8IaBX1Pe4gSzpVVUsKQ==}
+  /dotenv/16.0.2:
+    resolution: {integrity: sha512-JvpYKUmzQhYoIFgK2MOnF3bciIZoItIIoryihy0rIA+H4Jy0FmgyKYAHCTN98P5ybGSJcIFbh6QKeJdtZd1qhA==}
     engines: {node: '>=12'}
     dev: false
 
@@ -2366,7 +2366,7 @@ packages:
     resolution: {integrity: sha512-91u95Nlny+LmjF3Mk96j8k6k+GOXcFEdMUv3bWQjtM2l+KTAdW6qITiv8kHYO8vCaCScXpJTDyd1AFnCQTnYaQ==}
     dependencies:
       ajv: 8.11.0
-      dotenv: 16.0.1
+      dotenv: 16.0.2
       dotenv-expand: 8.0.3
     dev: false
 
