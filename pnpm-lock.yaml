@@ -23,7 +23,7 @@ importers:
       '@faker-js/faker': 7.4.0
       '@fastify/env': 4.1.0
       '@fastify/helmet': 9.1.0
-      '@graphql-yoga/node': 2.13.6
+      '@graphql-yoga/node': 2.13.12
       '@pothos/core': 3.13.0
       '@pothos/plugin-complexity': 3.9.1
       '@pothos/plugin-errors': 3.6.0
@@ -55,7 +55,7 @@ importers:
       '@envelop/graphql-jit': 4.4.2_lg2dopunptv6a4xbsilfvzr35e
       '@fastify/env': 4.1.0
       '@fastify/helmet': 9.1.0
-      '@graphql-yoga/node': 2.13.6_graphql@16.5.0
+      '@graphql-yoga/node': 2.13.12_graphql@16.5.0
       '@pothos/core': 3.13.0_graphql@16.5.0
       '@pothos/plugin-complexity': 3.9.1_d45oi43uzjj34y4thgehxdtd5u
       '@pothos/plugin-errors': 3.6.0_d45oi43uzjj34y4thgehxdtd5u
@@ -552,15 +552,16 @@ packages:
       lru-cache: 6.0.0
     dev: false
 
-  /@envelop/parser-cache/4.5.1_lg2dopunptv6a4xbsilfvzr35e:
-    resolution: {integrity: sha512-vASzQdsZa+fmcg4GTXmBErhWl9zCQTMpRGMvOnucrowJILHm9CEIcNxbYQsRZbNfOcArj6ERN9j5RLE7z3lrsA==}
+  /@envelop/parser-cache/4.7.0_lg2dopunptv6a4xbsilfvzr35e:
+    resolution: {integrity: sha512-63NfXDcW/vGn4U6NFxaZ0JbYWAcJb9A6jhTvghsSz1ZS+Dny/ci8bVSgVmM1q+N56hPyGsVPuyI+rIc71mPU5g==}
     peerDependencies:
-      '@envelop/core': ^2.4.1
+      '@envelop/core': ^2.6.0
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       '@envelop/core': 2.5.0_graphql@16.5.0
       graphql: 16.5.0
       lru-cache: 6.0.0
+      tslib: 2.4.0
     dev: false
 
   /@envelop/types/2.3.1_graphql@16.5.0:
@@ -571,15 +572,16 @@ packages:
       graphql: 16.5.0
     dev: false
 
-  /@envelop/validation-cache/4.5.1_lg2dopunptv6a4xbsilfvzr35e:
-    resolution: {integrity: sha512-03BefcSGQl2/rNjajijfeDKnZBWBRbW8VYRg1xk+8DM6dAnsQF8vqANeIxdd2nlSdAFbHeV66AQr2XYYeacnsg==}
+  /@envelop/validation-cache/4.7.0_lg2dopunptv6a4xbsilfvzr35e:
+    resolution: {integrity: sha512-PzL+GfWJRT+JjsJqZAIxHKEkvkM3hxkeytS5O0QLXT8kURNBV28r+Kdnn2RCF5+6ILhyGpiDb60vaquBi7g4lw==}
     peerDependencies:
-      '@envelop/core': ^2.4.1
+      '@envelop/core': ^2.6.0
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       '@envelop/core': 2.5.0_graphql@16.5.0
       graphql: 16.5.0
       lru-cache: 6.0.0
+      tslib: 2.4.0
     dev: false
 
   /@eslint/eslintrc/1.3.0:
@@ -656,26 +658,35 @@ packages:
       helmet: 5.1.1
     dev: false
 
-  /@graphql-tools/merge/8.3.1_graphql@16.5.0:
-    resolution: {integrity: sha512-BMm99mqdNZbEYeTPK3it9r9S6rsZsQKtlqJsSBknAclXq2pGEfOxjcIZi+kBSkHZKPKCRrYDd5vY0+rUmIHVLg==}
+  /@graphql-tools/merge/8.3.4_graphql@16.5.0:
+    resolution: {integrity: sha512-2z1UpHvvI52nQZIYArU+rPq1lOENWetsdb+6vu8yLGyCRP4CpKMBvtmiHkbrlPBO8dItpZ08szXEoaStfJHBxQ==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 8.9.0_graphql@16.5.0
+      '@graphql-tools/utils': 8.10.1_graphql@16.5.0
       graphql: 16.5.0
       tslib: 2.4.0
     dev: false
 
-  /@graphql-tools/schema/8.5.1_graphql@16.5.0:
-    resolution: {integrity: sha512-0Esilsh0P/qYcB5DKQpiKeQs/jevzIadNTaT0jeWklPMwNbT7yMX4EqZany7mbeRRlSRwMzNzL5olyFdffHBZg==}
+  /@graphql-tools/schema/9.0.2_graphql@16.5.0:
+    resolution: {integrity: sha512-FnBM1PMKQ6y8KlzeFocnEwcGA/IT++z4v+hvvwwXL+IUYDNqmrp9XYNklpQRb/KKSbTtKnQapCWNiVNex7jl+Q==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/merge': 8.3.1_graphql@16.5.0
-      '@graphql-tools/utils': 8.9.0_graphql@16.5.0
+      '@graphql-tools/merge': 8.3.4_graphql@16.5.0
+      '@graphql-tools/utils': 8.10.1_graphql@16.5.0
       graphql: 16.5.0
       tslib: 2.4.0
       value-or-promise: 1.0.11
+    dev: false
+
+  /@graphql-tools/utils/8.10.1_graphql@16.5.0:
+    resolution: {integrity: sha512-UYi/afPvxZ8mz0LjplMxOSmGDPenVS/Q0zJ/6LOyF9yZdJYIDe+J+Qr/I9+rCYQmgBW4BJeRUUc7VoUzZPfZDA==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      graphql: 16.5.0
+      tslib: 2.4.0
     dev: false
 
   /@graphql-tools/utils/8.9.0_graphql@16.5.0:
@@ -695,19 +706,19 @@ packages:
       graphql: 16.5.0
     dev: false
 
-  /@graphql-yoga/common/2.12.5_graphql@16.5.0:
-    resolution: {integrity: sha512-5p634xtfphiHNPd39kyDc3VSIX8shkinywalNiMHEAal1DGYCn4x/mKbA6Q7tgWvrCqC4fAAuklHoxxi7TIyxA==}
+  /@graphql-yoga/common/2.12.11_graphql@16.5.0:
+    resolution: {integrity: sha512-MQ5AFFSwKvi3/nmvT7LYyQscwNMyz7+d2Yxqr8pY25eh7TlHZY45BLtFj4xRlphuogS9HiNEWTWMqhAo2Rxdew==}
     peerDependencies:
       graphql: ^15.2.0 || ^16.0.0
     dependencies:
       '@envelop/core': 2.5.0_graphql@16.5.0
-      '@envelop/parser-cache': 4.5.1_lg2dopunptv6a4xbsilfvzr35e
-      '@envelop/validation-cache': 4.5.1_lg2dopunptv6a4xbsilfvzr35e
-      '@graphql-tools/schema': 8.5.1_graphql@16.5.0
+      '@envelop/parser-cache': 4.7.0_lg2dopunptv6a4xbsilfvzr35e
+      '@envelop/validation-cache': 4.7.0_lg2dopunptv6a4xbsilfvzr35e
+      '@graphql-tools/schema': 9.0.2_graphql@16.5.0
       '@graphql-tools/utils': 8.9.0_graphql@16.5.0
       '@graphql-typed-document-node/core': 3.1.1_graphql@16.5.0
       '@graphql-yoga/subscription': 2.2.3
-      '@whatwg-node/fetch': 0.2.6
+      '@whatwg-node/fetch': 0.3.2
       dset: 3.1.2
       graphql: 16.5.0
       tslib: 2.4.0
@@ -715,16 +726,16 @@ packages:
       - encoding
     dev: false
 
-  /@graphql-yoga/node/2.13.6_graphql@16.5.0:
-    resolution: {integrity: sha512-gQDP2pZ88lR6+ZZbq6VosiCmhKR9cMWIAbtjTqcFu5k3isKdJnJvCSzk8vZuMjdwWl+IlyJaTVZTN8Xor+Z2tQ==}
+  /@graphql-yoga/node/2.13.12_graphql@16.5.0:
+    resolution: {integrity: sha512-QVlMTSLyOWw1uCsS8Lm4lufGMcQs9R4PIo/LkFU9w9e+NHfFdrU+VaHODU2+3CY5KksIHnX9OmWX9N+3d9rBfA==}
     peerDependencies:
       graphql: ^15.2.0 || ^16.0.0
     dependencies:
       '@envelop/core': 2.5.0_graphql@16.5.0
       '@graphql-tools/utils': 8.9.0_graphql@16.5.0
-      '@graphql-yoga/common': 2.12.5_graphql@16.5.0
+      '@graphql-yoga/common': 2.12.11_graphql@16.5.0
       '@graphql-yoga/subscription': 2.2.3
-      '@whatwg-node/fetch': 0.2.6
+      '@whatwg-node/fetch': 0.3.2
       graphql: 16.5.0
       tslib: 2.4.0
     transitivePeerDependencies:
@@ -1638,8 +1649,8 @@ packages:
       '@typescript-eslint/types': 5.30.7
       eslint-visitor-keys: 3.3.0
 
-  /@whatwg-node/fetch/0.2.6:
-    resolution: {integrity: sha512-NhHiqeGcKjgqUZvJTZSou9qsFEPBBG1LPm2Npz0cmcPvukhhQfjX+p3quRx6b9AyjNPp1f73VB1z4ApHy9FcNg==}
+  /@whatwg-node/fetch/0.3.2:
+    resolution: {integrity: sha512-Bs5zAWQs0tXsLa4mRmLw7Psps1EN78vPtgcLpw3qPY8s6UYPUM67zFZ9cy+7tZ64PXhfwzxJn+m7RH2Lq48RNQ==}
     dependencies:
       '@peculiar/webcrypto': 1.4.0
       abort-controller: 3.0.0
