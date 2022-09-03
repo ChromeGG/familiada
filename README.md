@@ -10,7 +10,7 @@ This turborepo uses [pnpm](https://pnpm.io) as a packages manager. It includes t
 - `web`: a [Next.js](https://nextjs.org) frontend
 
 - `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+- `tsconfig`: `tsconfig.json`s used through the monorepo
 
 Each package/app is:
 
@@ -26,9 +26,8 @@ Each package/app is:
 1. Install all dependencies `pnpm i`
 2. Copy `.env.example` => `.env` in each `/apps`
 3. Run `docker-compose up`
-4. Run `pnpm run dev`
-
-TODO: add note/script about DB migrations
+4. Run migrations `pnpm -w run migrate`
+5. Run `pnpm run dev`
 
 ```bash
 # api
@@ -46,5 +45,3 @@ To build all apps and packages, run the following command:
 ```bash
 pnpm run build
 ```
-
-TODO: Add docker image with production build

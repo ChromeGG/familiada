@@ -11,6 +11,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "migrate": "pnpm --filter api run migrate:dev",
     "lint": "turbo run lint",
     "prepare": "husky install"
   },
