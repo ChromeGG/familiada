@@ -1,12 +1,11 @@
-import type { InputShapeFromFields, InputRef } from '@pothos/core'
+import type { InputShapeFromFields } from '@pothos/core'
 
 import { builder } from '../builder'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
-import { Player } from '../player/player-schema'
 import { TeamColorGql } from '../team/team-schema'
 
 import { createGame } from './game-service'
-import { createGameValidation } from './game-validator'
+import { createGameValidation, joinToGameValidation } from './game-validator'
 
 const CreateGameInput = builder.inputType('CreateGameInput', {
   fields: (t) => ({
@@ -18,9 +17,8 @@ const CreateGameInput = builder.inputType('CreateGameInput', {
 
 const JoinToGameInput = builder.inputType('JoinToGameInput', {
   fields: (t) => ({
-    gameId: t.id(),
     playerName: t.string(),
-    playerTeam: t.field({ type: TeamColorGql }),
+    teamId: t.id(),
   }),
 })
 
@@ -31,6 +29,12 @@ const JoinToGameInput = builder.inputType('JoinToGameInput', {
 const createGameArgs = builder.args((t) => ({
   gameInput: t.field({
     type: CreateGameInput,
+  }),
+}))
+
+const joinToGameArgs = builder.args((t) => ({
+  gameInput: t.field({
+    type: JoinToGameInput,
   }),
 }))
 
@@ -49,9 +53,9 @@ builder.mutationFields((t) => {
     joinToGame: t.boolean({
       // type: Game,
       // CreateGameInputShould be renamed
-      args: createGameArgs,
+      args: joinToGameArgs,
       validate: {
-        schema: createGameValidation,
+        schema: joinToGameValidation,
       },
       resolve: (_, __, context) => {
         return true
