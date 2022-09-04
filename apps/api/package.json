@@ -15,6 +15,7 @@
     "migrate:dev": "prisma migrate dev && prisma generate",
     "migrate:reset": "prisma migrate reset",
     "migrate:test:dev": "dotenv -e .env.test -- pnpm prisma db push",
+    "type-check": "tsc --noEmit",
     "start": "node dist/index",
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest 2>&1"
   },
