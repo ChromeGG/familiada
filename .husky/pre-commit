@@ -2,4 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 pnpm exec lint-staged
+
+# TODO this should be per staged file but it's hard to achive 
 pnpm run type-check

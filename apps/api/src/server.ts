@@ -78,6 +78,7 @@ export async function createServer() {
           where: { id: parseInt(userId) },
           include: { team: true },
         })
+        req.log.info(user)
       }
 
       return {
