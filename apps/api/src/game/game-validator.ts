@@ -1,6 +1,7 @@
 import { TeamColor } from '@prisma/client'
 
 import { z } from '../validation'
+import type { Z } from '../validation'
 
 export const createGameValidation = z.object({
   gameInput: z.object({
@@ -13,6 +14,8 @@ export const createGameValidation = z.object({
 export const joinToGameValidation = z.object({
   gameInput: z.object({
     playerName: z.playerName(),
-    teamId: z.id(),
+    teamId: z.string(),
   }),
 })
+
+export type JoinToGameValidation = Z.infer<typeof joinToGameValidation>

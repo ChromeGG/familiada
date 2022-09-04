@@ -25,7 +25,7 @@ builder.subscriptionFields((t) => {
             // upon initiating the subscription
             [],
             // event stream for future updates
-            pubSub.subscribe('players:changed'),
+            pubSub.subscribe('playerJoined'),
           ]),
           // map all events to the latest globalCounter
           map(() => [])

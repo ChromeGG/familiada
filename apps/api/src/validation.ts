@@ -12,3 +12,5 @@ export const z = {
       .regex(/[A-Za-z0-9_]/),
   playerName: () => z.string().min(3).max(30),
 }
+
+export * as Z from 'zod'

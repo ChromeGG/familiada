@@ -1,7 +1,15 @@
 {
   "name": "familiada",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
+  "repository": {
+    "url": "https://github.com/ChromeGG/familiada"
+  },
+  "author": {
+    "email": "adam@tkaczyk.dev",
+    "name": "Adam Tkaczyk",
+    "url": "https://tkaczyk.dev"
+  },
   "type": "module",
   "workspaces": [
     "apps/*",

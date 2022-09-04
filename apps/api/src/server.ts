@@ -34,7 +34,9 @@ export interface Context extends YogaInitialContext {
   pubSub: typeof pubSub
 }
 
-const pubSub = createPubSub()
+// TODO extract it to the type
+const pubSub = createPubSub<{ playerJoined: [Player] }>()
+// pubSub.publish('playerJoined', { })
 
 export async function createHttpServer(
   opts: FastifyServerOptions = {}
@@ -55,6 +57,7 @@ export async function createServer() {
     logger: {
       level: 'info',
     },
+    disableRequestLogging: process.env.DISABLE_REQUEST_LOGGING === 'true',
   })
 
   // TODO refactor it to the separate file like graphqlServer.ts?

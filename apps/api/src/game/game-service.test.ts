@@ -3,7 +3,7 @@ import { GameStatus, TeamColor } from '@prisma/client'
 import { integrationSetup } from '../../tests/helpers'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 
-import type { CreateGameArgs } from './game-schema'
+import type { CreateGameArgs } from './contract/create-game-args'
 
 import { createGame } from './game-service'
 

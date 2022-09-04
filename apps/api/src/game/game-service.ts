@@ -1,9 +1,11 @@
 import { GameStatus, TeamColor } from '@prisma/client'
 
 import { AlreadyExistError } from '../errors/AlreadyExistError'
+import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
 import type { Context } from '../server'
 
-import type { CreateGameArgs } from './game-schema'
+import type { CreateGameArgs } from './contract/create-game-args'
+import type { JoinToGameArgs } from './contract/join-to-game-args'
 
 export const createGame = async (
   { gameInput }: CreateGameArgs,
@@ -55,12 +57,43 @@ export const createGame = async (
 
   return game
 }
+
+const MAX_PLAYERS_PER_TEAM = 5
+
 export const joinToGame = async (
-  { gameInput }: CreateGameArgs,
+  { gameInput }: JoinToGameArgs,
   { prisma, pubSub }: Context
 ) => {
-  // TODO: throw error if player already exist?
-  const gamez = await prisma.game.findFirstOrThrow({
-    where: { id: gameInput.gameId },
+  const { playerName } = gameInput
+  const teamId = Number(gameInput.teamId)
+
+  const numberOfPlayers = await prisma.player.count({
+    where: { teamId: teamId },
   })
+
+  if (numberOfPlayers > MAX_PLAYERS_PER_TEAM) {
+    throw new GraphQLOperationalError('Max players number exceeded')
+  }
+
+  const team = await prisma.team.findUniqueOrThrow({
+    where: { id: teamId },
+  })
+
+  const game = await prisma.game.findUniqueOrThrow({
+    where: { id: team.gameId },
+  })
+
+  if (game.status !== GameStatus.LOBBY) {
+    throw new GraphQLOperationalError('Game is not in lobby status')
+  }
+
+  const player = await prisma.player.create({
+    data: { name: playerName, teamId: team.id },
+    include: { team: true },
+  })
+
+  // ! NEXT: TEST IT
+  pubSub.publish('playerJoined', player)
+
+  return game
 }
