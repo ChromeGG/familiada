@@ -84,13 +84,12 @@ describe('game-service.ts', () => {
   })
 
   describe(joinToGame.name, () => {
-    // ! NEXT: fix failing test, should pubSub be mocked or imported from file?
     test('Should join to game', async () => {
       const game = await Tester.createGame()
       const [, blueTeam] = game.team
 
       const input: JoinToGameArgs = {
-        // TODO rename gameInput here, and get rid of .toString() and Number()
+        // ! NEXT rename gameInput here, and get rid of .toString() and Number()
         gameInput: {
           playerName: 'MyPlayer',
           teamId: blueTeam.id.toString(),
