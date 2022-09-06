@@ -1,11 +1,14 @@
+import type { Player } from '@prisma/client'
 import { GameStatus, TeamColor } from '@prisma/client'
+import { any } from 'zod'
 
 import { integrationSetup } from '../../tests/helpers'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 
 import type { CreateGameArgs } from './contract/create-game-args'
+import type { JoinToGameArgs } from './contract/join-to-game-args'
 
-import { createGame } from './game-service'
+import { createGame, joinToGame } from './game-service'
 
 const { integrationContext, Tester } = await integrationSetup()
 
@@ -28,6 +31,7 @@ describe('game-service.ts', () => {
       })
       const dbPlayer = await Tester.db.player.findFirst()
 
+      // TODO type it?
       expect(dbGame).toEqual({
         id: input.gameInput.gameId,
         status: GameStatus.LOBBY,
@@ -76,6 +80,33 @@ describe('game-service.ts', () => {
       await expect(createGameFunc).rejects.toThrow(
         new AlreadyExistError('This resource already exists')
       )
+    })
+  })
+
+  describe(joinToGame.name, () => {
+    // ! NEXT: fix failing test, should pubSub be mocked or imported from file?
+    test('Should join to game', async () => {
+      const game = await Tester.createGame()
+      const [, blueTeam] = game.team
+
+      const input: JoinToGameArgs = {
+        // TODO rename gameInput here, and get rid of .toString() and Number()
+        gameInput: {
+          playerName: 'MyPlayer',
+          teamId: blueTeam.id.toString(),
+        },
+      }
+
+      await joinToGame(input, integrationContext)
+
+      const player = await Tester.db.player.findFirst({
+        where: { name: 'MyPlayer' },
+      })
+      expect(player).toEqual<Player>({
+        id: expect.any(Number),
+        name: 'MyPlayer',
+        teamId: blueTeam.id,
+      })
     })
   })
 })

@@ -1,42 +1,19 @@
-import { useGraphQlJit } from '@envelop/graphql-jit'
 import fastifyHelmet from '@fastify/helmet'
-import type { YogaInitialContext } from '@graphql-yoga/node'
-import {
-  createPubSub,
-  createServer as createGraphqlServer,
-  useExtendContext,
-} from '@graphql-yoga/node'
 
-import type { Player, PrismaClient, Team } from '@prisma/client'
-import type {
-  FastifyInstance,
-  FastifyReply,
-  FastifyRequest,
-  FastifyServerOptions,
-} from 'fastify'
+import type { Player, Team } from '@prisma/client'
+import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import fastify from 'fastify'
+
+import { createGraphqlServer } from './graphql-server'
 
 import { envPlugin, envOptions } from './plugins/env'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
-import { prisma } from './prisma'
-import { schema } from './schema'
 
 // TODO should I import Player from /player/types instead of direct import from prisma?
 export interface AuthenticatedPlayer extends Player {
   team: Team
 }
-
-export interface Context extends YogaInitialContext {
-  prisma: PrismaClient
-  req: FastifyRequest
-  reply: FastifyReply
-  pubSub: typeof pubSub
-}
-
-// TODO extract it to the type
-const pubSub = createPubSub<{ playerJoined: [Player] }>()
-// pubSub.publish('playerJoined', { })
 
 export async function createHttpServer(
   opts: FastifyServerOptions = {}
@@ -55,52 +32,12 @@ export async function createHttpServer(
 export async function createServer() {
   const server = await createHttpServer({
     logger: {
-      level: 'info',
+      level: process.env.LOGGER_LOG_LEVEL || 'info',
     },
     disableRequestLogging: process.env.DISABLE_REQUEST_LOGGING === 'true',
   })
 
-  // TODO refactor it to the separate file like graphqlServer.ts?
-  const graphQLServer = createGraphqlServer<{
-    req: FastifyRequest
-    reply: FastifyReply
-  }>({
-    schema,
-    logging: {
-      debug: (...args) => args.forEach((arg) => server.log.debug(arg)),
-      info: (...args) => args.forEach((arg) => server.log.info(arg)),
-      warn: (...args) => args.forEach((arg) => server.log.warn(arg)),
-      error: (...args) => args.forEach((arg) => server.log.error(arg)),
-    },
-    context: async ({ request, req, reply }) => {
-      // TODO probably user should be obtained from other place
-      const userId = req.headers.userid as string
-      let user: AuthenticatedPlayer | undefined
-      if (userId) {
-        user = await prisma.player.findUniqueOrThrow({
-          where: { id: parseInt(userId) },
-          include: { team: true },
-        })
-        req.log.info(user)
-      }
-
-      return {
-        prisma,
-        req,
-        pubSub,
-        request,
-        reply,
-        player: user,
-      }
-    },
-    cors: {
-      origin: server.config.CORS_ORIGINS.split(','),
-      credentials: true,
-      methods: ['POST', 'GET', 'OPTIONS'],
-    },
-    graphiql: true,
-    plugins: [useGraphQlJit(), useExtendContext(() => ({ pubSub }))],
-  })
+  const graphQLServer = await createGraphqlServer(server)
 
   server.route({
     url: '/graphql',

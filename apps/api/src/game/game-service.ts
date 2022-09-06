@@ -2,14 +2,14 @@ import { GameStatus, TeamColor } from '@prisma/client'
 
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
-import type { Context } from '../server'
+import type { Context } from '../graphql-server'
 
 import type { CreateGameArgs } from './contract/create-game-args'
 import type { JoinToGameArgs } from './contract/join-to-game-args'
 
 export const createGame = async (
   { gameInput }: CreateGameArgs,
-  { prisma, pubSub }: Context
+  { prisma }: Context
 ) => {
   const isExistingGame = await prisma.game.findUnique({
     where: { id: gameInput.gameId },

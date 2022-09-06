@@ -4,13 +4,13 @@ import type { PartialDeep } from 'type-fest'
 
 import type { CreateGameArgs } from '../../src/game/contract/create-game-args'
 import { createGame } from '../../src/game/game-service'
-import type { Context } from '../../src/server'
+import type { Context } from '../../src/graphql-server'
 
 export const getGameTester = async (context: Context) => {
   return {
     createGame: async ({
       gameInput = {},
-    }: PartialDeep<CreateGameArgs>): ReturnType<typeof createGame> => {
+    }: PartialDeep<CreateGameArgs> = {}): ReturnType<typeof createGame> => {
       const { gameId, playerName, playerTeam } = gameInput
       const input = <CreateGameArgs>{
         gameInput: {

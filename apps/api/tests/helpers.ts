@@ -1,5 +1,6 @@
+import type { Context } from '../src/graphql-server'
+import { createPubSub } from '../src/graphql-server'
 import { prisma } from '../src/prisma'
-import type { Context } from '../src/server'
 import { createServer } from '../src/server'
 
 import { getTester, getFunctionalTester } from './tester'
@@ -27,8 +28,11 @@ export const integrationSetup = async () => {
     await truncateAllTables()
   })
 
+  const pubSub = createPubSub()
+
   const testingContext = <Context>{
     prisma,
+    pubSub,
   }
 
   return {
@@ -42,8 +46,11 @@ export const functionalSetup = async () => {
     await truncateAllTables()
   })
 
+  const pubSub = createPubSub()
+
   const testingContext = <Context>{
     prisma,
+    pubSub,
   }
   const server = await createServer()
 
