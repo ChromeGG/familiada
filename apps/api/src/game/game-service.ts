@@ -1,11 +1,11 @@
-import { GameStatus, TeamColor } from '@prisma/client'
-
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
 import type { Context } from '../graphql-server'
+import { TeamColor } from '../team/team-schema'
 
 import type { CreateGameArgs } from './contract/create-game-args'
 import type { JoinToGameArgs } from './contract/join-to-game-args'
+import { GameStatus } from './game-schema'
 
 export const createGame = async (
   { gameInput }: CreateGameArgs,
@@ -61,11 +61,11 @@ export const createGame = async (
 const MAX_PLAYERS_PER_TEAM = 5
 
 export const joinToGame = async (
-  { gameInput }: JoinToGameArgs,
+  { joinInput }: JoinToGameArgs,
   { prisma, pubSub }: Context
 ) => {
-  const { playerName } = gameInput
-  const teamId = Number(gameInput.teamId)
+  const { playerName } = joinInput
+  const teamId = Number(joinInput.teamId)
 
   const numberOfPlayers = await prisma.player.count({
     where: { teamId: teamId },

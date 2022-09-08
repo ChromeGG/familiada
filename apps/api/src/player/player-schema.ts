@@ -2,7 +2,10 @@ import { pipe, Repeater, map } from '@graphql-yoga/node'
 
 import { builder } from '../builder'
 
-export const Player = builder.prismaObject('Player', {
+export type { Player } from '@prisma/client'
+
+// Not used, but will be used in future
+export const PlayerGql = builder.prismaObject('Player', {
   fields: (t) => ({
     id: t.exposeID('id'),
     name: t.exposeString('name'),

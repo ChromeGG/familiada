@@ -1,12 +1,15 @@
-import type { Player } from '@prisma/client'
-import { GameStatus, TeamColor } from '@prisma/client'
-import { any } from 'zod'
-
 import { integrationSetup } from '../../tests/helpers'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 
+import type { Player } from '../player/player-schema'
+
+import type { Team } from '../team/team-schema'
+import { TeamColor } from '../team/team-schema'
+
 import type { CreateGameArgs } from './contract/create-game-args'
 import type { JoinToGameArgs } from './contract/join-to-game-args'
+import type { Game } from './game-schema'
+import { GameStatus } from './game-schema'
 
 import { createGame, joinToGame } from './game-service'
 
@@ -31,8 +34,7 @@ describe('game-service.ts', () => {
       })
       const dbPlayer = await Tester.db.player.findFirst()
 
-      // TODO type it?
-      expect(dbGame).toEqual({
+      expect(dbGame).toEqual<Game>({
         id: input.gameInput.gameId,
         status: GameStatus.LOBBY,
         rounds: 3,
@@ -40,7 +42,7 @@ describe('game-service.ts', () => {
         currentScore: 0,
       })
 
-      expect(dbRedTeam).toEqual({
+      expect(dbRedTeam).toEqual<Team>({
         id: expect.any(Number),
         answeringPlayerId: null,
         gameId: input.gameInput.gameId,
@@ -48,7 +50,7 @@ describe('game-service.ts', () => {
         teamColor: TeamColor.RED,
       })
 
-      expect(dbBlueTeam).toEqual({
+      expect(dbBlueTeam).toEqual<Team>({
         id: expect.any(Number),
         answeringPlayerId: null,
         gameId: input.gameInput.gameId,
@@ -56,7 +58,7 @@ describe('game-service.ts', () => {
         teamColor: TeamColor.BLUE,
       })
 
-      expect(dbPlayer).toEqual({
+      expect(dbPlayer).toEqual<Player>({
         id: expect.any(Number),
         name: input.gameInput.playerName,
         teamId: dbBlueTeam.id,
@@ -89,8 +91,7 @@ describe('game-service.ts', () => {
       const [, blueTeam] = game.team
 
       const input: JoinToGameArgs = {
-        // ! NEXT rename gameInput here, and get rid of .toString() and Number()
-        gameInput: {
+        joinInput: {
           playerName: 'MyPlayer',
           teamId: blueTeam.id.toString(),
         },

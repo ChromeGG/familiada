@@ -10,7 +10,7 @@ const joinToGameInput = builder.inputType('JoinToGameInput', {
 })
 
 export const joinToGameArgs = builder.args((t) => ({
-  gameInput: t.field({
+  joinInput: t.field({
     type: joinToGameInput,
   }),
 }))

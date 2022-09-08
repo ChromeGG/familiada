@@ -1,5 +1,4 @@
-import { TeamColor } from '@prisma/client'
-
+import { TeamColor } from '../team/team-schema'
 import { z } from '../validation'
 import type { Z } from '../validation'
 
@@ -12,7 +11,7 @@ export const createGameValidation = z.object({
 })
 
 export const joinToGameValidation = z.object({
-  gameInput: z.object({
+  joinInput: z.object({
     playerName: z.playerName(),
     teamId: z.string(),
   }),

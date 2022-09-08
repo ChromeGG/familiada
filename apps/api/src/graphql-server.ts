@@ -5,9 +5,10 @@ import {
   createServer,
   useExtendContext,
 } from '@graphql-yoga/node'
-import type { Player, PrismaClient } from '@prisma/client'
 
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
+
+import type { Player } from './player/player-schema'
 
 import { prisma } from './prisma'
 
@@ -15,7 +16,7 @@ import { schema } from './schema'
 import type { AuthenticatedPlayer } from './server'
 
 export interface Context extends YogaInitialContext {
-  prisma: PrismaClient
+  prisma: typeof prisma
   req: FastifyRequest
   reply: FastifyReply
   pubSub: PubSub<PubSubArgs>

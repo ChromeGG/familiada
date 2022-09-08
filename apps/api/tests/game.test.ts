@@ -1,4 +1,4 @@
-import { GameStatus } from '@prisma/client'
+import { GameStatus } from '../src/game/game-schema'
 
 import { functionalSetup } from './helpers'
 

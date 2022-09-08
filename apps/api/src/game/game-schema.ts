@@ -7,6 +7,9 @@ import { joinToGameArgs } from './contract/join-to-game-args'
 import { createGame, joinToGame } from './game-service'
 import { createGameValidation, joinToGameValidation } from './game-validator'
 
+export type { Game } from '@prisma/client'
+export { GameStatus } from '@prisma/client'
+
 // could be useful in future
 // type ShapeFromInput<T> = T extends InputRef<infer U> ? U : never
 // type CreateGameInputType = ShapeFromInput<typeof CreateGameInput>

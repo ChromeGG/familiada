@@ -1,14 +1,15 @@
 import fastifyHelmet from '@fastify/helmet'
 
-import type { Player, Team } from '@prisma/client'
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import fastify from 'fastify'
 
 import { createGraphqlServer } from './graphql-server'
+import type { Player } from './player/player-schema'
 
 import { envPlugin, envOptions } from './plugins/env'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
+import type { Team } from './team/team-schema'
 
 // TODO should I import Player from /player/types instead of direct import from prisma?
 export interface AuthenticatedPlayer extends Player {

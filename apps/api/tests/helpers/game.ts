@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker'
-import { TeamColor } from '@prisma/client'
 import type { PartialDeep } from 'type-fest'
 
 import type { CreateGameArgs } from '../../src/game/contract/create-game-args'
 import { createGame } from '../../src/game/game-service'
 import type { Context } from '../../src/graphql-server'
+import { TeamColor } from '../../src/team/team-schema'
 
 export const getGameTester = async (context: Context) => {
   return {
