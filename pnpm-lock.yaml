@@ -22,7 +22,7 @@ importers:
       '@envelop/graphql-jit': 4.6.0
       '@faker-js/faker': 7.5.0
       '@fastify/env': 4.1.0
-      '@fastify/helmet': 9.1.0
+      '@fastify/helmet': 10.0.0
       '@graphql-yoga/node': 2.13.12
       '@pothos/core': 3.20.0
       '@pothos/plugin-complexity': 3.10.0
@@ -55,7 +55,7 @@ importers:
       '@envelop/core': 2.6.0_graphql@16.5.0
       '@envelop/graphql-jit': 4.6.0_iancjfawq6opzcxnaqyvdzrj3a
       '@fastify/env': 4.1.0
-      '@fastify/helmet': 9.1.0
+      '@fastify/helmet': 10.0.0
       '@graphql-yoga/node': 2.13.12_graphql@16.5.0
       '@pothos/core': 3.20.0_graphql@16.5.0
       '@pothos/plugin-complexity': 3.10.0_355lnhuclqkmednlel6jyzjo6i
@@ -639,11 +639,11 @@ packages:
       fast-json-stringify: 5.1.0
     dev: false
 
-  /@fastify/helmet/9.1.0:
-    resolution: {integrity: sha512-wAtu/38t90vH46GdLM6pVi8tM1HZXb6PRdLTNBo9pudSfSw5i5Ogm8Hq1Nx337WjgSOeU6MefaTd+1avlOlCDQ==}
+  /@fastify/helmet/10.0.0:
+    resolution: {integrity: sha512-PQI8YXr6Aa1srsMexDBZC+ThD4sCHoDo3T4F1JlfeJ0JfWnl4hoBgsXGJ+jpNcE61Ily6P6p/tTnOXdLRYnEeQ==}
     dependencies:
-      fastify-plugin: 3.0.1
-      helmet: 5.1.1
+      fastify-plugin: 4.2.1
+      helmet: 6.0.0
     dev: false
 
   /@graphql-tools/merge/8.3.4_graphql@16.5.0:
@@ -3038,10 +3038,6 @@ packages:
     resolution: {integrity: sha512-qKRta6N7BWEFVlyonVY/V+BMLgFqktCUV0QjT259ekAIlbVrMaFnFLxJ4s/JPl4tou56S1BzPufI60bLe29fHA==}
     dev: false
 
-  /fastify-plugin/3.0.1:
-    resolution: {integrity: sha512-qKcDXmuZadJqdTm6vlCqioEbyewF60b/0LOFCcYN1B6BIZGlYJumWWOYs70SFYLDAH4YqdE1cxH/RKMG7rFxgA==}
-    dev: false
-
   /fastify-plugin/4.2.1:
     resolution: {integrity: sha512-dlGKiwLzRBKkEf5J5ho0uAD/Jdv8GQVUbriB3tAX3ehRUXE4gTV3lRd5inEg9li1aLzb0EGj8y2K4/8g1TN06g==}
     dev: false
@@ -3361,9 +3357,9 @@ packages:
     dependencies:
       function-bind: 1.1.1
 
-  /helmet/5.1.1:
-    resolution: {integrity: sha512-/yX0oVZBggA9cLJh8aw3PPCfedBnbd7J2aowjzsaWwZh7/UFY0nccn/aHAggIgWUFfnykX8GKd3a1pSbrmlcVQ==}
-    engines: {node: '>=12.0.0'}
+  /helmet/6.0.0:
+    resolution: {integrity: sha512-FO9RpR1wNJepH/GbLPQVtkE2eESglXL641p7SdyoT4LngHFJcZheHMoyUcjCZF4qpuMMO1u5q6RK0l9Ux8JBcg==}
+    engines: {node: '>=14.0.0'}
     dev: false
 
   /help-me/4.0.1:
