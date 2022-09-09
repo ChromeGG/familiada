@@ -1,3 +1,5 @@
+import { GameStatus as GameStatusLocal } from '@prisma/client'
+
 import { builder } from '../builder'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 
@@ -8,17 +10,21 @@ import { createGame, joinToGame } from './game-service'
 import { createGameValidation, joinToGameValidation } from './game-validator'
 
 export type { Game } from '@prisma/client'
-export { GameStatus } from '@prisma/client'
+
+export const GameStatus = GameStatusLocal
 
 // could be useful in future
 // type ShapeFromInput<T> = T extends InputRef<infer U> ? U : never
 // type CreateGameInputType = ShapeFromInput<typeof CreateGameInput>
 
+export const GameStatusGql = builder.enumType(GameStatus, {
+  name: 'GameStatus',
+})
+
 const Game = builder.prismaObject('Game', {
   fields: (t) => ({
     id: t.exposeID('id'),
-    // TODO this should be an enum
-    status: t.exposeString('status'),
+    status: t.expose('status', { type: GameStatusGql }),
   }),
 })
 
