@@ -38,8 +38,6 @@ builder.mutationFields((t) => {
       },
     }),
     joinToGame: t.field({
-      // type: Game,
-      // CreateGameInputShould be renamed
       args: joinToGameArgs,
       validate: {
         schema: joinToGameValidation,
@@ -47,15 +45,10 @@ builder.mutationFields((t) => {
       type: Game,
       resolve: async (_, args, context) => {
         return joinToGame(args, context)
-        // return joinToGame()
-        // context.pubSub.publish('players:changed')
-        // return 0
       },
     }),
     sendAnswer: t.withAuth({ player: true }).float({
       resolve: (_, __, context) => {
-        // context.pubSub.publish('players:changed')
-        // context.player is available because of withAuth({player: true})
         console.log('~ context.player123', context.player)
         return 0
       },

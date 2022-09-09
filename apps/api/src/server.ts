@@ -1,4 +1,4 @@
-import fastifyHelmet from '@fastify/helmet'
+import helmet from '@fastify/helmet'
 
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import fastify from 'fastify'
@@ -11,7 +11,6 @@ import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
 import type { Team } from './team/team-schema'
 
-// TODO should I import Player from /player/types instead of direct import from prisma?
 export interface AuthenticatedPlayer extends Player {
   team: Team
 }
@@ -25,7 +24,10 @@ export async function createHttpServer(
 
   server.register(shutdownPlugin)
   server.register(statusPlugin)
-  // server.register(fastifyHelmet)
+  server.register(helmet, {
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
 
   return server
 }
