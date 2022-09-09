@@ -95,7 +95,7 @@ importers:
       eslint: 8.23.0
       eslint-config-custom: workspace:*
       eslint-config-next: 12.2.5
-      eslint-plugin-react: 7.31.4
+      eslint-plugin-react: 7.31.8
       graphql: 16.5.0
       next: 12.2.5
       next-transpile-modules: 9.0.0
@@ -115,7 +115,7 @@ importers:
       eslint: 8.23.0
       eslint-config-custom: link:../../packages/eslint-config-custom
       eslint-config-next: 12.2.5_yqf6kl63nyoq5megxukfnom5rm
-      eslint-plugin-react: 7.31.4_eslint@8.23.0
+      eslint-plugin-react: 7.31.8_eslint@8.23.0
       next-transpile-modules: 9.0.0
       tsconfig: link:../../packages/tsconfig
       typescript: 4.8.2
@@ -2520,7 +2520,7 @@ packages:
       eslint-import-resolver-typescript: 2.7.1_faomjyrlgqmwswvqymymzkxcqi
       eslint-plugin-import: 2.26.0_4mbnohsmhns3k63p2rslhjemri
       eslint-plugin-jsx-a11y: 6.6.0_eslint@8.23.0
-      eslint-plugin-react: 7.31.4_eslint@8.23.0
+      eslint-plugin-react: 7.31.8_eslint@8.23.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.23.0
       typescript: 4.8.2
     transitivePeerDependencies:
@@ -2765,8 +2765,8 @@ packages:
       eslint: 8.23.0
     dev: true
 
-  /eslint-plugin-react/7.31.4_eslint@8.23.0:
-    resolution: {integrity: sha512-2ry4HTT+c+hSgpnV2DXj3d5oAmH11KH8HHQwtcfRdq6/+R3nEimvMbwAqK79eb4ZW1/hp8yC5elBusZM6li/Gg==}
+  /eslint-plugin-react/7.31.8_eslint@8.23.0:
+    resolution: {integrity: sha512-5lBTZmgQmARLLSYiwI71tiGVTLUuqXantZM6vlSY39OaDSV0M7+32K5DnLkmFrwTe+Ksz0ffuLUC91RUviVZfw==}
     engines: {node: '>=4'}
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
