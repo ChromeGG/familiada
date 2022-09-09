@@ -1,9 +1,10 @@
 import type { FastifyPluginAsync } from 'fastify'
 
+import { prisma } from '../prisma'
+
 const statusPlugin: FastifyPluginAsync = async (server, _options) => {
-  // Status/health endpoint
   server.get(`/`, async function (_req, _res) {
-    // TODO add prisma health check
+    await prisma.$queryRaw`SELECT 1`
     return { up: true }
   })
 }

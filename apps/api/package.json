@@ -22,7 +22,7 @@
     "@envelop/core": "2.6.0",
     "@envelop/graphql-jit": "4.6.0",
     "@fastify/env": "4.1.0",
-    "@fastify/helmet": "9.1.0",
+    "@fastify/helmet": "10.0.0",
     "@graphql-yoga/node": "2.13.12",
     "@pothos/core": "3.20.0",
     "@pothos/plugin-complexity": "3.10.0",

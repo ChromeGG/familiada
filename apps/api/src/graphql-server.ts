@@ -28,7 +28,7 @@ export const createPubSub = () => createYogaPubSub<PubSubArgs>()
 
 export const createGraphqlServer = async (server: FastifyInstance) => {
   const pubSub = createPubSub()
-  return createServer<{
+  const graphQLServer = createServer<{
     req: FastifyRequest
     reply: FastifyReply
   }>({
@@ -67,5 +67,24 @@ export const createGraphqlServer = async (server: FastifyInstance) => {
     },
     graphiql: true,
     plugins: [useGraphQlJit(), useExtendContext(() => ({ pubSub }))],
+  })
+
+  server.route({
+    url: '/graphql',
+    method: ['GET', 'POST', 'OPTIONS'],
+    handler: async (req, reply) => {
+      const response = await graphQLServer.handleIncomingMessage(req, {
+        req,
+        reply,
+      })
+      response.headers.forEach((value, key) => {
+        reply.header(key, value)
+      })
+
+      reply.status(response.status)
+      reply.send(response.body)
+
+      return reply
+    },
   })
 }

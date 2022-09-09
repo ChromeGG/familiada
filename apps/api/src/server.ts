@@ -40,26 +40,7 @@ export async function createServer() {
     disableRequestLogging: process.env.DISABLE_REQUEST_LOGGING === 'true',
   })
 
-  const graphQLServer = await createGraphqlServer(server)
-
-  server.route({
-    url: '/graphql',
-    method: ['GET', 'POST', 'OPTIONS'],
-    handler: async (req, reply) => {
-      const response = await graphQLServer.handleIncomingMessage(req, {
-        req,
-        reply,
-      })
-      response.headers.forEach((value, key) => {
-        reply.header(key, value)
-      })
-
-      reply.status(response.status)
-      reply.send(response.body)
-
-      return reply
-    },
-  })
+  await createGraphqlServer(server)
 
   return server
 }
