@@ -1,0 +1,19 @@
+{
+  "dynamic-namespaces-link": "See an example of dynamic namespace",
+  "example-with-html": "<0>This is an example <1>using HTML</1> inside the translation</0>",
+  "example-with-number-variable": "Przykład ze sformatowaną liczbą {{exampleOfVariable, number}}!",
+  "example-with-title": "Tytuły też się tłumaczy",
+  "example-with-variable": "Przykład ze zmienną {{exampleOfVariable}}!",
+  "nested-example": {
+    "very-nested": {
+      "nested": "Nested example!"
+    }
+  },
+  "no-functional-example": "Translation done from a no-functional component",
+  "plural-example": {
+    "6": "Customowy text on exact match",
+    "few": "To są {{count}} sztuki",
+    "many": "To jest {{count}} sztuk",
+    "one": "To jest {{count}} sztuka"
+  }
+}

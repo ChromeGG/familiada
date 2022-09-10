@@ -1,0 +1,51 @@
+{
+  "any": {
+    "invalid": "Pole {{#label}} zawiera nieprawidłową wartość",
+    "required": "Pole {{#label}} jest wymagane"
+  },
+  "array": {
+    "max": "Kolekcja {{#label}} musi zawierać mniej niż {{#limit}} rzeczy",
+    "min": "Kolekcja {{#label}} musi zawierać przynajmniej {{#limit}} rzecz"
+  },
+  "custom": {
+    "bad_image_size": "Podany plik jest zbyt duży (maks. {{maxSize}} MB)",
+    "bad_image_type": "Podany plik ma złe rozszerzenie. Podaj plik typu .jpg, .jpeg, .png",
+    "eanCodeLength": "Kod musi mieć 8 lub 13 cyfr",
+    "invalid_date": "Nieprawidłowy format daty",
+    "numeric": "Pole {{#label}} musi być wartością numeryczną",
+    "percentage_sum": "Suma procent musi być równa 100",
+    "product_by_ean_code_not_found": "Nie znaleziono produktu z kodem: {{code}}",
+    "rules": "Musisz zaakceptować regulamin, aby założyć konto.",
+    "samePasswords": "Hasła muszą być takie same.",
+    "unexpected_error_occurred": "Wystąpił nieoczekiwany błąd, spróbuj ponownie później",
+    "uniqueCombinationError": "W tym dniu, o tej porze, znajduje się już taki wpis. Zmień jego porcję w tym dniu lub dodaj go o innej porze.",
+    "uniqueCombinationErrorTitle": "Taki wpis już istnieje."
+  },
+  "date": {
+    "format": "Pole {{#label}} musi być w formacie \"{msg(\"date.format.\" + #format) || #format}\"",
+    "max": "Pole {{#label}} musi być po \"{{MAX_DATE_ISO}}\"",
+    "min": "Pole {{#label}} musi być po \"{{MIN_DATE_ISO}}\"",
+    "minCustomDate": "Data musi być większa bądź równa dacie początkowej"
+  },
+  "number": {
+    "base": "Pole {{#label}} musi być liczbą",
+    "greater": "Pole {{#label}} musi być większe od {{#limit}}",
+    "integer": "Pole {{#label}} musi być liczbą całkowitą",
+    "less": "Pole {{#label}} musi być mniejsze niż {{#limit}}",
+    "max": "Pole {{#label}} musi być mniejsze bądź równe {{#limit}}",
+    "min": "Pole {{#label}} musi być większe bądź równe {{#limit}}",
+    "unsafe": "Pole {{#label}} musi być poprawną liczbą"
+  },
+  "string": {
+    "email": "Pole {{#label}} musi być poprawnym adresem e-mail",
+    "empty": "Pole {{#label}} nie może być puste",
+    "id": "Pole {{#label}} musi być poprawnym identyfikatorem",
+    "max": "Pole {{#label}} musi zawierać mniej niż {{#limit}} znaków",
+    "min": "Pole {{#label}} musi zawierać przynajmniej {{#limit}} znaków"
+  },
+  "field": {
+    "id": "id",
+    "ratio": "ilość",
+    "to": "od"
+  }
+}
