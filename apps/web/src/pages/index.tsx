@@ -9,7 +9,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-export default function Web() {
+export default function Index() {
   return (
     <div>
       <ApolloProvider client={client}>

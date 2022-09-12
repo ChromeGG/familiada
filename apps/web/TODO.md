@@ -1,3 +1,5 @@
 ### TODO:
 
-1. 
+1. Handle 404
+2. Setup Sentry
+3. 
