@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
+    "codegen": "graphql-codegen --config codegen.yml",
     "dev": "next dev -p 8080",
     "lint": "next lint",
     "start": "next start -p 8080",
@@ -40,6 +41,12 @@
     "urlcat": "2.0.4"
   },
   "devDependencies": {
+    "@graphql-codegen/add": "3.2.1",
+    "@graphql-codegen/cli": "2.12.0",
+    "@graphql-codegen/introspection": "2.2.1",
+    "@graphql-codegen/typescript": "2.7.3",
+    "@graphql-codegen/typescript-operations": "2.5.3",
+    "@graphql-codegen/typescript-react-apollo": "3.3.3",
     "@types/apollo-upload-client": "17.0.1",
     "@types/node": "18.7.16",
     "@types/react": "18.0.19",
@@ -49,6 +56,7 @@
     "eslint-plugin-react": "7.31.8",
     "next-transpile-modules": "9.0.0",
     "tsconfig": "workspace:*",
-    "typescript": "4.8.3"
+    "typescript": "4.8.3",
+    "@graphql-codegen/fragment-matcher": "3.3.1"
   }
 }

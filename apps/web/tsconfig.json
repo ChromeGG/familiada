@@ -5,5 +5,5 @@
     "module": "esnext",
     "rootDir": "."
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "i18n.mjs"]
+  "include": ["**/*.ts", "**/*.tsx", "i18n.mjs"]
 }

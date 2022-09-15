@@ -1,0 +1,67 @@
+type AlreadyExistError implements Error {
+  message: String!
+}
+
+type BaseError implements Error {
+  message: String!
+}
+
+input CreateGameInput {
+  gameId: String!
+  playerName: String!
+  playerTeam: TeamColor!
+}
+
+interface Error {
+  message: String!
+}
+
+type Game {
+  id: ID!
+  status: String!
+}
+
+input JoinToGameInput {
+  gameId: ID!
+  playerName: String!
+  playerTeam: TeamColor!
+}
+
+type Mutation {
+  createGame(gameInput: CreateGameInput!): MutationCreateGameResult!
+  joinToGame(gameInput: CreateGameInput!): Boolean!
+  sendAnswer: Float!
+}
+
+union MutationCreateGameResult =
+    AlreadyExistError
+  | BaseError
+  | MutationCreateGameSuccess
+
+type MutationCreateGameSuccess {
+  data: Game!
+}
+
+type Player {
+  id: ID!
+  name: String!
+}
+
+type Query {
+  test(asd: TeamColor!): TeamColor!
+}
+
+type Subscription {
+  players(gameId: String!): [Player!]!
+}
+
+type Team {
+  id: ID!
+  player: [Player!]!
+  teamColor: String!
+}
+
+enum TeamColor {
+  BLUE
+  RED
+}

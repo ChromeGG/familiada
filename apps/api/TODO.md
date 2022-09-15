@@ -9,4 +9,6 @@
 7. Exclude tests from `dist` folder
 8. Try to use ts-node-dev or node-dev for `pnpm run dev`
 9. ~~Allow migrate from top level package.json~~
-10. docker container with production build
+10. docker container with production build?
+11. Add jest-extended
+12. Refactor Tester.has...

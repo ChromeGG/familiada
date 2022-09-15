@@ -1,0 +1,10 @@
+schema: "./sdl.gql"
+documents: "src/graphql/**/*.ts"
+generates:
+  src/graphql/generated/index.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+      - add:
+          content: "/* eslint-disable */"
