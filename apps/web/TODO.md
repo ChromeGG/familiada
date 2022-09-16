@@ -2,4 +2,5 @@
 
 1. Handle 404
 2. Setup Sentry
-3. 
+3. ! NEXT: Fix lib and types detection
+4. 

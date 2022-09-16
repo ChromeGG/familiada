@@ -38,7 +38,8 @@
     "react-dom": "18.2.0",
     "react-hook-form": "7.35.0",
     "react-hook-form-mui": "5.7.1",
-    "urlcat": "2.0.4"
+    "urlcat": "2.0.4",
+    "zod": "3.19.1"
   },
   "devDependencies": {
     "@graphql-codegen/add": "3.2.1",

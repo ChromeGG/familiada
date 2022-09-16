@@ -3,7 +3,9 @@
   "compilerOptions": {
     "outDir": "dist",
     "module": "esnext",
-    "rootDir": "."
+    "rootDir": ".",
+    "skipLibCheck": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "i18n.mjs"]
+  "include": ["next-env.d.ts", "./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["node_modules"]
 }

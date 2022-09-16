@@ -95,6 +95,7 @@ importers:
       '@emotion/styled': 11.10.4
       '@graphql-codegen/add': 3.2.1
       '@graphql-codegen/cli': 2.12.0
+      '@graphql-codegen/fragment-matcher': 3.3.1
       '@graphql-codegen/introspection': 2.2.1
       '@graphql-codegen/typescript': 2.7.3
       '@graphql-codegen/typescript-operations': 2.5.3
@@ -132,6 +133,7 @@ importers:
       tsconfig: workspace:*
       typescript: 4.8.3
       urlcat: 2.0.4
+      zod: 3.19.1
     dependencies:
       '@apollo/client': 3.6.9_onqnqwb3ubg5opvemcqf7c2qhy
       '@date-io/date-fns': 2.15.0_date-fns@2.29.2
@@ -160,9 +162,11 @@ importers:
       react-hook-form: 7.35.0_react@18.2.0
       react-hook-form-mui: 5.7.1_cu33urw4bwl5gkuszm6fkfhhfq
       urlcat: 2.0.4
+      zod: 3.19.1
     devDependencies:
       '@graphql-codegen/add': 3.2.1_graphql@16.6.0
       '@graphql-codegen/cli': 2.12.0_vtmm4o2gauvri4jdzhdh3qrgf4
+      '@graphql-codegen/fragment-matcher': 3.3.1_graphql@16.6.0
       '@graphql-codegen/introspection': 2.2.1_graphql@16.6.0
       '@graphql-codegen/typescript': 2.7.3_graphql@16.6.0
       '@graphql-codegen/typescript-operations': 2.5.3_graphql@16.6.0
@@ -1974,6 +1978,16 @@ packages:
       '@graphql-codegen/plugin-helpers': 2.7.0_graphql@16.6.0
       '@graphql-tools/schema': 9.0.4_graphql@16.6.0
       '@graphql-tools/utils': 8.12.0_graphql@16.6.0
+      graphql: 16.6.0
+      tslib: 2.4.0
+    dev: true
+
+  /@graphql-codegen/fragment-matcher/3.3.1_graphql@16.6.0:
+    resolution: {integrity: sha512-FpIDBmnbWYS50f0FdB1l8qPNi1i+IKkp3bhzT14rnLMjll+dzn1Lux5evuth+3USkS9dn2zGrzGh44j6svrpgQ==}
+    peerDependencies:
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      '@graphql-codegen/plugin-helpers': 2.7.0_graphql@16.6.0
       graphql: 16.6.0
       tslib: 2.4.0
     dev: true
@@ -10354,4 +10368,8 @@ packages:
 
   /zod/3.18.0:
     resolution: {integrity: sha512-gwTm8RfUCe8l9rDwN5r2A17DkAa8Ez4Yl4yXqc5VqeGaXaJahzYYXbTwvhroZi0SNBqTwh/bKm2N0mpCzuw4bA==}
+    dev: false
+
+  /zod/3.19.1:
+    resolution: {integrity: sha512-LYjZsEDhCdYET9ikFu6dVPGp2YH9DegXjdJToSzD9rO6fy4qiRYFoyEYwps88OseJlPyl2NOe2iJuhEhL7IpEA==}
     dev: false
