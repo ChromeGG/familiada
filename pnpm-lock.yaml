@@ -100,7 +100,7 @@ importers:
       '@graphql-codegen/typescript': 2.7.3
       '@graphql-codegen/typescript-operations': 2.5.3
       '@graphql-codegen/typescript-react-apollo': 3.3.3
-      '@hookform/resolvers': 2.9.7
+      '@hookform/resolvers': 2.9.8
       '@mui/icons-material': 5.10.3
       '@mui/lab': 5.0.0-alpha.98
       '@mui/material': 5.10.4
@@ -139,7 +139,7 @@ importers:
       '@date-io/date-fns': 2.15.0_date-fns@2.29.2
       '@emotion/react': 11.10.4_grkpvclzj6ihtz6ub5zlkiexgm
       '@emotion/styled': 11.10.4_u52ikoyrxmrxb77enjpil3pyy4
-      '@hookform/resolvers': 2.9.7_react-hook-form@7.35.0
+      '@hookform/resolvers': 2.9.8_react-hook-form@7.35.0
       '@mui/icons-material': 5.10.3_a2hj5atstaulbk2sc24hz7fpli
       '@mui/lab': 5.0.0-alpha.98_klan7okuotiyu4m5pmkfxftse4
       '@mui/material': 5.10.4_g6p6knjyjrjltwufjb7cltiueu
@@ -2485,8 +2485,8 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@hookform/resolvers/2.9.7_react-hook-form@7.35.0:
-    resolution: {integrity: sha512-BloehX3MOLwuFEwT4yZnmolPjVmqyn8VsSuodLfazbCIqxBHsQ4qUZsi+bvNNCduRli1AGWFrkDLGD5QoNzsoA==}
+  /@hookform/resolvers/2.9.8_react-hook-form@7.35.0:
+    resolution: {integrity: sha512-iVVjH0USq+1TqDdGkWe2M1x7Wn5OFPgVRo7CbWFsXTqqXqCaZtZcnzJu+UhljCWbthFWxWGXKLGYUDPZ04oVvQ==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
