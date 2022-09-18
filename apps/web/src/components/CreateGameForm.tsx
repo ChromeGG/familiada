@@ -8,6 +8,7 @@ import {
   Stack,
 } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
+import { useRouter } from 'next/router'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm, UseFormHandleSubmit, UseFormReturn } from 'react-hook-form'
 import {
@@ -23,9 +24,22 @@ import { useCreateGameForm } from '../validators/createGame.validator'
 const CreateGameForm = () => {
   const { t } = useTranslation()
   const [createGameMutation] = useCreateGameMutation()
+
+  const router = useRouter()
+
   const createGameHandler: SubmitHandler<CreateGameSchema> = async (data) => {
-    const resp = await createGameMutation({ variables: { input: data } })
-    console.log(resp)
+    const { data: response } = await createGameMutation({
+      variables: { input: data },
+    })
+    if (response?.createGame.__typename === 'AlreadyExistError') {
+      createGameForm.setError('gameId', {
+        message: t`error:game-with-given-id-already-exists`,
+      })
+    }
+
+    if (response?.createGame.__typename === 'MutationCreateGameSuccess') {
+      router.push(`/${data.gameId}`)
+    }
   }
 
   const createGameForm = useCreateGameForm()
