@@ -3,7 +3,7 @@ import { Button } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 
-import * as z from 'zod'
+import { z } from 'zod'
 
 const schema = z.object({
   name: z.string().min(3).max(15),
