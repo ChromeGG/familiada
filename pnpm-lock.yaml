@@ -24,7 +24,7 @@ importers:
       '@fastify/env': 4.1.0
       '@fastify/helmet': 10.0.0
       '@graphql-yoga/node': 2.13.12
-      '@pothos/core': 3.20.0
+      '@pothos/core': 3.21.0
       '@pothos/plugin-complexity': 3.10.0
       '@pothos/plugin-errors': 3.7.0
       '@pothos/plugin-prisma': 3.32.0
@@ -57,12 +57,12 @@ importers:
       '@fastify/env': 4.1.0
       '@fastify/helmet': 10.0.0
       '@graphql-yoga/node': 2.13.12_graphql@16.5.0
-      '@pothos/core': 3.20.0_graphql@16.5.0
-      '@pothos/plugin-complexity': 3.10.0_355lnhuclqkmednlel6jyzjo6i
-      '@pothos/plugin-errors': 3.7.0_355lnhuclqkmednlel6jyzjo6i
-      '@pothos/plugin-prisma': 3.32.0_7li27szlkijf4pdboofgydvyua
-      '@pothos/plugin-scope-auth': 3.13.0_355lnhuclqkmednlel6jyzjo6i
-      '@pothos/plugin-validation': 3.7.0_twcauhacgl6mfwm6e475f6uqze
+      '@pothos/core': 3.21.0_graphql@16.5.0
+      '@pothos/plugin-complexity': 3.10.0_tu3czme3mwxj3wb7j5gauahh3i
+      '@pothos/plugin-errors': 3.7.0_tu3czme3mwxj3wb7j5gauahh3i
+      '@pothos/plugin-prisma': 3.32.0_xz7jo3lyfpehqvv4t36zppnfgy
+      '@pothos/plugin-scope-auth': 3.13.0_tu3czme3mwxj3wb7j5gauahh3i
+      '@pothos/plugin-validation': 3.7.0_6yvhvcid7smrzwmlnanbliwp7m
       '@prisma/client': 4.3.1_prisma@4.3.1
       dotenv: 16.0.2
       fastify: 4.5.3
@@ -3278,35 +3278,35 @@ packages:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
     dev: false
 
-  /@pothos/core/3.20.0_graphql@16.5.0:
-    resolution: {integrity: sha512-BfWnHJvOMtESg8syGJWvon26xnF8xVEjzUICnByae9ZHNNCPkRJ3kYSrmCGD46d7QSeaT/DQc/moHa01mnyqww==}
+  /@pothos/core/3.21.0_graphql@16.5.0:
+    resolution: {integrity: sha512-ZyXtLAzYnMplmeGiUYvHV991fCKof9zVtWdXUS6k6eQEjeBkeW/oCYhKZGBYKZhMExn/TRj48tR54bT1DpPMzA==}
     peerDependencies:
       graphql: '>=15.1.0'
     dependencies:
       graphql: 16.5.0
     dev: false
 
-  /@pothos/plugin-complexity/3.10.0_355lnhuclqkmednlel6jyzjo6i:
+  /@pothos/plugin-complexity/3.10.0_tu3czme3mwxj3wb7j5gauahh3i:
     resolution: {integrity: sha512-hkPITMGTGqV4T3PBL3SL8heBQepO9o75vDxtussFQzX8LDqI+2E8h5KwJJ0bxl2hFshgNJLnKgldfz6hzAaLmQ==}
     peerDependencies:
       '@pothos/core': '*'
       graphql: '>=15.1.0'
     dependencies:
-      '@pothos/core': 3.20.0_graphql@16.5.0
+      '@pothos/core': 3.21.0_graphql@16.5.0
       graphql: 16.5.0
     dev: false
 
-  /@pothos/plugin-errors/3.7.0_355lnhuclqkmednlel6jyzjo6i:
+  /@pothos/plugin-errors/3.7.0_tu3czme3mwxj3wb7j5gauahh3i:
     resolution: {integrity: sha512-h7Ed9VfiylI0s5R7Q5EyHDxiVqNiukATlaDld3AwSXRn1/MAnlEkccNvFQgbIwWkYiWp6bbcuQbJTHjFjUSaMg==}
     peerDependencies:
       '@pothos/core': '*'
       graphql: '>=15.1.0'
     dependencies:
-      '@pothos/core': 3.20.0_graphql@16.5.0
+      '@pothos/core': 3.21.0_graphql@16.5.0
       graphql: 16.5.0
     dev: false
 
-  /@pothos/plugin-prisma/3.32.0_7li27szlkijf4pdboofgydvyua:
+  /@pothos/plugin-prisma/3.32.0_xz7jo3lyfpehqvv4t36zppnfgy:
     resolution: {integrity: sha512-ds+mo2CCVbT/ex5rO0tRsfsDeMWaIQd+WlGhU28DDNf/4MxJ+cJuyc5jzfiioh7LrAyLggu/SIx9tN+M2oK9Yg==}
     hasBin: true
     peerDependencies:
@@ -3315,7 +3315,7 @@ packages:
       graphql: '>=15.1.0'
       typescript: '>=4.7.2'
     dependencies:
-      '@pothos/core': 3.20.0_graphql@16.5.0
+      '@pothos/core': 3.21.0_graphql@16.5.0
       '@prisma/client': 4.3.1_prisma@4.3.1
       '@prisma/generator-helper': 4.3.1
       graphql: 16.5.0
@@ -3324,24 +3324,24 @@ packages:
       - supports-color
     dev: false
 
-  /@pothos/plugin-scope-auth/3.13.0_355lnhuclqkmednlel6jyzjo6i:
+  /@pothos/plugin-scope-auth/3.13.0_tu3czme3mwxj3wb7j5gauahh3i:
     resolution: {integrity: sha512-+8mBfOCzC8BPTKpD2rkgiMhDyHXCWvp6TY0orca0Ea+OpyQyTDAR9LStmuS2xnF7jmhtV0LSwmwHBlRMHCnoXA==}
     peerDependencies:
       '@pothos/core': '*'
       graphql: '>=15.1.0'
     dependencies:
-      '@pothos/core': 3.20.0_graphql@16.5.0
+      '@pothos/core': 3.21.0_graphql@16.5.0
       graphql: 16.5.0
     dev: false
 
-  /@pothos/plugin-validation/3.7.0_twcauhacgl6mfwm6e475f6uqze:
+  /@pothos/plugin-validation/3.7.0_6yvhvcid7smrzwmlnanbliwp7m:
     resolution: {integrity: sha512-2ju+FMaBZt156Yg+aDAxVdvNulSKVZszMLNBrp6/3iL+X2HWAt0JESvO6Ey9c7eRYpXiZ7iwO7ZGUhdgbqPO0A==}
     peerDependencies:
       '@pothos/core': '*'
       graphql: '>=15.1.0'
       zod: '*'
     dependencies:
-      '@pothos/core': 3.20.0_graphql@16.5.0
+      '@pothos/core': 3.21.0_graphql@16.5.0
       graphql: 16.5.0
       zod: 3.18.0
     dev: false
