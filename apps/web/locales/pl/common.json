@@ -1,4 +1,11 @@
 {
   "add": "Dodaj",
-  "app-name": "Familiada"
+  "app-name": "Familiada",
+  "player-name": "Nazwa gracza",
+  "game-id": "ID gry",
+  "create-new-game": "Stwórz nową grę",
+  "create": "stwórz",
+  "red": "Czerwony",
+  "blue": "Niebieski",
+  "team-color": "Kolor drużyny"
 }
