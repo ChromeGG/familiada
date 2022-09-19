@@ -24,7 +24,7 @@
     "@mui/x-data-grid": "5.17.2",
     "@mui/x-date-pickers": "5.0.1",
     "@react-hookz/web": "15.1.0",
-    "@sentry/nextjs": "7.12.1",
+    "@sentry/nextjs": "7.13.0",
     "apollo-upload-client": "17.0.0",
     "date-fns": "2.29.2",
     "graphql": "16.6.0",
