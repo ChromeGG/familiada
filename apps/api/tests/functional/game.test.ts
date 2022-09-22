@@ -1,6 +1,6 @@
-import { GameStatus } from '../src/game/game-schema'
+import { GameStatus } from '../../src/game/game-schema'
 
-import { functionalSetup } from './helpers'
+import { functionalSetup } from '../helpers'
 
 const { Tester } = await functionalSetup()
 
@@ -36,7 +36,7 @@ describe('Game', () => {
   })
 
   test('Should handle error if game already exist', async () => {
-    await Tester.createGame({ gameInput: { gameId: 'EXIST' } })
+    await Tester.game.create({ gameInput: { gameId: 'EXIST' } })
 
     const response = await Tester.sendGraphql({
       query: `#graphql

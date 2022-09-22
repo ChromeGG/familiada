@@ -8,7 +8,7 @@ import { TeamColor } from '../../src/team/team-schema'
 
 export const getGameTester = async (context: Context) => {
   return {
-    createGame: async ({
+    create: async ({
       gameInput = {},
     }: PartialDeep<CreateGameArgs> = {}): ReturnType<typeof createGame> => {
       const { gameId, playerName, playerTeam } = gameInput

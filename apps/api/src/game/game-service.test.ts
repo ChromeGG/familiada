@@ -66,7 +66,7 @@ describe('game-service.ts', () => {
     })
 
     test('When gameId already exists, then throw an AlreadyExistError', async () => {
-      await Tester.createGame({ gameInput: { gameId: 'boom' } })
+      await Tester.game.create({ gameInput: { gameId: 'boom' } })
 
       const createGameFunc = createGame(
         {
@@ -87,7 +87,7 @@ describe('game-service.ts', () => {
 
   describe(joinToGame.name, () => {
     test('Should join to game', async () => {
-      const game = await Tester.createGame()
+      const game = await Tester.game.create()
       const [, blueTeam] = game.team
 
       const input: JoinToGameArgs = {
