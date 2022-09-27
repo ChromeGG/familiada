@@ -26,7 +26,7 @@
     "@react-hookz/web": "15.1.0",
     "@sentry/nextjs": "7.12.1",
     "apollo-upload-client": "17.0.0",
-    "date-fns": "2.29.2",
+    "date-fns": "2.29.3",
     "graphql": "16.6.0",
     "next": "12.3.0",
     "next-secure-headers": "2.2.0",

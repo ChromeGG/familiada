@@ -113,7 +113,7 @@ importers:
       '@types/node': 18.7.18
       '@types/react': 18.0.20
       apollo-upload-client: 17.0.0
-      date-fns: 2.29.2
+      date-fns: 2.29.3
       eslint: 8.23.1
       eslint-config-custom: workspace:*
       eslint-config-next: 12.3.0
@@ -136,7 +136,7 @@ importers:
       zod: 3.19.1
     dependencies:
       '@apollo/client': 3.6.9_onqnqwb3ubg5opvemcqf7c2qhy
-      '@date-io/date-fns': 2.15.0_date-fns@2.29.2
+      '@date-io/date-fns': 2.15.0_date-fns@2.29.3
       '@emotion/react': 11.10.4_34hk3yshwlnbbjm3tk3mg2phgq
       '@emotion/styled': 11.10.4_xf3lbyu2rtyuu62zb7nswuusle
       '@hookform/resolvers': 2.9.8_react-hook-form@7.35.0
@@ -145,11 +145,11 @@ importers:
       '@mui/material': 5.10.4_af5ln35zuaotaffazii6n6bke4
       '@mui/system': 5.10.4_4mv32nu4vciambuqqzuu4gtvj4
       '@mui/x-data-grid': 5.17.2_7x3tnmrpyjhx3vi3ne7jspnmqu
-      '@mui/x-date-pickers': 5.0.1_6bygmx2mtp7ta7arkajchr4yoe
+      '@mui/x-date-pickers': 5.0.1_5v3idpmmqjkbvknej3yzjj2s4m
       '@react-hookz/web': 15.1.0_biqbaboplfbrettd7655fr4n2y
       '@sentry/nextjs': 7.12.1_2fzqwq3pc3nji6b4hgcrpjpoyu
       apollo-upload-client: 17.0.0_j5f4qhrwpy2nv6d24wvohvgylu
-      date-fns: 2.29.2
+      date-fns: 2.29.3
       graphql: 16.6.0
       next: 12.3.0_qugu52izettqdqqm5qcjcltcia
       next-secure-headers: 2.2.0
@@ -1622,7 +1622,7 @@ packages:
     resolution: {integrity: sha512-3CRvQUEK7aF87NUOwcTtmJ2Rc1kN0D4jFQUfRoanuAnE4o5HzHx4E2YenjaKjSPWeZYiWG6ZhDomx5hp1AaCJA==}
     dev: false
 
-  /@date-io/date-fns/2.15.0_date-fns@2.29.2:
+  /@date-io/date-fns/2.15.0_date-fns@2.29.3:
     resolution: {integrity: sha512-hkVeLm0jijHS2F9YVQcf0LSlD55w9xPvvIfuxDE0XWNXOTcRAAhqw2aqOxyeGbmHxc5U4HqyPZaqs9tfeTsomQ==}
     peerDependencies:
       date-fns: ^2.0.0
@@ -1631,7 +1631,7 @@ packages:
         optional: true
     dependencies:
       '@date-io/core': 2.15.0
-      date-fns: 2.29.2
+      date-fns: 2.29.3
     dev: false
 
   /@date-io/dayjs/2.15.0:
@@ -3057,7 +3057,7 @@ packages:
       reselect: 4.1.6
     dev: false
 
-  /@mui/x-date-pickers/5.0.1_6bygmx2mtp7ta7arkajchr4yoe:
+  /@mui/x-date-pickers/5.0.1_5v3idpmmqjkbvknej3yzjj2s4m:
     resolution: {integrity: sha512-S+qUdhs3M/awoON9tfcoCtjBqn7tyfmU9gQUG1WwdGj6jySpze2bIjS7v7uhwydjddk7AlJGyrLOIc17F6ZVIA==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -3087,7 +3087,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.18.9
       '@date-io/core': 2.15.0
-      '@date-io/date-fns': 2.15.0_date-fns@2.29.2
+      '@date-io/date-fns': 2.15.0_date-fns@2.29.3
       '@date-io/dayjs': 2.15.0
       '@date-io/luxon': 2.15.0
       '@date-io/moment': 2.15.0
@@ -3098,7 +3098,7 @@ packages:
       '@mui/utils': 5.10.3_react@18.2.0
       '@types/react-transition-group': 4.4.5
       clsx: 1.2.1
-      date-fns: 2.29.2
+      date-fns: 2.29.3
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -5043,8 +5043,8 @@ packages:
     resolution: {integrity: sha512-qTcEYLen3r7ojZNgVUaRggOI+KM7jrKxXeSHhogh/TWxYMeONEMqY+hmkobiYQozsGIyg9OYVzO4ZIfoB4I0pQ==}
     dev: true
 
-  /date-fns/2.29.2:
-    resolution: {integrity: sha512-0VNbwmWJDS/G3ySwFSJA3ayhbURMTJLtwM2DTxf9CWondCnh6DTNlO9JgRSq6ibf4eD0lfMJNBxUdEAHHix+bA==}
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
     engines: {node: '>=0.11'}
     dev: false
 
@@ -8832,7 +8832,7 @@ packages:
     dependencies:
       '@mui/icons-material': 5.10.3_7rmtbr6e6uky2oxd4rjzhfpeie
       '@mui/material': 5.10.4_af5ln35zuaotaffazii6n6bke4
-      '@mui/x-date-pickers': 5.0.1_6bygmx2mtp7ta7arkajchr4yoe
+      '@mui/x-date-pickers': 5.0.1_5v3idpmmqjkbvknej3yzjj2s4m
       react: 18.2.0
       react-hook-form: 7.35.0_react@18.2.0
     dev: false
