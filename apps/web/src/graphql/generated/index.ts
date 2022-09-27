@@ -122,6 +122,13 @@ export type AsdQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AsdQuery = { __typename?: 'Query', test: TeamColor };
 
+export type PlayersSubscriptionVariables = Exact<{
+  gameId: Scalars['String'];
+}>;
+
+
+export type PlayersSubscription = { __typename?: 'Subscription', players: Array<{ __typename?: 'Player', id: string, name: string }> };
+
 
 export const CreateGameDocument = gql`
     mutation createGame($input: CreateGameInput!) {
@@ -196,3 +203,34 @@ export function useAsdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AsdQue
 export type AsdQueryHookResult = ReturnType<typeof useAsdQuery>;
 export type AsdLazyQueryHookResult = ReturnType<typeof useAsdLazyQuery>;
 export type AsdQueryResult = Apollo.QueryResult<AsdQuery, AsdQueryVariables>;
+export const PlayersDocument = gql`
+    subscription Players($gameId: String!) {
+  players(gameId: $gameId) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __usePlayersSubscription__
+ *
+ * To run a query within a React component, call `usePlayersSubscription` and pass it any options that fit your needs.
+ * When your component renders, `usePlayersSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePlayersSubscription({
+ *   variables: {
+ *      gameId: // value for 'gameId'
+ *   },
+ * });
+ */
+export function usePlayersSubscription(baseOptions: Apollo.SubscriptionHookOptions<PlayersSubscription, PlayersSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<PlayersSubscription, PlayersSubscriptionVariables>(PlayersDocument, options);
+      }
+export type PlayersSubscriptionHookResult = ReturnType<typeof usePlayersSubscription>;
+export type PlayersSubscriptionResult = Apollo.SubscriptionResult<PlayersSubscription>;

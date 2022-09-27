@@ -8,6 +8,8 @@ import { useMemo } from 'react'
 
 import { config } from '../configuration'
 import { isServerSide } from '../helpers/common'
+
+import { link } from './sseLink'
 export { useApolloClient as useGqlClient } from '@apollo/client'
 
 const { apiUrl } = config
@@ -23,7 +25,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject>
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: isServerSide(),
-    link: ApolloLink.from([httpLink]),
+    link: ApolloLink.from([link]),
     cache: new InMemoryCache(),
   })
 }

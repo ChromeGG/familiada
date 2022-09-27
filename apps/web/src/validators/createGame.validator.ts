@@ -19,6 +19,7 @@ export type CreateGameSchema = z.infer<typeof schema>
 
 export const useCreateGameForm = () => {
   return useForm<CreateGameSchema>({
+    // @ts-ignore: FIX IT !!!
     resolver: zodResolver(schema),
   })
 }
