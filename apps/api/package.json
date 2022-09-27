@@ -23,7 +23,7 @@
     "@envelop/graphql-jit": "4.6.0",
     "@fastify/env": "4.1.0",
     "@fastify/helmet": "10.0.0",
-    "@graphql-yoga/node": "2.13.12",
+    "@graphql-yoga/node": "2.13.13",
     "@pothos/core": "3.20.0",
     "@pothos/plugin-complexity": "3.10.0",
     "@pothos/plugin-errors": "3.7.0",
