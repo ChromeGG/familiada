@@ -58,6 +58,17 @@
       // just re-states the default and ensures that PRs are really created - you can remove this line
       // if you did not change "prCreation" elsewhere to some non-default value
       "prCreation": "immediate",
+    },
+    {
+      "matchPackagePatterns": [
+        "*"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
     }
   ],
   // Avoid spam via scheduling and grouping (#5): avoid interference during working hours - applies globally to all deps!
