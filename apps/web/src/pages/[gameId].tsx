@@ -1,6 +1,4 @@
 import { Box, Container, Typography } from '@mui/material'
-import Grid2 from '@mui/material/Unstable_Grid2'
-import { GetServerSideProps } from 'next'
 import { NextSeo } from 'next-seo'
 import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
@@ -14,17 +12,18 @@ const GameId = () => {
 
   const gameId = query.gameId as string
 
-  const playersSubscription = usePlayersSubscription({
+  const { data, error } = usePlayersSubscription({
     variables: { gameId },
   })
-  console.log('~ gameId', gameId)
 
-  console.log(playersSubscription.data?.players)
+  console.log('~ data', data)
+  console.log('~ error', error)
 
   return (
     <Container>
       <NextSeo title={'gameIDhere'} />
       <h4>ELO</h4>
+      {/* <button onClick={() => execute()}>lol</button> */}
     </Container>
   )
 }

@@ -1,31 +1,27 @@
 import type { NormalizedCacheObject } from '@apollo/client'
 
-import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client'
-// import { onError } from '@apollo/client/link/error'
-import { createUploadLink } from 'apollo-upload-client'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+
 import type { GetServerSidePropsContext } from 'next'
 import { useMemo } from 'react'
 
 import { config } from '../configuration'
 import { isServerSide } from '../helpers/common'
 
-import { link } from './sseLink'
+import { YogaLink } from './MyYogaLink'
+
 export { useApolloClient as useGqlClient } from '@apollo/client'
 
 const { apiUrl } = config
-
-// Like normal Apollo HttpLink but with Upload scalar type support
-const httpLink = createUploadLink({
-  uri: `${apiUrl}/graphql`,
-  // TODO fix bug with incompatible ApolloLinks between packages
-}) as unknown as ApolloLink
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: isServerSide(),
-    link: ApolloLink.from([link]),
+    link: new YogaLink({
+      endpoint: apiUrl,
+    }),
     cache: new InMemoryCache(),
   })
 }
