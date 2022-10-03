@@ -11,4 +11,6 @@
 9. ~~Allow migrate from top level package.json~~
 10. docker container with production build?
 11. Add jest-extended
-12. Refactor Tester.has...
+12. ~~Refactor Tester.has...~~
+13. Refactor game-schema, -validator to .schema, .validator etc.
+14. 

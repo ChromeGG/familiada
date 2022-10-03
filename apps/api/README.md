@@ -15,10 +15,16 @@ The project is written in TypeScript and attempts to maintain a high degree of t
 Useful commands:
 
 ```bash
-# (re)generate prisma client 
+# (re)generate prisma client
 pnpm prisma generate
 
-# run test 
+# run test
 pnm run test <pattern>
 ```
 
+Preview all Postgres logs
+```sql
+ALTER DATABASE familiada
+SET log_statement = 'all';
+-- use it in transaction or set it back to 'none' to revert changes
+```

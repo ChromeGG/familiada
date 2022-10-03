@@ -24,6 +24,10 @@ class MyDocument extends Document {
           />
           <meta name="apple-mobile-web-app-title" content="#appTitle" />
           <meta name="mobile-web-app-capable" content="yes" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&family=Press+Start+2P&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />
