@@ -27,6 +27,6 @@ builder.prismaObject('Team', {
   fields: (t) => ({
     id: t.exposeID('id'),
     teamColor: t.exposeString('teamColor'),
-    player: t.relation('Player'),
+    players: t.relation('Player'),
   }),
 })

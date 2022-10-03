@@ -25,6 +25,7 @@ const Game = builder.prismaObject('Game', {
   fields: (t) => ({
     id: t.exposeID('id'),
     status: t.expose('status', { type: GameStatusGql }),
+    teams: t.relation('team'),
   }),
 })
 
@@ -61,3 +62,11 @@ builder.mutationFields((t) => {
     }),
   }
 })
+
+// builder.prismaObject('Game', {
+//   fields: (t) => ({
+//     id: t.exposeID('id'),
+//     // TODO this should be enum
+//     teamColor: t.exposeString('status'),
+//   }),
+// })

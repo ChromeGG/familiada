@@ -4,19 +4,18 @@ import { builder } from '../builder'
 
 export type { Player } from '@prisma/client'
 
-// Not used, but will be used in future
 export const PlayerGql = builder.prismaObject('Player', {
   fields: (t) => ({
     id: t.exposeID('id'),
     name: t.exposeString('name'),
-    // team: t.relation('team'),
+    team: t.relation('team'),
   }),
 })
 
 builder.subscriptionFields((t) => {
   return {
     players: t.prismaField({
-      type: ['Player'],
+      type: [PlayerGql],
       args: {
         gameId: t.arg.string(),
       },

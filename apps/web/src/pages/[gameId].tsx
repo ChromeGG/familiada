@@ -21,7 +21,7 @@ const GameId = () => {
 
   return (
     <Container>
-      <NextSeo title={'gameIDhere'} />
+      <NextSeo title={gameId} />
       <h4>ELO</h4>
       {/* <button onClick={() => execute()}>lol</button> */}
     </Container>
