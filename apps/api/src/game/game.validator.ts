@@ -1,4 +1,4 @@
-import { TeamColor } from '../team/team-schema'
+import { TeamColor } from '../team/team.schema'
 import { z } from '../validation'
 import type { Z } from '../validation'
 

@@ -1,6 +1,6 @@
 import type { FastifyInstance, InjectOptions } from 'fastify'
 
-import type { Context } from '../src/graphql-server'
+import type { Context } from '../src/graphqlServer'
 
 import { getGameTester } from './helpers/game'
 

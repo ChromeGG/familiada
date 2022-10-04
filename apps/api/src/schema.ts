@@ -1,8 +1,8 @@
 import { builder } from './builder'
 
-import './player/player-schema'
-import './team/team-schema'
-import './game/game-schema'
+import './player/player.schema'
+import './team/team.schema'
+import './game/game.schema'
 import './errors/error-schema'
 
 // TODO maybe we can get rid of that boilerplate code?

@@ -1,11 +1,11 @@
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
-import type { Context } from '../graphql-server'
-import { TeamColor } from '../team/team-schema'
+import type { Context } from '../graphqlServer'
+import { TeamColor } from '../team/team.schema'
 
-import type { CreateGameArgs } from './contract/create-game-args'
-import type { JoinToGameArgs } from './contract/join-to-game-args'
-import { GameStatus } from './game-schema'
+import type { CreateGameArgs } from './contract/createGame.args'
+import type { JoinToGameArgs } from './contract/joinToGame.args'
+import { GameStatus } from './game.schema'
 
 export const createGame = async (
   { gameInput }: CreateGameArgs,

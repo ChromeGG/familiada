@@ -1,7 +1,7 @@
 import type { InputShapeFromFields } from '@pothos/core'
 
 import { builder } from '../../builder'
-import { TeamColorGql } from '../../team/team-schema'
+import { TeamColorGql } from '../../team/team.schema'
 
 const CreateGameInput = builder.inputType('CreateGameInput', {
   fields: (t) => ({

@@ -1,5 +1,5 @@
-import type { Context } from '../src/graphql-server'
-import { createPubSub } from '../src/graphql-server'
+import type { Context } from '../src/graphqlServer'
+import { createPubSub } from '../src/graphqlServer'
 import { prisma } from '../src/prisma'
 import { createServer } from '../src/server'
 

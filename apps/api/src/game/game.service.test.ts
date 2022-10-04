@@ -1,17 +1,17 @@
 import { integrationSetup } from '../../tests/helpers'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 
-import type { Player } from '../player/player-schema'
+import type { Player } from '../player/player.schema'
 
-import type { Team } from '../team/team-schema'
-import { TeamColor } from '../team/team-schema'
+import type { Team } from '../team/team.schema'
+import { TeamColor } from '../team/team.schema'
 
-import type { CreateGameArgs } from './contract/create-game-args'
-import type { JoinToGameArgs } from './contract/join-to-game-args'
-import type { Game } from './game-schema'
-import { GameStatus } from './game-schema'
+import type { CreateGameArgs } from './contract/createGame.args'
+import type { JoinToGameArgs } from './contract/joinToGame.args'
+import type { Game } from './game.schema'
+import { GameStatus } from './game.schema'
 
-import { createGame, joinToGame } from './game-service'
+import { createGame, joinToGame } from './game.service'
 
 const { integrationContext, Tester } = await integrationSetup()
 

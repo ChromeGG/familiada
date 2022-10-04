@@ -8,7 +8,7 @@ import {
 
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
-import type { Player } from './player/player-schema'
+import type { Player } from './player/player.schema'
 
 import { prisma } from './prisma'
 

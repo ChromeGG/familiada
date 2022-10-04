@@ -1,4 +1,4 @@
-import { GameStatus } from '../../src/game/game-schema'
+import { GameStatus } from '../../src/game/game.schema'
 
 import { functionalSetup } from '../helpers'
 
