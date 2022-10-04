@@ -18,18 +18,24 @@ interface Error {
 
 type Game {
   id: ID!
-  status: String!
+  status: GameStatus!
+  teams: [Team!]!
+}
+
+enum GameStatus {
+  FINISHED
+  LOBBY
+  RUNNING
 }
 
 input JoinToGameInput {
-  gameId: ID!
   playerName: String!
-  playerTeam: TeamColor!
+  teamId: String!
 }
 
 type Mutation {
   createGame(gameInput: CreateGameInput!): MutationCreateGameResult!
-  joinToGame(gameInput: CreateGameInput!): Boolean!
+  joinToGame(joinInput: JoinToGameInput!): Game!
   sendAnswer: Float!
 }
 
@@ -45,6 +51,7 @@ type MutationCreateGameSuccess {
 type Player {
   id: ID!
   name: String!
+  team: Team!
 }
 
 type Query {
@@ -57,7 +64,7 @@ type Subscription {
 
 type Team {
   id: ID!
-  player: [Player!]!
+  players: [Player!]!
   teamColor: String!
 }
 

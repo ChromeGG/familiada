@@ -20,7 +20,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: isServerSide(),
     link: new YogaLink({
-      endpoint: apiUrl,
+      endpoint: `${apiUrl}/graphql`,
     }),
     cache: new InMemoryCache(),
   })
