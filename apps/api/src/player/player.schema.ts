@@ -32,13 +32,22 @@ builder.subscriptionFields((t) => {
           // map all events to the latest globalCounter
           map(() => [])
         ),
-      resolve: (payload, parent, { gameId }, { prisma }, info) => {
-        return prisma.player.findMany({
+      resolve: async (payload, parent, { gameId }, { prisma }, info) => {
+        const game = await prisma.game.findUniqueOrThrow({
           where: {
+            id: gameId,
+          },
+          include: {
             team: {
-              gameId,
+              include: {
+                Player: true,
+              },
             },
           },
+        })
+
+        return game.team.flatMap(({ Player }) => {
+          return Player
         })
       },
     }),
