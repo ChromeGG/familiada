@@ -58,5 +58,16 @@ builder.queryFields((t) => {
         })
       },
     }),
+    me: t.field({
+      type: PlayerGql,
+      authScopes: {
+        player: true,
+      },
+      resolve: async (root, args, ctx, info) => {
+        // @ts-ignore: FIXME Player is there ...
+        const playerId: number = ctx.player.id
+        return ctx.prisma.player.findUniqueOrThrow({ where: { id: playerId } })
+      },
+    }),
   }
 })

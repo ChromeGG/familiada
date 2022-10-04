@@ -40,15 +40,14 @@ export const createGraphqlServer = async (server: FastifyInstance) => {
       error: (...args) => args.forEach((arg) => server.log.error(arg)),
     },
     context: async ({ request, req, reply }) => {
-      // TODO probably user should be obtained from other place
-      const userId = req.headers.userid as string
-      let user: AuthenticatedPlayer | undefined
-      if (userId) {
-        user = await prisma.player.findUniqueOrThrow({
-          where: { id: parseInt(userId) },
+      // TODO probably player header should be obtained from other place
+      const playerId = req.headers['player-id'] as string
+      let player: AuthenticatedPlayer | undefined
+      if (playerId) {
+        player = await prisma.player.findUniqueOrThrow({
+          where: { id: parseInt(playerId) },
           include: { team: true },
         })
-        req.log.info(user)
       }
 
       return {
@@ -57,7 +56,7 @@ export const createGraphqlServer = async (server: FastifyInstance) => {
         pubSub,
         request,
         reply,
-        player: user,
+        player,
       }
     },
     cors: {
