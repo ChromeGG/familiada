@@ -12,26 +12,34 @@ export const PlayerGql = builder.prismaObject('Player', {
   }),
 })
 
-builder.subscriptionFields((t) => {
+builder.queryFields((t) => {
   return {
+    // ! TODO online: check examples with smart subscriptions.
     players: t.prismaField({
       type: [PlayerGql],
       args: {
         gameId: t.arg.string(),
       },
-      subscribe: (_, { gameId }, { pubSub }) =>
+      smartSubscription: true,
+      subscribe: (_, root, { gameId }, { pubSub }) =>
         // the raw pubSub.subscribe was not working ...
-        pipe(
-          Repeater.merge([
-            // cause an initial event so the globalCounter is streamed to the client
-            // upon initiating the subscription
-            [],
-            // event stream for future updates
-            pubSub.subscribe('playerJoined'),
-          ]),
-          // map all events to the latest globalCounter
-          map(() => [])
-        ),
+        {
+          _.register('playerJoined')
+          console.log(_)
+          console.log('Registered 1')
+          pubSub.subscribe('playerJoined')
+          return pipe(
+            Repeater.merge([
+              // cause an initial event so the globalCounter is streamed to the client
+              // upon initiating the subscription
+              [],
+              // event stream for future updates
+              pubSub.subscribe('playerJoined'),
+            ]),
+            // map all events to the latest globalCounter
+            map(() => [])
+          )
+        },
       resolve: async (payload, parent, { gameId }, { prisma }, info) => {
         const game = await prisma.game.findUniqueOrThrow({
           where: {
@@ -45,7 +53,6 @@ builder.subscriptionFields((t) => {
             },
           },
         })
-
         return game.team.flatMap(({ Player }) => {
           return Player
         })

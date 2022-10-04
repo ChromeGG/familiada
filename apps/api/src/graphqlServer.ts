@@ -65,8 +65,8 @@ export const createGraphqlServer = async (server: FastifyInstance) => {
       credentials: true,
       methods: ['POST', 'GET', 'OPTIONS'],
     },
-    graphiql: true,
-    plugins: [useGraphQlJit(), useExtendContext(() => ({ pubSub }))],
+    graphiql: true, // FIXME Check it in production mode
+    plugins: [useGraphQlJit()],
   })
 
   server.route({
