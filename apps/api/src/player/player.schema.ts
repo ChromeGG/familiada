@@ -2,7 +2,7 @@ import { pipe, Repeater, map } from '@graphql-yoga/node'
 
 import { builder } from '../builder'
 
-export type { Player } from '@prisma/client'
+export type { Player } from '../generated/prisma'
 
 export const PlayerGql = builder.prismaObject('Player', {
   fields: (t) => ({
@@ -14,7 +14,6 @@ export const PlayerGql = builder.prismaObject('Player', {
 
 builder.queryFields((t) => {
   return {
-    // ! TODO online: check examples with smart subscriptions.
     players: t.prismaField({
       type: [PlayerGql],
       args: {

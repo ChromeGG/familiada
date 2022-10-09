@@ -1,4 +1,4 @@
-import { Language, PrismaClient } from '@prisma/client'
+import { Language, PrismaClient } from '../src/generated/prisma'
 
 const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 

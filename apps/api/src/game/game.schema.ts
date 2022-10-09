@@ -1,7 +1,6 @@
-import { GameStatus as GameStatusLocal } from '@prisma/client'
-
 import { builder } from '../builder'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
+import { GameStatus as GameStatusLocal } from '../generated/prisma'
 
 import { createGameArgs } from './contract/createGame.args'
 import { joinToGameArgs } from './contract/joinToGame.args'
@@ -9,7 +8,7 @@ import { joinToGameArgs } from './contract/joinToGame.args'
 import { createGame, joinToGame } from './game.service'
 import { createGameValidation, joinToGameValidation } from './game.validator'
 
-export type { Game } from '@prisma/client'
+export type { Game } from '../generated/prisma'
 
 export const GameStatus = GameStatusLocal
 
