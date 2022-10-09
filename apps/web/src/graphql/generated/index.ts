@@ -117,9 +117,9 @@ export type SubscriptionPlayersArgs = {
 
 export type Team = {
   __typename?: 'Team';
+  color: Scalars['String'];
   id: Scalars['ID'];
   players: Array<Player>;
-  color: Scalars['String'];
 };
 
 export enum TeamColor {
@@ -144,7 +144,7 @@ export type PlayersSubscriptionVariables = Exact<{
 }>;
 
 
-export type PlayersSubscription = { __typename?: 'Subscription', players: Array<{ __typename?: 'Player', id: string, name: string }> };
+export type PlayersSubscription = { __typename?: 'Subscription', players: Array<{ __typename?: 'Player', id: string, name: string, team: { __typename?: 'Team', id: string, color: string } }> };
 
 
 export const CreateGameDocument = gql`
@@ -225,6 +225,10 @@ export const PlayersDocument = gql`
   players(gameId: $gameId) {
     id
     name
+    team {
+      id
+      color
+    }
   }
 }
     `;

@@ -8,5 +8,7 @@
   "player-name": "Nazwa gracza",
   "red": "Czerwony",
   "sum": "Suma",
-  "team-color": "Kolor drużyny"
+  "team-blue": "Drużyna niebieska",
+  "team-color": "Kolor drużyny",
+  "team-red": "Drużyna czerwona"
 }

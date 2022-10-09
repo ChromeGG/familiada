@@ -123,6 +123,7 @@ importers:
       eslint-config-next: 12.3.1
       eslint-plugin-react: 7.31.8
       graphql: 16.6.0
+      mdi-material-ui: 7.5.0
       next: 12.3.1
       next-secure-headers: 2.2.0
       next-seo: 5.5.0
@@ -157,6 +158,7 @@ importers:
       apollo-upload-client: 17.0.0_mqgocqfa4eosf6ggtp5xgoaooq
       date-fns: 2.29.3
       graphql: 16.6.0
+      mdi-material-ui: 7.5.0_t3e56bfurmhwc5lfjedqqhppmi
       next: 12.3.1_qugu52izettqdqqm5qcjcltcia
       next-secure-headers: 2.2.0
       next-seo: 5.5.0_azq6kxkn3od7qdylwkyksrwopy
@@ -6719,6 +6721,16 @@ packages:
     resolution: {integrity: sha512-8y/eV9QQZCiyn1SprXSrCmqJN0yNRATe+PO8ztwqrvrbdRLA3eYJF0yaR0YayLWkMbsQSKWS9N2gPcGEc4UsZg==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /mdi-material-ui/7.5.0_t3e56bfurmhwc5lfjedqqhppmi:
+    resolution: {integrity: sha512-/0QLIFErB+4Y0he1sXN8GAomfgYWd8DeYwtEZ51F6+opxDPstanHFGLJqcqBpz3ylZ7H8haXc5oB7qBKWvF5TA==}
+    peerDependencies:
+      '@mui/material': ^5.0.0 || ^5.0.0-rc.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@mui/material': 5.10.8_ikcgkdnp4bn3rgptamntbhbo7e
+      react: 18.2.0
+    dev: false
 
   /merge-stream/2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}

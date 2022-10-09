@@ -5,6 +5,10 @@ const PLAYERS = gql`
     players(gameId: $gameId) {
       id
       name
+      team {
+        id
+        color
+      }
     }
   }
 `

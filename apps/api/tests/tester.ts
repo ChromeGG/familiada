@@ -21,7 +21,7 @@ export const getFunctionalTester = async (
   return {
     ...integrationTester,
     sendGraphql: async (
-      { token, query }: { token?: string; query?: string },
+      { query, variables }: { query?: string; variables?: Record<string, any> },
       options?: InjectOptions
     ) => {
       return server.inject({
@@ -29,6 +29,7 @@ export const getFunctionalTester = async (
         url: '/graphql',
         payload: {
           query,
+          variables,
         },
         ...options,
       })

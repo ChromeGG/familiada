@@ -6,20 +6,13 @@ import { useRouter } from 'next/router'
 import Board from '../components/Board'
 
 import Question from '../components/Question'
-import { usePlayersSubscription } from '../graphql/generated'
+import TeamsSection from '../components/TeamsSection'
 
 const GameId = () => {
   const { t } = useTranslation()
   const { query } = useRouter()
 
   const gameId = query.gameId as string
-
-  const { data, error } = usePlayersSubscription({
-    variables: { gameId },
-  })
-
-  console.log('~ data', data?.players)
-  console.log('~ error', error)
 
   return (
     <Container>
@@ -32,6 +25,7 @@ const GameId = () => {
           <Question></Question>
           {/* <StageArea game={game} /> */}
         </Grid>
+        <TeamsSection gameId={gameId} />
         <Grid item container xs={12} p={2} spacing={2}>
           <Grid item xs={6}>
             {/* <PlayersList team={teamRed} /> */}
