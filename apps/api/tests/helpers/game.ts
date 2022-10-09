@@ -21,7 +21,7 @@ export const getGameTester = async (context: Context) => {
             faker.helpers.arrayElement([TeamColor.RED, TeamColor.BLUE]),
         },
       }
-      return createGame(input, context)
+      return createGame(input)
     },
   }
 }

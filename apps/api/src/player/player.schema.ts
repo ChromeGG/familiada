@@ -2,7 +2,7 @@ import { pipe, Repeater } from '@graphql-yoga/node'
 
 import { builder } from '../builder'
 
-import { getPlayersByGame } from './player.service'
+import { getPlayersByGameId } from './player.service'
 
 export type { Player } from '../generated/prisma'
 
@@ -40,13 +40,13 @@ builder.subscriptionFields((t) => {
           Repeater.merge([
             // cause an initial event so the value is streamed to the client
             // upon initiating the subscription
-            await getPlayersByGame(gameId, ctx),
+            await getPlayersByGameId(gameId),
             // event stream for future updates
             ctx.pubSub.subscribe('playerJoined'),
           ])
         ),
       resolve: async (payload, parent, { gameId }, ctx, info) => {
-        return getPlayersByGame(gameId, ctx)
+        return getPlayersByGameId(gameId)
       },
     }),
   }

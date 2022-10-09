@@ -2,12 +2,12 @@ import { integrationSetup } from '../../tests/helpers'
 
 import { TeamColor } from '../team/team.schema'
 
-import { getPlayersByGame } from './player.service'
+import { getPlayersByGameId } from './player.service'
 
 const { integrationContext, Tester } = await integrationSetup()
 
 describe('player.service.ts', () => {
-  describe(getPlayersByGame.name, () => {
+  describe(getPlayersByGameId.name, () => {
     test('Should return players by game', async () => {
       const { id: gameId, team } = await Tester.game.create({
         gameInput: {
@@ -20,7 +20,7 @@ describe('player.service.ts', () => {
         joinInput: { playerName: 'SecondPlayer', teamId: String(team[1].id) },
       })
 
-      const players = await getPlayersByGame(gameId, integrationContext)
+      const players = await getPlayersByGameId(gameId)
 
       expect(players).toHaveLength(2)
       expect(players).toEqual(

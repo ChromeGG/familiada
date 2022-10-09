@@ -15,7 +15,7 @@ import { createGame, joinToGame } from './game.service'
 
 const { integrationContext, Tester } = await integrationSetup()
 
-describe('game-service.ts', () => {
+describe('game.service.ts', () => {
   describe(createGame.name, () => {
     test('Should create a game with two teams and the player', async () => {
       const input: CreateGameArgs = {
@@ -26,7 +26,7 @@ describe('game-service.ts', () => {
         },
       }
 
-      await createGame(input, integrationContext)
+      await createGame(input)
 
       const dbGame = await Tester.db.game.findFirst()
       const [dbRedTeam, dbBlueTeam] = await Tester.db.team.findMany({
@@ -68,16 +68,13 @@ describe('game-service.ts', () => {
     test('When gameId already exists, then throw an AlreadyExistError', async () => {
       await Tester.game.create({ gameInput: { gameId: 'boom' } })
 
-      const createGameFunc = createGame(
-        {
-          gameInput: {
-            gameId: 'boom',
-            playerName: 'MyPlayer',
-            playerTeam: TeamColor.BLUE,
-          },
+      const createGameFunc = createGame({
+        gameInput: {
+          gameId: 'boom',
+          playerName: 'MyPlayer',
+          playerTeam: TeamColor.BLUE,
         },
-        integrationContext
-      )
+      })
 
       await expect(createGameFunc).rejects.toThrow(
         new AlreadyExistError('This resource already exists')
