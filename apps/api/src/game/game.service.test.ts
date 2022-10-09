@@ -30,7 +30,7 @@ describe('game.service.ts', () => {
 
       const dbGame = await Tester.db.game.findFirst()
       const [dbRedTeam, dbBlueTeam] = await Tester.db.team.findMany({
-        orderBy: { teamColor: 'asc' },
+        orderBy: { color: 'asc' },
       })
       const dbPlayer = await Tester.db.player.findFirst()
 
@@ -47,7 +47,7 @@ describe('game.service.ts', () => {
         answeringPlayerId: null,
         gameId: input.gameInput.gameId,
         score: 0,
-        teamColor: TeamColor.RED,
+        color: TeamColor.RED,
       })
 
       expect(dbBlueTeam).toEqual<Team>({
@@ -55,7 +55,7 @@ describe('game.service.ts', () => {
         answeringPlayerId: null,
         gameId: input.gameInput.gameId,
         score: 0,
-        teamColor: TeamColor.BLUE,
+        color: TeamColor.BLUE,
       })
 
       expect(dbPlayer).toEqual<Player>({

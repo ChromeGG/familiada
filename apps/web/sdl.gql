@@ -70,7 +70,7 @@ type Subscription {
 type Team {
   id: ID!
   players: [Player!]!
-  teamColor: String!
+  color: String!
 }
 
 enum TeamColor {

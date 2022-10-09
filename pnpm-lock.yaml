@@ -34,6 +34,7 @@ importers:
       '@types/jest': 29.1.2
       '@types/node': 18.7.14
       dotenv: 16.0.3
+      dotenv-cli: 6.0.0
       eslint: 8.25.0
       fastify: 4.7.0
       fastify-plugin: 4.2.1
@@ -65,6 +66,7 @@ importers:
       '@pothos/plugin-validation': 3.8.4_ykfklomp77jiwakvisntg2j7ai
       '@prisma/client': 4.4.0_prisma@4.4.0
       dotenv: 16.0.3
+      dotenv-cli: 6.0.0
       fastify: 4.7.0
       fastify-plugin: 4.2.1
       graphql: 16.6.0
@@ -4327,6 +4329,16 @@ packages:
       no-case: 3.0.4
       tslib: 2.4.0
     dev: true
+
+  /dotenv-cli/6.0.0:
+    resolution: {integrity: sha512-qXlCOi3UMDhCWFKe0yq5sg3X+pJAz+RQDiFN38AMSbUrnY3uZshSfDJUAge951OS7J9gwLZGfsBlWRSOYz/TRg==}
+    hasBin: true
+    dependencies:
+      cross-spawn: 7.0.3
+      dotenv: 16.0.3
+      dotenv-expand: 8.0.3
+      minimist: 1.2.6
+    dev: false
 
   /dotenv-expand/8.0.3:
     resolution: {integrity: sha512-SErOMvge0ZUyWd5B0NXMQlDkN+8r+HhVUsxgOO7IoPDOdDRD2JjExpN6y3KnFR66jsJMwSn1pqIivhU5rcJiNg==}

@@ -27,8 +27,8 @@ export const gameRepository = {
         team: {
           createMany: {
             data: [
-              { score: 0, teamColor: TeamColor.RED },
-              { score: 0, teamColor: TeamColor.BLUE },
+              { score: 0, color: TeamColor.RED },
+              { score: 0, color: TeamColor.BLUE },
             ],
           },
         },

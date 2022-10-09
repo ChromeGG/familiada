@@ -119,7 +119,7 @@ export type Team = {
   __typename?: 'Team';
   id: Scalars['ID'];
   players: Array<Player>;
-  teamColor: Scalars['String'];
+  color: Scalars['String'];
 };
 
 export enum TeamColor {

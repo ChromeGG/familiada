@@ -13,10 +13,10 @@ const seedDb = async () => {
   })
 
   const redTeam = await prisma.team.create({
-    data: { gameId: game.id, score: 0, teamColor: 'RED' },
+    data: { gameId: game.id, score: 0, color: 'RED' },
   })
   const blueTeam = await prisma.team.create({
-    data: { gameId: game.id, score: 0, teamColor: 'BLUE' },
+    data: { gameId: game.id, score: 0, color: 'BLUE' },
   })
 
   await prisma.player.create({

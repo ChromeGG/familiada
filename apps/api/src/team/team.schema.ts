@@ -25,7 +25,7 @@ builder.queryFields((t) => {
 builder.prismaObject('Team', {
   fields: (t) => ({
     id: t.exposeID('id'),
-    teamColor: t.exposeString('teamColor'),
+    color: t.exposeString('color'),
     players: t.relation('Player'),
   }),
 })

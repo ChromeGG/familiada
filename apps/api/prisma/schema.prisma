@@ -27,7 +27,7 @@ model Player {
 
 model Team {
   id                Int       @id @default(autoincrement())
-  teamColor         TeamColor
+  color             TeamColor
   Player            Player[]
   Game              Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId            String

@@ -24,9 +24,7 @@ export const createGame = async ({ gameInput }: CreateGameArgs) => {
   const game = await gameRepository.createGameWithTeams(gameId, numberOfRounds)
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { id: teamId } = game.team.find(
-    ({ teamColor }) => teamColor === playerTeam
-  )!
+  const { id: teamId } = game.team.find(({ color }) => color === playerTeam)!
 
   // TODO check if user in this team exists and trow error
   // TODO this should be realized by user service method

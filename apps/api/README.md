@@ -28,3 +28,9 @@ ALTER DATABASE familiada
 SET log_statement = 'all';
 -- use it in transaction or set it back to 'none' to revert changes
 ```
+
+## Adding new migration
+
+```bash
+pnpm prisma migrate dev --name <migration-name>
+```
