@@ -1,6 +1,8 @@
-import { pipe, Repeater, map } from '@graphql-yoga/node'
+import { pipe, Repeater } from '@graphql-yoga/node'
 
 import { builder } from '../builder'
+
+import { getPlayersByGame } from './player.service'
 
 export type { Player } from '../generated/prisma'
 
@@ -12,60 +14,39 @@ export const PlayerGql = builder.prismaObject('Player', {
   }),
 })
 
-builder.queryFields((t) => {
+builder.queryFields((t) => ({
+  me: t.field({
+    type: PlayerGql,
+    authScopes: {
+      player: true,
+    },
+    resolve: async (root, args, ctx, info) => {
+      // @ts-ignore: FIXME Player is there ...
+      const playerId: number = ctx.player.id
+      return ctx.prisma.player.findUniqueOrThrow({ where: { id: playerId } })
+    },
+  }),
+}))
+
+builder.subscriptionFields((t) => {
   return {
     players: t.prismaField({
       type: [PlayerGql],
       args: {
         gameId: t.arg.string(),
       },
-      smartSubscription: true,
-      subscribe: (_, root, { gameId }, { pubSub }) =>
-        // the raw pubSub.subscribe was not working ...
-        {
-          _.register('playerJoined')
-          console.log(_)
-          console.log('Registered 1')
-          pubSub.subscribe('playerJoined')
-          return pipe(
-            Repeater.merge([
-              // cause an initial event so the globalCounter is streamed to the client
-              // upon initiating the subscription
-              [],
-              // event stream for future updates
-              pubSub.subscribe('playerJoined'),
-            ]),
-            // map all events to the latest globalCounter
-            map(() => [])
-          )
-        },
-      resolve: async (payload, parent, { gameId }, { prisma }, info) => {
-        const game = await prisma.game.findUniqueOrThrow({
-          where: {
-            id: gameId,
-          },
-          include: {
-            team: {
-              include: {
-                Player: true,
-              },
-            },
-          },
-        })
-        return game.team.flatMap(({ Player }) => {
-          return Player
-        })
-      },
-    }),
-    me: t.field({
-      type: PlayerGql,
-      authScopes: {
-        player: true,
-      },
-      resolve: async (root, args, ctx, info) => {
-        // @ts-ignore: FIXME Player is there ...
-        const playerId: number = ctx.player.id
-        return ctx.prisma.player.findUniqueOrThrow({ where: { id: playerId } })
+      subscribe: async (root, { gameId }, ctx) =>
+        pipe(
+          Repeater.merge([
+            // cause an initial event so the value is streamed to the client
+            // upon initiating the subscription
+            await getPlayersByGame(gameId, ctx),
+            // event stream for future updates
+            ctx.pubSub.subscribe('playerJoined'),
+          ])
+        ),
+      resolve: async (payload, parent, { gameId }, ctx, info) => {
+        return getPlayersByGame(gameId, ctx)
       },
     }),
   }

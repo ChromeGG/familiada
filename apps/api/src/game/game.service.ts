@@ -92,7 +92,7 @@ export const joinToGame = async (
     include: { team: true },
   })
 
-  pubSub.publish('playerJoined', player)
+  pubSub.publish('playerJoined')
 
   return game
 }

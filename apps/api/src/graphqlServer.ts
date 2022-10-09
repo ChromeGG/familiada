@@ -3,12 +3,9 @@ import type { PubSub, YogaInitialContext } from '@graphql-yoga/node'
 import {
   createPubSub as createYogaPubSub,
   createServer,
-  useExtendContext,
 } from '@graphql-yoga/node'
 
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-
-import type { Player } from './player/player.schema'
 
 import { prisma } from './prisma'
 
@@ -22,7 +19,7 @@ export interface Context extends YogaInitialContext {
   pubSub: PubSub<PubSubArgs>
 }
 
-type PubSubArgs = { playerJoined: [Player] }
+type PubSubArgs = { playerJoined: [] }
 
 export const createPubSub = () => createYogaPubSub<PubSubArgs>()
 

@@ -12,11 +12,13 @@ export const getGameTester = async (context: Context) => {
       gameInput = {},
     }: PartialDeep<CreateGameArgs> = {}): ReturnType<typeof createGame> => {
       const { gameId, playerName, playerTeam } = gameInput
-      const input = <CreateGameArgs>{
+      const input: CreateGameArgs = {
         gameInput: {
           gameId: gameId || faker.random.word(),
           playerName: playerName || faker.name.firstName(),
-          playerTeam: playerTeam || TeamColor.RED,
+          playerTeam:
+            playerTeam ||
+            faker.helpers.arrayElement([TeamColor.RED, TeamColor.BLUE]),
         },
       }
       return createGame(input, context)

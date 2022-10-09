@@ -29,7 +29,6 @@ importers:
       '@pothos/plugin-errors': 3.8.4
       '@pothos/plugin-prisma': 3.35.4
       '@pothos/plugin-scope-auth': 3.14.4
-      '@pothos/plugin-smart-subscriptions': 3.6.4
       '@pothos/plugin-validation': 3.8.4
       '@prisma/client': 4.4.0
       '@types/jest': 29.1.2
@@ -63,7 +62,6 @@ importers:
       '@pothos/plugin-errors': 3.8.4_erqwihcggpcndzoesdwddtg7aa
       '@pothos/plugin-prisma': 3.35.4_wtknh3f4dqdpl5dsfnft7gpzaa
       '@pothos/plugin-scope-auth': 3.14.4_erqwihcggpcndzoesdwddtg7aa
-      '@pothos/plugin-smart-subscriptions': 3.6.4_erqwihcggpcndzoesdwddtg7aa
       '@pothos/plugin-validation': 3.8.4_ykfklomp77jiwakvisntg2j7ai
       '@prisma/client': 4.4.0_prisma@4.4.0
       dotenv: 16.0.3
@@ -2643,16 +2641,6 @@ packages:
 
   /@pothos/plugin-scope-auth/3.14.4_erqwihcggpcndzoesdwddtg7aa:
     resolution: {integrity: sha512-nX6dr91J6gh0tSiiPA5knQ+9bkgvsH077BMhbSHZ8F7GhgH+NsdCW8TtJoIw7aAuxojbWuUl1bmr6pH9yQkjTg==}
-    peerDependencies:
-      '@pothos/core': '*'
-      graphql: '>=15.1.0'
-    dependencies:
-      '@pothos/core': 3.22.5_graphql@16.6.0
-      graphql: 16.6.0
-    dev: false
-
-  /@pothos/plugin-smart-subscriptions/3.6.4_erqwihcggpcndzoesdwddtg7aa:
-    resolution: {integrity: sha512-1Nw2GZqrR/5Fkwt+GygVyIF0GPc6j+9AiKaZ1CaL3FSOjmixiJ9i4IJPvlEs4rqdVUez6kASHMI7x3UHOavpCQ==}
     peerDependencies:
       '@pothos/core': '*'
       graphql: '>=15.1.0'

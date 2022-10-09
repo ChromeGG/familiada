@@ -1,6 +1,6 @@
 import { builder } from '../builder'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
-import { GameStatus as GameStatusLocal } from '../generated/prisma'
+import { GameStatus as PrismaGameStatus } from '../generated/prisma'
 
 import { createGameArgs } from './contract/createGame.args'
 import { joinToGameArgs } from './contract/joinToGame.args'
@@ -10,7 +10,7 @@ import { createGameValidation, joinToGameValidation } from './game.validator'
 
 export type { Game } from '../generated/prisma'
 
-export const GameStatus = GameStatusLocal
+export const GameStatus = PrismaGameStatus
 
 // could be useful in future
 // type ShapeFromInput<T> = T extends InputRef<infer U> ? U : never
@@ -24,7 +24,21 @@ const Game = builder.prismaObject('Game', {
   fields: (t) => ({
     id: t.exposeID('id'),
     status: t.expose('status', { type: GameStatusGql }),
+    rounds: t.exposeInt('rounds'),
+    currentRound: t.exposeInt('currentRound'),
+    currentScore: t.exposeInt('currentScore'),
     teams: t.relation('team'),
+
+    /* dynamic things, could be a separate subscription/object
+     answeringPlayers: [PlayerGql]
+     sendedResponse: String
+     boardState: {
+       discoveredAnswers: [AnswerGql],
+       answersNumber: Int,
+       answeringTeamFailures: Int (0-3),
+       secondTeamFailure: boolean
+     }
+     */
   }),
 })
 
@@ -61,11 +75,3 @@ builder.mutationFields((t) => {
     }),
   }
 })
-
-// builder.prismaObject('Game', {
-//   fields: (t) => ({
-//     id: t.exposeID('id'),
-//     // TODO this should be enum
-//     teamColor: t.exposeString('status'),
-//   }),
-// })

@@ -7,5 +7,5 @@
 5. Exclude tests from `dist` folder
 6. Try to use ts-node-dev or node-dev for `pnpm run dev`
 7. Docker container with production build?
-8.  Add jest-extended
-9.  Rename `teamColor` to `color`
+8. Add jest-extended
+9. Rename `teamColor` to `color`
