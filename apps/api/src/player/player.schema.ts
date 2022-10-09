@@ -42,7 +42,7 @@ builder.subscriptionFields((t) => {
             // upon initiating the subscription
             await getPlayersByGameId(gameId),
             // event stream for future updates
-            ctx.pubSub.subscribe('playerJoined'),
+            ctx.pubSub.subscribe('playerJoined', gameId),
           ])
         ),
       resolve: async (payload, parent, { gameId }, ctx, info) => {

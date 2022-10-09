@@ -18,7 +18,7 @@ const GameId = () => {
     variables: { gameId },
   })
 
-  console.log('~ data', data)
+  console.log('~ data', data?.players)
   console.log('~ error', error)
 
   return (

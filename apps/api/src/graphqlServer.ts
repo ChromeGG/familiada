@@ -7,6 +7,8 @@ import {
 
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
+import type { Game } from './generated/prisma'
+
 import { prisma } from './prisma'
 
 import { schema } from './schema'
@@ -19,7 +21,10 @@ export interface Context extends YogaInitialContext {
   pubSub: PubSub<PubSubArgs>
 }
 
-type PubSubArgs = { playerJoined: [] }
+type PubSubArgs = {
+  // TODO fix TS, payload shouldn't be required
+  playerJoined: [gamieId: Game['id'], payload: { wtf: true }]
+}
 
 export const createPubSub = () => createYogaPubSub<PubSubArgs>()
 
