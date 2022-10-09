@@ -11,10 +11,8 @@ export const createGameValidation = z.object({
 })
 
 export const joinToGameValidation = z.object({
-  joinInput: z.object({
-    playerName: z.playerName(),
-    teamId: z.string(),
-  }),
+  teamId: z.string(),
+  playerName: z.playerName(),
 })
 
 export type JoinToGameValidation = Z.infer<typeof joinToGameValidation>

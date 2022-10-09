@@ -63,8 +63,8 @@ builder.mutationFields((t) => {
         schema: joinToGameValidation,
       },
       type: Game,
-      resolve: async (_, args, context) => {
-        return joinToGame(args, context)
+      resolve: async (_, { teamId, playerName }, context) => {
+        return joinToGame({ teamId: Number(teamId), playerName }, context)
       },
     }),
     sendAnswer: t.withAuth({ player: true }).float({

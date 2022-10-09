@@ -7,10 +7,10 @@ import type { Team } from '../team/team.schema'
 import { TeamColor } from '../team/team.schema'
 
 import type { CreateGameArgs } from './contract/createGame.args'
-import type { JoinToGameArgs } from './contract/joinToGame.args'
 import type { Game } from './game.schema'
 import { GameStatus } from './game.schema'
 
+import type { JoinToGameInput } from './game.service'
 import { createGame, joinToGame } from './game.service'
 
 const { integrationContext, Tester } = await integrationSetup()
@@ -87,11 +87,9 @@ describe('game.service.ts', () => {
       const game = await Tester.game.create()
       const [, blueTeam] = game.team
 
-      const input: JoinToGameArgs = {
-        joinInput: {
-          playerName: 'MyPlayer',
-          teamId: blueTeam.id.toString(),
-        },
+      const input: JoinToGameInput = {
+        teamId: blueTeam.id,
+        playerName: 'MyPlayer',
       }
 
       await joinToGame(input, integrationContext)

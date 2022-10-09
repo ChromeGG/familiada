@@ -1,11 +1,11 @@
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
+import type { Team } from '../generated/prisma'
 import type { Context } from '../graphqlServer'
 import { playerRepository } from '../player/player.repository'
 import { teamRepository } from '../team/team.repository'
 
 import type { CreateGameArgs } from './contract/createGame.args'
-import type { JoinToGameArgs } from './contract/joinToGame.args'
 import { gameRepository } from './game.repository'
 import { GameStatus } from './game.schema'
 
@@ -37,13 +37,15 @@ export const createGame = async ({ gameInput }: CreateGameArgs) => {
 
 const MAX_PLAYERS_PER_TEAM = 5
 
+export interface JoinToGameInput {
+  playerName: string
+  teamId: Team['id']
+}
+
 export const joinToGame = async (
-  { joinInput }: JoinToGameArgs,
+  { playerName, teamId }: JoinToGameInput,
   { pubSub }: Context
 ) => {
-  const { playerName } = joinInput
-  const teamId = Number(joinInput.teamId)
-
   const team = await teamRepository.findByIdWithGameAndPlayers(teamId)
 
   const { Game: game, Player: players } = team

@@ -38,20 +38,29 @@ export type Error = {
 
 export type Game = {
   __typename?: 'Game';
+  currentRound: Scalars['Int'];
+  currentScore: Scalars['Int'];
   id: Scalars['ID'];
-  status: Scalars['String'];
+  rounds: Scalars['Int'];
+  status: GameStatus;
+  teams: Array<Team>;
 };
 
+export enum GameStatus {
+  Finished = 'FINISHED',
+  Lobby = 'LOBBY',
+  Running = 'RUNNING'
+}
+
 export type JoinToGameInput = {
-  gameId: Scalars['ID'];
   playerName: Scalars['String'];
-  playerTeam: TeamColor;
+  teamId: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createGame: MutationCreateGameResult;
-  joinToGame: Scalars['Boolean'];
+  joinToGame: Game;
   sendAnswer: Scalars['Float'];
 };
 
@@ -62,7 +71,7 @@ export type MutationCreateGameArgs = {
 
 
 export type MutationJoinToGameArgs = {
-  gameInput: CreateGameInput;
+  joinInput: JoinToGameInput;
 };
 
 export type MutationCreateGameResult = AlreadyExistError | BaseError | MutationCreateGameSuccess;
@@ -76,11 +85,19 @@ export type Player = {
   __typename?: 'Player';
   id: Scalars['ID'];
   name: Scalars['String'];
+  team: Team;
 };
 
 export type Query = {
   __typename?: 'Query';
+  me: Player;
+  players: Array<Player>;
   test: TeamColor;
+};
+
+
+export type QueryPlayersArgs = {
+  gameId: Scalars['String'];
 };
 
 
@@ -101,7 +118,7 @@ export type SubscriptionPlayersArgs = {
 export type Team = {
   __typename?: 'Team';
   id: Scalars['ID'];
-  player: Array<Player>;
+  players: Array<Player>;
   teamColor: Scalars['String'];
 };
 
@@ -115,7 +132,7 @@ export type CreateGameMutationVariables = Exact<{
 }>;
 
 
-export type CreateGameMutation = { __typename?: 'Mutation', createGame: { __typename?: 'AlreadyExistError', message: string } | { __typename?: 'BaseError' } | { __typename?: 'MutationCreateGameSuccess', data: { __typename?: 'Game', id: string, status: string } } };
+export type CreateGameMutation = { __typename?: 'Mutation', createGame: { __typename?: 'AlreadyExistError', message: string } | { __typename?: 'BaseError' } | { __typename?: 'MutationCreateGameSuccess', data: { __typename?: 'Game', id: string, status: GameStatus } } };
 
 export type AsdQueryVariables = Exact<{ [key: string]: never; }>;
 

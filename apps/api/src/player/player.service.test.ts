@@ -4,7 +4,7 @@ import { TeamColor } from '../team/team.schema'
 
 import { getPlayersByGameId } from './player.service'
 
-const { integrationContext, Tester } = await integrationSetup()
+const { Tester } = await integrationSetup()
 
 describe('player.service.ts', () => {
   describe(getPlayersByGameId.name, () => {
@@ -17,7 +17,9 @@ describe('player.service.ts', () => {
       })
 
       await Tester.player.joinToGame({
-        joinInput: { playerName: 'SecondPlayer', teamId: String(team[1].id) },
+        playerName: 'SecondPlayer',
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        teamId: team[1].id!,
       })
 
       const players = await getPlayersByGameId(gameId)
