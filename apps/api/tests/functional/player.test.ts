@@ -5,7 +5,8 @@ import { functionalSetup } from '../helpers'
 const { Tester } = await functionalSetup()
 
 describe('Player', () => {
-  test.todo('Should return all players by game id', async () => {
+  // TODO fix it
+  test.skip('Should return all players by game id', async () => {
     const { id } = await Tester.game.create()
     const res = await Tester.sendGraphql({
       query: `#graphql

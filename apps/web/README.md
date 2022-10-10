@@ -3,7 +3,6 @@
 ### Graphql hooks generating
 
 1. Write your query in `./src/graphql`
-2. Update the `sdl.gql` file by grabbing the sdl schema from any client (Altair, Apollo Studio etc.).
-3. Run `pnpm run generate`
+2. Run `pnpm run generate`
 
-> This will be realized by one command in future.
+> API must be running on `127.0.0.1:3000/graphql` or you can adjust the url in the script

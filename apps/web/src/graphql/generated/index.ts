@@ -52,11 +52,6 @@ export enum GameStatus {
   Running = 'RUNNING'
 }
 
-export type JoinToGameInput = {
-  playerName: Scalars['String'];
-  teamId: Scalars['String'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   createGame: MutationCreateGameResult;
@@ -71,7 +66,8 @@ export type MutationCreateGameArgs = {
 
 
 export type MutationJoinToGameArgs = {
-  joinInput: JoinToGameInput;
+  playerName: Scalars['String'];
+  teamId: Scalars['ID'];
 };
 
 export type MutationCreateGameResult = AlreadyExistError | BaseError | MutationCreateGameSuccess;
@@ -91,13 +87,7 @@ export type Player = {
 export type Query = {
   __typename?: 'Query';
   me: Player;
-  players: Array<Player>;
   test: TeamColor;
-};
-
-
-export type QueryPlayersArgs = {
-  gameId: Scalars['String'];
 };
 
 
@@ -133,6 +123,14 @@ export type CreateGameMutationVariables = Exact<{
 
 
 export type CreateGameMutation = { __typename?: 'Mutation', createGame: { __typename?: 'AlreadyExistError', message: string } | { __typename?: 'BaseError' } | { __typename?: 'MutationCreateGameSuccess', data: { __typename?: 'Game', id: string, status: GameStatus } } };
+
+export type JoinToGameMutationVariables = Exact<{
+  teamId: Scalars['ID'];
+  name: Scalars['String'];
+}>;
+
+
+export type JoinToGameMutation = { __typename?: 'Mutation', joinToGame: { __typename?: 'Game', id: string } };
 
 export type AsdQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -188,6 +186,40 @@ export function useCreateGameMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateGameMutationHookResult = ReturnType<typeof useCreateGameMutation>;
 export type CreateGameMutationResult = Apollo.MutationResult<CreateGameMutation>;
 export type CreateGameMutationOptions = Apollo.BaseMutationOptions<CreateGameMutation, CreateGameMutationVariables>;
+export const JoinToGameDocument = gql`
+    mutation JoinToGame($teamId: ID!, $name: String!) {
+  joinToGame(teamId: $teamId, playerName: $name) {
+    id
+  }
+}
+    `;
+export type JoinToGameMutationFn = Apollo.MutationFunction<JoinToGameMutation, JoinToGameMutationVariables>;
+
+/**
+ * __useJoinToGameMutation__
+ *
+ * To run a mutation, you first call `useJoinToGameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinToGameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinToGameMutation, { data, loading, error }] = useJoinToGameMutation({
+ *   variables: {
+ *      teamId: // value for 'teamId'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useJoinToGameMutation(baseOptions?: Apollo.MutationHookOptions<JoinToGameMutation, JoinToGameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<JoinToGameMutation, JoinToGameMutationVariables>(JoinToGameDocument, options);
+      }
+export type JoinToGameMutationHookResult = ReturnType<typeof useJoinToGameMutation>;
+export type JoinToGameMutationResult = Apollo.MutationResult<JoinToGameMutation>;
+export type JoinToGameMutationOptions = Apollo.BaseMutationOptions<JoinToGameMutation, JoinToGameMutationVariables>;
 export const AsdDocument = gql`
     query asd {
   test(asd: BLUE)

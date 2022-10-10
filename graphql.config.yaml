@@ -2,4 +2,3 @@
 projects:
   default:
     schema: http://localhost:3000/graphql
-  

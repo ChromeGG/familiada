@@ -4,6 +4,7 @@ import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
 
 import Board from '../components/Board'
+import JoinToGameForm from '../components/JoinToGameForm'
 
 import Question from '../components/Question'
 import TeamsSection from '../components/TeamsSection'
@@ -23,23 +24,12 @@ const GameId = () => {
         </Grid>
         <Grid item xs={12}>
           <Question></Question>
-          {/* <StageArea game={game} /> */}
         </Grid>
         <TeamsSection gameId={gameId} />
-        <Grid item container xs={12} p={2} spacing={2}>
-          <Grid item xs={6}>
-            {/* <PlayersList team={teamRed} /> */}
-          </Grid>
-          <Grid item xs={6}>
-            {/* <PlayersList team={teamBlue} /> */}
-          </Grid>
-        </Grid>
       </Grid>
-      {/* {!me && (
-        <Container sx={{ display: 'flex', justifyContent: 'center' }}>
-          <JoinToGameFrom game={game} />
-        </Container>
-      )} */}
+      <Container sx={{ display: 'flex', justifyContent: 'center' }}>
+        <JoinToGameForm gameId={gameId} />
+      </Container>
     </Container>
   )
 }

@@ -122,6 +122,7 @@ importers:
       eslint-config-custom: workspace:*
       eslint-config-next: 12.3.1
       eslint-plugin-react: 7.31.8
+      get-graphql-schema: 2.1.2
       graphql: 16.6.0
       mdi-material-ui: 7.5.0
       next: 12.3.1
@@ -186,6 +187,7 @@ importers:
       eslint-config-custom: link:../../packages/eslint-config-custom
       eslint-config-next: 12.3.1_e24lxsqdqt3oba6r3j443w4ftm
       eslint-plugin-react: 7.31.8_eslint@8.25.0
+      get-graphql-schema: 2.1.2
       next-transpile-modules: 9.0.0
       tsconfig: link:../../packages/tsconfig
       typescript: 4.8.3
@@ -5224,6 +5226,18 @@ packages:
     engines: {node: 6.* || 8.* || >= 10.*}
     dev: true
 
+  /get-graphql-schema/2.1.2:
+    resolution: {integrity: sha512-1z5Hw91VrE3GrpCZE6lE8Dy+jz4kXWesLS7rCSjwOxf5BOcIedAZeTUJRIeIzmmR+PA9CKOkPTYFRJbdgUtrxA==}
+    hasBin: true
+    dependencies:
+      chalk: 2.4.2
+      graphql: 14.7.0
+      minimist: 1.2.6
+      node-fetch: 2.6.7
+    transitivePeerDependencies:
+      - encoding
+    dev: true
+
   /get-intrinsic/1.1.2:
     resolution: {integrity: sha512-Jfm3OyCxHh9DJyc28qGk+JmfkpO41A4XkneDSujN9MDXrm4oDKdHvndhZ2dN94+ERNfkYJWDclW6k2L/ZGHjXA==}
     dependencies:
@@ -5416,6 +5430,13 @@ packages:
       graphql: '>=0.11 <=16'
     dependencies:
       graphql: 16.6.0
+
+  /graphql/14.7.0:
+    resolution: {integrity: sha512-l0xWZpoPKpppFzMfvVyFmp9vLN7w/ZZJPefUicMCepfJeQ8sMcztloGYY9DfjVPo6tIUDzU5Hw3MUbIjj9AVVA==}
+    engines: {node: '>= 6.x'}
+    dependencies:
+      iterall: 1.3.0
+    dev: true
 
   /graphql/16.6.0:
     resolution: {integrity: sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==}
@@ -5869,6 +5890,10 @@ packages:
     dependencies:
       html-escaper: 2.0.2
       istanbul-lib-report: 3.0.0
+    dev: true
+
+  /iterall/1.3.0:
+    resolution: {integrity: sha512-QZ9qOMdF+QLHxy1QIpUHUU1D5pS2CG2P69LF6L6CPjPYA/XMOmKV3PZpawHoAjHNyB0swdVTRxdYT4tbBbxqwg==}
     dev: true
 
   /jest-changed-files/29.0.0:

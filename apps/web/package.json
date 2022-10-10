@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "codegen": "graphql-codegen --config codegen.yml",
     "dev": "next dev -p 8080",
+    "generate": "pnpm generate:update-schema && pnpm generate:codegen",
+    "generate:codegen": "graphql-codegen --config codegen.yml",
+    "generate:update-schema": "pnpm get-graphql-schema http://127.0.0.1:3000/graphql > sdl.gql",
     "lint": "next lint",
     "start": "next start -p 8080",
     "type-check": "tsc --noEmit"
@@ -59,6 +61,7 @@
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "12.3.1",
     "eslint-plugin-react": "7.31.8",
+    "get-graphql-schema": "2.1.2",
     "next-transpile-modules": "9.0.0",
     "tsconfig": "workspace:*",
     "typescript": "4.8.3"

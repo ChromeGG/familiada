@@ -1,3 +1,9 @@
+"""Exposes a URL that specifies the behavior of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behavior of this scalar."""
+  url: String!
+) on SCALAR
+
 type AlreadyExistError implements Error {
   message: String!
 }
@@ -31,21 +37,13 @@ enum GameStatus {
   RUNNING
 }
 
-input JoinToGameInput {
-  playerName: String!
-  teamId: String!
-}
-
 type Mutation {
   createGame(gameInput: CreateGameInput!): MutationCreateGameResult!
-  joinToGame(joinInput: JoinToGameInput!): Game!
+  joinToGame(playerName: String!, teamId: ID!): Game!
   sendAnswer: Float!
 }
 
-union MutationCreateGameResult =
-    AlreadyExistError
-  | BaseError
-  | MutationCreateGameSuccess
+union MutationCreateGameResult = AlreadyExistError | BaseError | MutationCreateGameSuccess
 
 type MutationCreateGameSuccess {
   data: Game!
@@ -59,7 +57,6 @@ type Player {
 
 type Query {
   me: Player!
-  players(gameId: String!): [Player!]!
   test(asd: TeamColor!): TeamColor!
 }
 
@@ -68,12 +65,13 @@ type Subscription {
 }
 
 type Team {
+  color: String!
   id: ID!
   players: [Player!]!
-  color: String!
 }
 
 enum TeamColor {
   BLUE
   RED
 }
+
