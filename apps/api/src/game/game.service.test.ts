@@ -83,7 +83,7 @@ describe('game.service.ts', () => {
   })
 
   describe(joinToGame.name, () => {
-    test('Should join to game', async () => {
+    test('Should join to game and return player', async () => {
       const game = await Tester.game.create()
       const [, blueTeam] = game.team
 
@@ -92,10 +92,16 @@ describe('game.service.ts', () => {
         playerName: 'MyPlayer',
       }
 
-      await joinToGame(input, integrationContext)
+      const result = await joinToGame(input, integrationContext)
 
       const player = await Tester.db.player.findFirst({
         where: { name: 'MyPlayer' },
+      })
+
+      expect(result).toEqual<Player>({
+        id: expect.any(Number),
+        name: 'MyPlayer',
+        teamId: blueTeam.id,
       })
       expect(player).toEqual<Player>({
         id: expect.any(Number),

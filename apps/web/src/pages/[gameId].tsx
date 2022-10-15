@@ -8,12 +8,31 @@ import JoinToGameForm from '../components/JoinToGameForm'
 
 import Question from '../components/Question'
 import TeamsSection from '../components/TeamsSection'
+import { TeamColor, useGameSubscription } from '../graphql/generated'
 
 const GameId = () => {
   const { t } = useTranslation()
   const { query } = useRouter()
 
   const gameId = query.gameId as string
+
+  const { data, error } = useGameSubscription({ variables: { gameId } })
+
+  if (!data) {
+    return (
+      <Container>
+        <NextSeo title={t`game`} />
+        <h1>{t`loading`}</h1>
+      </Container>
+    )
+  }
+
+  const { gameState } = data
+  // make helper function for this
+  const redTeamId =
+    gameState.teams.find(({ color }) => color === TeamColor.Red)?.id ?? ''
+  const blueTeamId =
+    gameState.teams.find(({ color }) => color === TeamColor.Blue)?.id ?? ''
 
   return (
     <Container>
@@ -28,7 +47,7 @@ const GameId = () => {
         <TeamsSection gameId={gameId} />
       </Grid>
       <Container sx={{ display: 'flex', justifyContent: 'center' }}>
-        <JoinToGameForm gameId={gameId} />
+        <JoinToGameForm redTeamId={redTeamId} blueTeamId={blueTeamId} />
       </Container>
     </Container>
   )

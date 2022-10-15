@@ -5,6 +5,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { DefaultSeo } from 'next-seo'
 import type { AppProps } from 'next/app'
 import { SnackbarProvider } from 'notistack'
+import { RecoilRoot } from 'recoil'
 
 import { config } from '../configuration'
 
@@ -55,13 +56,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       <CssBaseline />
       <SnackbarProvider>
         <ApolloProvider client={graphqlClient}>
-          <ThemeProvider theme={appTheme}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              {/* <NetworkStateNotification /> */}
+          <RecoilRoot>
+            <ThemeProvider theme={appTheme}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                {/* <NetworkStateNotification /> */}
 
-              <NextPage />
-            </LocalizationProvider>
-          </ThemeProvider>
+                <NextPage />
+              </LocalizationProvider>
+            </ThemeProvider>
+          </RecoilRoot>
         </ApolloProvider>
       </SnackbarProvider>
     </>

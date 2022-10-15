@@ -13,33 +13,42 @@ import {
   TextFieldElement,
   RadioButtonGroup,
 } from 'react-hook-form-mui'
+import { useRecoilState } from 'recoil'
 
+import type { Team } from '../graphql/generated'
 import { useJoinToGameMutation } from '../graphql/generated'
 
-import type { Game } from '../interfaces/common'
+import { meAtom } from '../store/me'
 import type { JoinToGameSchema } from '../validators/joinToGame.validator'
 import { useJoinToGameForm } from '../validators/joinToGame.validator'
 
 interface Props {
-  gameId: Game['id']
+  redTeamId: Team['id']
+  blueTeamId: Team['id']
 }
 
-const JoinToGameForm: FC<Props> = ({ gameId }) => {
+const JoinToGameForm: FC<Props> = ({ redTeamId, blueTeamId }) => {
   const { t } = useTranslation()
 
   const form = useJoinToGameForm()
+  const [me, setMe] = useRecoilState(meAtom)
 
+  // TODO add loading state
   const [joinToGameMutation, { loading }] = useJoinToGameMutation()
 
-  // use
   const joinToGameHandler = async ({ name, teamId }: JoinToGameSchema) => {
-    console.log(name, teamId)
-    // await joinToGameMutation({
-    //   variables: {
-    //     name,
-    //     teamId,
-    //   },
-    // })
+    const { data } = await joinToGameMutation({
+      variables: {
+        name,
+        teamId,
+      },
+    })
+
+    if (!data) {
+      throw new Error('No data')
+    }
+    // console.log(data.joinToGame)
+    setMe(data.joinToGame)
   }
 
   return (
@@ -58,11 +67,11 @@ const JoinToGameForm: FC<Props> = ({ gameId }) => {
             name="teamId"
             options={[
               {
-                id: '1',
+                id: redTeamId,
                 label: t`team-red`,
               },
               {
-                id: '2',
+                id: blueTeamId,
                 label: t`team-blue`,
               },
             ]}
@@ -73,6 +82,7 @@ const JoinToGameForm: FC<Props> = ({ gameId }) => {
           <Button
             type="submit"
             variant="contained"
+            disabled={loading}
             fullWidth
           >{t`join-to-game`}</Button>
         </CardActions>

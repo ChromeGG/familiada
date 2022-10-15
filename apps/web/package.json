@@ -43,6 +43,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "7.37.0",
     "react-hook-form-mui": "5.7.2",
+    "recoil": "0.7.6",
     "urlcat": "2.0.4",
     "zod": "3.19.1"
   },

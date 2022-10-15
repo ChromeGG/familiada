@@ -1,11 +1,14 @@
+import { pipe, Repeater } from '@graphql-yoga/node'
+
 import { builder } from '../builder'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 import { GameStatus as PrismaGameStatus } from '../generated/prisma'
+import { PlayerGql } from '../player/player.schema'
 
 import { createGameArgs } from './contract/createGame.args'
 import { joinToGameArgs } from './contract/joinToGame.args'
 
-import { createGame, joinToGame } from './game.service'
+import { createGame, getGameStatus, joinToGame } from './game.service'
 import { createGameValidation, joinToGameValidation } from './game.validator'
 
 export type { Game } from '../generated/prisma'
@@ -31,7 +34,10 @@ const Game = builder.prismaObject('Game', {
 
     /* dynamic things, could be a separate subscription/object
      answeringPlayers: [PlayerGql]
-     sendedResponse: String
+     sendedResponse: {
+       player: Player
+       text: String
+     }
      boardState: {
        discoveredAnswers: [AnswerGql],
        answersNumber: Int,
@@ -41,6 +47,26 @@ const Game = builder.prismaObject('Game', {
      */
   }),
 })
+
+builder.subscriptionFields((t) => ({
+  gameState: t.field({
+    type: Game,
+    args: {
+      gameId: t.arg.string(),
+    },
+    subscribe: async (root, { gameId }, ctx) => {
+      return pipe(
+        Repeater.merge([
+          await getGameStatus(gameId),
+          ctx.pubSub.subscribe('gameStateUpdated', String(gameId)),
+        ])
+      )
+    },
+    resolve: async (_root, { gameId }) => {
+      return getGameStatus(gameId)
+    },
+  }),
+}))
 
 builder.mutationFields((t) => {
   return {
@@ -62,7 +88,8 @@ builder.mutationFields((t) => {
       validate: {
         schema: joinToGameValidation,
       },
-      type: Game,
+      // This should return Player
+      type: PlayerGql,
       resolve: async (_, { teamId, playerName }, context) => {
         return joinToGame({ teamId: Number(teamId), playerName }, context)
       },

@@ -58,8 +58,12 @@ export const joinToGame = async (
   }
 
   // TODO this should be realized by user service method
-  await playerRepository.createPlayer(playerName, teamId)
+  const player = await playerRepository.createPlayer(playerName, teamId)
   pubSub.publish('playerJoined', game.id, { wtf: true })
 
-  return game
+  return player
+}
+
+export const getGameStatus = async (gameId: string) => {
+  return gameRepository.findByIdOrThrow(gameId)
 }

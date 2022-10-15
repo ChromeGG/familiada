@@ -8,7 +8,7 @@ module.exports = {
     'plugin:import/recommended',
     'plugin:import/typescript',
     'plugin:jest/recommended',
-    'plugin:jest-formatting/recommended',
+    'plugin:jest-formatting/strict',
   ],
   env: {
     jest: true,

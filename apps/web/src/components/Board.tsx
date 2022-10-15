@@ -9,9 +9,14 @@ import {
   Stack,
 } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
+import { useRecoilValue } from 'recoil'
+
+import { meState } from '../store/me'
 
 const Board = () => {
   const { t } = useTranslation()
+  const me = useRecoilValue(meState)
+  console.log('~ me', me)
 
   const answers = [
     { position: 1, text: 'Lama', score: 45 },

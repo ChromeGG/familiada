@@ -39,7 +39,7 @@ enum GameStatus {
 
 type Mutation {
   createGame(gameInput: CreateGameInput!): MutationCreateGameResult!
-  joinToGame(playerName: String!, teamId: ID!): Game!
+  joinToGame(playerName: String!, teamId: ID!): Player!
   sendAnswer: Float!
 }
 
@@ -61,6 +61,7 @@ type Query {
 }
 
 type Subscription {
+  gameState(gameId: String!): Game!
   players(gameId: String!): [Player!]!
 }
 
