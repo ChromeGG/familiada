@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Button,
   Card,
@@ -10,7 +9,6 @@ import {
 import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
 import type { SubmitHandler } from 'react-hook-form'
-import { useForm, UseFormHandleSubmit, UseFormReturn } from 'react-hook-form'
 import {
   FormContainer,
   RadioButtonGroup,

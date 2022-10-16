@@ -31,7 +31,7 @@ const JoinToGameForm: FC<Props> = ({ redTeamId, blueTeamId }) => {
   const { t } = useTranslation()
 
   const form = useJoinToGameForm()
-  const [me, setMe] = useRecoilState(meAtom)
+  const [, setMe] = useRecoilState(meAtom)
 
   // TODO add loading state
   const [joinToGameMutation, { loading }] = useJoinToGameMutation()
@@ -44,10 +44,11 @@ const JoinToGameForm: FC<Props> = ({ redTeamId, blueTeamId }) => {
       },
     })
 
+    // TODO how to handle it?
     if (!data) {
       throw new Error('No data')
     }
-    // console.log(data.joinToGame)
+
     setMe(data.joinToGame)
   }
 

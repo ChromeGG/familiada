@@ -12,15 +12,15 @@ interface Props {
 }
 
 const TeamsSection: FC<Props> = ({ gameId }) => {
-  console.log('~ gameId', gameId)
   const { data, error } = usePlayersSubscription({
     variables: { gameId },
   })
 
+  // TODO handle error
   if (!data || error) {
     return <div>Unhandled Error</div>
   }
-  console.log('~ data', data.players)
+
   const redPlayers = data.players.filter(
     ({ team }) => team.color === TeamColor.Red
   )

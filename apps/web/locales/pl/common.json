@@ -9,8 +9,11 @@
   "pick-a-team": "Wybierz drużynę",
   "player-name": "Nazwa gracza",
   "red": "Czerwony",
+  "start-game": "Rozpocznij grę",
   "sum": "Suma",
+  "loading": "Ładowanie",
   "team-blue": "Drużyna niebieska",
   "team-color": "Kolor drużyny",
-  "team-red": "Drużyna czerwona"
+  "team-red": "Drużyna czerwona",
+  "waiting-for-other-players": "Czekanie na innych graczy ..."
 }

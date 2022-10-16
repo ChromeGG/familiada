@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil'
+import { atom, selector, useRecoilValue } from 'recoil'
 
 import type { Player, Team } from '../graphql/generated'
 
@@ -16,9 +16,13 @@ export const meAtom = atom<Me | null>({
   default: null,
 })
 
-export const meState = selector({
+const meState = selector({
   key: 'charCountState',
   get: ({ get }) => {
     return get(meAtom)
   },
 })
+
+export const useMe = () => {
+  return useRecoilValue(meState)
+}

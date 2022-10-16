@@ -6,9 +6,10 @@ import { useRouter } from 'next/router'
 import Board from '../components/Board'
 import JoinToGameForm from '../components/JoinToGameForm'
 
-import Question from '../components/Question'
 import TeamsSection from '../components/TeamsSection'
+import Stage from '../components/stage/Stage'
 import { TeamColor, useGameSubscription } from '../graphql/generated'
+import { useMe } from '../store/me'
 
 const GameId = () => {
   const { t } = useTranslation()
@@ -17,11 +18,13 @@ const GameId = () => {
   const gameId = query.gameId as string
 
   const { data, error } = useGameSubscription({ variables: { gameId } })
+  console.log('~ error', error)
+  const me = useMe()
 
   if (!data) {
     return (
       <Container>
-        <NextSeo title={t`game`} />
+        <NextSeo title={t`loading`} />
         <h1>{t`loading`}</h1>
       </Container>
     )
@@ -42,12 +45,15 @@ const GameId = () => {
           <Board />
         </Grid>
         <Grid item xs={12}>
-          <Question></Question>
+          <Stage status={gameState.status} />
         </Grid>
         <TeamsSection gameId={gameId} />
       </Grid>
       <Container sx={{ display: 'flex', justifyContent: 'center' }}>
-        <JoinToGameForm redTeamId={redTeamId} blueTeamId={blueTeamId} />
+        {!me && (
+          <JoinToGameForm redTeamId={redTeamId} blueTeamId={blueTeamId} />
+        )}
+        <button>CLICK ME</button>
       </Container>
     </Container>
   )
