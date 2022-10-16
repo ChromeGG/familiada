@@ -17,8 +17,7 @@ const GameId = () => {
 
   const gameId = query.gameId as string
 
-  const { data, error } = useGameSubscription({ variables: { gameId } })
-  console.log('~ error', error)
+  const { data } = useGameSubscription({ variables: { gameId } })
   const me = useMe()
 
   if (!data) {
@@ -53,7 +52,6 @@ const GameId = () => {
         {!me && (
           <JoinToGameForm redTeamId={redTeamId} blueTeamId={blueTeamId} />
         )}
-        <button>CLICK ME</button>
       </Container>
     </Container>
   )

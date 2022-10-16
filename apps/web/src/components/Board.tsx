@@ -9,7 +9,6 @@ import {
   Stack,
 } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
-import { useRecoilValue } from 'recoil'
 
 const Board = () => {
   const { t } = useTranslation()
