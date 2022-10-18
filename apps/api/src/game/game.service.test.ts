@@ -1,17 +1,14 @@
 import { integrationSetup } from '../../tests/helpers'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
-
-import type { Player } from '../player/player.schema'
-
-import type { Team } from '../team/team.schema'
-import { TeamColor } from '../team/team.schema'
+import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
+import type { Player, Team } from '../generated/prisma'
+import { TeamColor } from '../generated/prisma'
 
 import type { CreateGameArgs } from './contract/createGame.args'
 import type { Game } from './game.schema'
 import { GameStatus } from './game.schema'
 
-import type { JoinToGameInput } from './game.service'
-import { createGame, joinToGame } from './game.service'
+import { startGame, createGame, joinToGame } from './game.service'
 
 const { integrationContext, Tester } = await integrationSetup()
 
@@ -87,12 +84,13 @@ describe('game.service.ts', () => {
       const game = await Tester.game.create()
       const [, blueTeam] = game.team
 
-      const input: JoinToGameInput = {
-        teamId: blueTeam.id,
-        playerName: 'MyPlayer',
-      }
-
-      const result = await joinToGame(input, integrationContext)
+      const result = await joinToGame(
+        {
+          teamId: blueTeam.id,
+          playerName: 'MyPlayer',
+        },
+        integrationContext
+      )
 
       const player = await Tester.db.player.findFirst({
         where: { name: 'MyPlayer' },
@@ -108,6 +106,52 @@ describe('game.service.ts', () => {
         name: 'MyPlayer',
         teamId: blueTeam.id,
       })
+    })
+  })
+
+  describe(startGame.name, () => {
+    test('should start a game with two players in different teams', async () => {
+      const game = await Tester.game.create({
+        gameInput: { playerTeam: TeamColor.RED },
+      })
+      const [, blueTeam] = game.team
+      await Tester.game.joinToGame({ teamId: blueTeam.id })
+
+      const result = await startGame(game.id, integrationContext)
+
+      const dbGame = await Tester.db.game.findFirst()
+
+      expect(result).toMatchObject({ status: GameStatus.RUNNING })
+      expect(dbGame).toMatchObject({ status: GameStatus.RUNNING })
+    })
+
+    test('should throw an error if one of teams has no players', async () => {
+      const game = await Tester.game.create({
+        gameInput: { playerTeam: TeamColor.RED },
+      })
+      const [redTeam] = game.team
+      await Tester.game.joinToGame({ teamId: redTeam.id })
+
+      const createGameFunc = startGame(game.id, integrationContext)
+
+      await expect(createGameFunc).rejects.toThrow(
+        new GraphQLOperationalError('Not enough players')
+      )
+    })
+
+    test('should throw an error if game is not in lobby status', async () => {
+      const game = await Tester.game.create({
+        gameInput: { playerTeam: TeamColor.RED },
+      })
+      const [, blueTeam] = game.team
+      await Tester.game.joinToGame({ teamId: blueTeam.id })
+      await Tester.game.startGame(game.id)
+
+      const createGameFunc = startGame(game.id, integrationContext)
+
+      await expect(createGameFunc).rejects.toThrow(
+        new GraphQLOperationalError('Game is not in lobby status')
+      )
     })
   })
 })

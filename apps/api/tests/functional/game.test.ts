@@ -1,4 +1,5 @@
 import { GameStatus } from '../../src/game/game.schema'
+import { TeamColor } from '../../src/generated/prisma'
 
 import { functionalSetup } from '../helpers'
 
@@ -90,6 +91,38 @@ describe('Game', () => {
             team: {
               id: String(blueTeam.id),
             },
+          },
+        },
+      })
+    })
+  })
+
+  describe('startGame mutation', () => {
+    test('should start a game with two players in different teams', async () => {
+      const game = await Tester.game.create({
+        gameInput: { playerTeam: TeamColor.RED },
+      })
+      const [, blueTeam] = game.team
+      await Tester.game.joinToGame({ teamId: blueTeam.id })
+
+      const res = await Tester.sendGraphql({
+        query: `#graphql
+        mutation StartGame($gameId: ID!) {
+          startGame(gameId: $gameId) {
+            id
+            status
+          }
+        }`,
+        variables: {
+          gameId: game.id,
+        },
+      })
+
+      expect(res.json()).toEqual({
+        data: {
+          startGame: {
+            id: expect.any(String),
+            status: GameStatus.RUNNING,
           },
         },
       })

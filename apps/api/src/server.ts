@@ -3,13 +3,13 @@ import helmet from '@fastify/helmet'
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import fastify from 'fastify'
 
+import type { Player, Team } from './generated/prisma'
+
 import { createGraphqlServer } from './graphqlServer'
-import type { Player } from './player/player.schema'
 
 import { envPlugin, envOptions } from './plugins/env'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
-import type { Team } from './team/team.schema'
 
 export interface AuthenticatedPlayer extends Player {
   team: Team

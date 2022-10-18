@@ -1,9 +1,6 @@
 import { builder } from '../builder'
 import { TeamColor } from '../generated/prisma'
 
-export type { Team } from '../generated/prisma'
-export { TeamColor } from '../generated/prisma'
-
 export const TeamColorGql = builder.enumType(TeamColor, {
   name: 'TeamColor',
 })

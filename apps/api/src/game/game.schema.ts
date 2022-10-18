@@ -7,9 +7,19 @@ import { PlayerGql } from '../player/player.schema'
 
 import { createGameArgs } from './contract/createGame.args'
 import { joinToGameArgs } from './contract/joinToGame.args'
+import { startGameArgs } from './contract/startGame.args'
 
-import { createGame, getGameStatus, joinToGame } from './game.service'
-import { createGameValidation, joinToGameValidation } from './game.validator'
+import {
+  createGame,
+  getGameStatus,
+  joinToGame,
+  startGame,
+} from './game.service'
+import {
+  createGameValidation,
+  joinToGameValidation,
+  startGameValidation,
+} from './game.validator'
 
 export type { Game } from '../generated/prisma'
 
@@ -88,7 +98,6 @@ builder.mutationFields((t) => {
       validate: {
         schema: joinToGameValidation,
       },
-      // This should return Player
       type: PlayerGql,
       resolve: async (_, { teamId, playerName }, context) => {
         return joinToGame({ teamId: Number(teamId), playerName }, context)
@@ -98,6 +107,16 @@ builder.mutationFields((t) => {
       resolve: (_, __, context) => {
         console.log('~ context.player123', context.player)
         return 0
+      },
+    }),
+    startGame: t.withAuth({ player: true }).field({
+      type: Game,
+      args: startGameArgs,
+      validate: {
+        schema: startGameValidation,
+      },
+      resolve: async (_root, { gameId }, context) => {
+        return startGame(String(gameId), context)
       },
     }),
   }

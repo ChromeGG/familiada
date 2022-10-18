@@ -1,6 +1,5 @@
 import { integrationSetup } from '../../tests/helpers'
-
-import { TeamColor } from '../team/team.schema'
+import { TeamColor } from '../generated/prisma'
 
 import { getPlayersByGameId } from './player.service'
 

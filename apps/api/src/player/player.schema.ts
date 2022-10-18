@@ -4,8 +4,6 @@ import { builder } from '../builder'
 
 import { getPlayersByGameId } from './player.service'
 
-export type { Player } from '../generated/prisma'
-
 export const PlayerGql = builder.prismaObject('Player', {
   fields: (t) => ({
     id: t.exposeID('id'),
@@ -15,13 +13,12 @@ export const PlayerGql = builder.prismaObject('Player', {
 })
 
 builder.queryFields((t) => ({
-  me: t.field({
+  me: t.withAuth({ player: true }).field({
     type: PlayerGql,
     authScopes: {
       player: true,
     },
-    resolve: async (root, args, ctx, info) => {
-      // @ts-ignore: FIXME Player is there ...
+    resolve: async (_root, _args, ctx) => {
       const playerId: number = ctx.player.id
       return ctx.prisma.player.findUniqueOrThrow({ where: { id: playerId } })
     },

@@ -1,6 +1,6 @@
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
-import type { Team } from '../generated/prisma'
+import type { Game, Team } from '../generated/prisma'
 import type { Context } from '../graphqlServer'
 import { playerRepository } from '../player/player.repository'
 import { teamRepository } from '../team/team.repository'
@@ -49,10 +49,12 @@ export const joinToGame = async (
   const { Game: game, Player: players } = team
   const numberOfPlayers = players.length
 
+  // TODO test this if
   if (game.status !== GameStatus.LOBBY) {
     throw new GraphQLOperationalError('Game is not in lobby status')
   }
 
+  // TODO test this if
   if (numberOfPlayers > MAX_PLAYERS_PER_TEAM) {
     throw new GraphQLOperationalError('Max players number exceeded')
   }
@@ -64,6 +66,27 @@ export const joinToGame = async (
   return player
 }
 
-export const getGameStatus = async (gameId: string) => {
+export const getGameStatus = async (gameId: Game['id']) => {
   return gameRepository.findByIdOrThrow(gameId)
+}
+
+export const startGame = async (gameId: Game['id'], { pubSub }: Context) => {
+  const game = await gameRepository.getGameWithTeamsAndPlayers(gameId)
+
+  // TODO check if player has permission to start game
+
+  if (game.status !== GameStatus.LOBBY) {
+    throw new GraphQLOperationalError('Game is not in lobby status')
+  }
+
+  if (game.team[0].Player.length < 1 || game.team[1].Player.length < 1) {
+    throw new GraphQLOperationalError('Not enough players')
+  }
+
+  const updatedGame = await gameRepository.updateGameStatus(
+    gameId,
+    GameStatus.RUNNING
+  )
+  pubSub.publish('gameStateUpdated', gameId, { wtf: true })
+  return updatedGame
 }

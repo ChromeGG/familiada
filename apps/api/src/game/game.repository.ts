@@ -1,5 +1,5 @@
+import { TeamColor } from '../generated/prisma'
 import { prisma } from '../prisma'
-import { TeamColor } from '../team/team.schema'
 
 import type { Game } from './game.schema'
 import { GameStatus } from './game.schema'
@@ -47,6 +47,12 @@ export const gameRepository = {
           },
         },
       },
+    })
+  },
+  updateGameStatus: async (id: Game['id'], status: keyof typeof GameStatus) => {
+    return prisma.game.update({
+      where: { id },
+      data: { status },
     })
   },
 }
