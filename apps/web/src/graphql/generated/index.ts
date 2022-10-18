@@ -38,8 +38,6 @@ export type Error = {
 
 export type Game = {
   __typename?: 'Game';
-  currentRound: Scalars['Int'];
-  currentScore: Scalars['Int'];
   id: Scalars['ID'];
   rounds: Scalars['Int'];
   status: GameStatus;
@@ -49,7 +47,8 @@ export type Game = {
 export enum GameStatus {
   Finished = 'FINISHED',
   Lobby = 'LOBBY',
-  Running = 'RUNNING'
+  WaitingForAnswers = 'WAITING_FOR_ANSWERS',
+  WaitingForQuestion = 'WAITING_FOR_QUESTION'
 }
 
 export type Mutation = {
@@ -57,6 +56,7 @@ export type Mutation = {
   createGame: MutationCreateGameResult;
   joinToGame: Player;
   sendAnswer: Scalars['Float'];
+  startGame: Game;
 };
 
 
@@ -68,6 +68,11 @@ export type MutationCreateGameArgs = {
 export type MutationJoinToGameArgs = {
   playerName: Scalars['String'];
   teamId: Scalars['ID'];
+};
+
+
+export type MutationStartGameArgs = {
+  gameId: Scalars['ID'];
 };
 
 export type MutationCreateGameResult = AlreadyExistError | BaseError | MutationCreateGameSuccess;

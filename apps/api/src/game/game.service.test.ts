@@ -35,23 +35,19 @@ describe('game.service.ts', () => {
         id: input.gameInput.gameId,
         status: GameStatus.LOBBY,
         rounds: 3,
-        currentRound: 0,
-        currentScore: 0,
       })
 
       expect(dbRedTeam).toEqual<Team>({
         id: expect.any(Number),
-        answeringPlayerId: null,
+        nextAnsweringPlayerId: null,
         gameId: input.gameInput.gameId,
-        score: 0,
         color: TeamColor.RED,
       })
 
       expect(dbBlueTeam).toEqual<Team>({
         id: expect.any(Number),
-        answeringPlayerId: null,
+        nextAnsweringPlayerId: null,
         gameId: input.gameInput.gameId,
-        score: 0,
         color: TeamColor.BLUE,
       })
 
@@ -82,7 +78,7 @@ describe('game.service.ts', () => {
   describe(joinToGame.name, () => {
     test('Should join to game and return player', async () => {
       const game = await Tester.game.create()
-      const [, blueTeam] = game.team
+      const [, blueTeam] = game.teams
 
       const result = await joinToGame(
         {
@@ -114,22 +110,22 @@ describe('game.service.ts', () => {
       const game = await Tester.game.create({
         gameInput: { playerTeam: TeamColor.RED },
       })
-      const [, blueTeam] = game.team
+      const [, blueTeam] = game.teams
       await Tester.game.joinToGame({ teamId: blueTeam.id })
 
       const result = await startGame(game.id, integrationContext)
 
       const dbGame = await Tester.db.game.findFirst()
 
-      expect(result).toMatchObject({ status: GameStatus.RUNNING })
-      expect(dbGame).toMatchObject({ status: GameStatus.RUNNING })
+      expect(result).toMatchObject({ status: GameStatus.WAITING_FOR_QUESTION })
+      expect(dbGame).toMatchObject({ status: GameStatus.WAITING_FOR_QUESTION })
     })
 
     test('should throw an error if one of teams has no players', async () => {
       const game = await Tester.game.create({
         gameInput: { playerTeam: TeamColor.RED },
       })
-      const [redTeam] = game.team
+      const [redTeam] = game.teams
       await Tester.game.joinToGame({ teamId: redTeam.id })
 
       const createGameFunc = startGame(game.id, integrationContext)
@@ -143,7 +139,7 @@ describe('game.service.ts', () => {
       const game = await Tester.game.create({
         gameInput: { playerTeam: TeamColor.RED },
       })
-      const [, blueTeam] = game.team
+      const [, blueTeam] = game.teams
       await Tester.game.joinToGame({ teamId: blueTeam.id })
       await Tester.game.startGame(game.id)
 

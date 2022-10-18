@@ -38,9 +38,7 @@ const Game = builder.prismaObject('Game', {
     id: t.exposeID('id'),
     status: t.expose('status', { type: GameStatusGql }),
     rounds: t.exposeInt('rounds'),
-    currentRound: t.exposeInt('currentRound'),
-    currentScore: t.exposeInt('currentScore'),
-    teams: t.relation('team'),
+    teams: t.relation('teams'),
 
     /* dynamic things, could be a separate subscription/object
      answeringPlayers: [PlayerGql]

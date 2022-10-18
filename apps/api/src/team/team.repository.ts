@@ -11,8 +11,8 @@ export const teamRepository = {
     return prisma.team.findUniqueOrThrow({
       where: { id },
       include: {
-        Game: true,
-        Player: true,
+        game: true,
+        players: true,
       },
     })
   },

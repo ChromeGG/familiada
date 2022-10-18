@@ -5,18 +5,16 @@ const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 const seedDb = async () => {
   const game = await prisma.game.create({
     data: {
-      currentRound: 0,
       rounds: 3,
-      currentScore: 0,
       id: 'ASD',
     },
   })
 
   const redTeam = await prisma.team.create({
-    data: { gameId: game.id, score: 0, color: 'RED' },
+    data: { gameId: game.id, color: 'RED' },
   })
   const blueTeam = await prisma.team.create({
-    data: { gameId: game.id, score: 0, color: 'BLUE' },
+    data: { gameId: game.id, color: 'BLUE' },
   })
 
   await prisma.player.create({

@@ -23,8 +23,6 @@ interface Error {
 }
 
 type Game {
-  currentRound: Int!
-  currentScore: Int!
   id: ID!
   rounds: Int!
   status: GameStatus!
@@ -34,13 +32,15 @@ type Game {
 enum GameStatus {
   FINISHED
   LOBBY
-  RUNNING
+  WAITING_FOR_ANSWERS
+  WAITING_FOR_QUESTION
 }
 
 type Mutation {
   createGame(gameInput: CreateGameInput!): MutationCreateGameResult!
   joinToGame(playerName: String!, teamId: ID!): Player!
   sendAnswer: Float!
+  startGame(gameId: ID!): Game!
 }
 
 union MutationCreateGameResult = AlreadyExistError | BaseError | MutationCreateGameSuccess

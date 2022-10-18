@@ -64,7 +64,7 @@ describe('Game', () => {
   describe('joinToGame mutation', () => {
     test('Should join to game and return player', async () => {
       const game = await Tester.game.create()
-      const [, blueTeam] = game.team
+      const [, blueTeam] = game.teams
 
       const res = await Tester.sendGraphql({
         query: `#graphql
@@ -102,7 +102,7 @@ describe('Game', () => {
       const game = await Tester.game.create({
         gameInput: { playerTeam: TeamColor.RED },
       })
-      const [, blueTeam] = game.team
+      const [, blueTeam] = game.teams
       await Tester.game.joinToGame({ teamId: blueTeam.id })
 
       const res = await Tester.sendGraphql({
@@ -122,7 +122,7 @@ describe('Game', () => {
         data: {
           startGame: {
             id: expect.any(String),
-            status: GameStatus.RUNNING,
+            status: GameStatus.WAITING_FOR_QUESTION,
           },
         },
       })

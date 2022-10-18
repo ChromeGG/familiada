@@ -24,7 +24,7 @@ export const createGame = async ({ gameInput }: CreateGameArgs) => {
   const game = await gameRepository.createGameWithTeams(gameId, numberOfRounds)
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { id: teamId } = game.team.find(({ color }) => color === playerTeam)!
+  const { id: teamId } = game.teams.find(({ color }) => color === playerTeam)!
 
   // TODO check if user in this team exists and trow error
   // TODO this should be realized by user service method
@@ -46,7 +46,7 @@ export const joinToGame = async (
 ) => {
   const team = await teamRepository.findByIdWithGameAndPlayers(teamId)
 
-  const { Game: game, Player: players } = team
+  const { game, players } = team
   const numberOfPlayers = players.length
 
   // TODO test this if
@@ -79,13 +79,13 @@ export const startGame = async (gameId: Game['id'], { pubSub }: Context) => {
     throw new GraphQLOperationalError('Game is not in lobby status')
   }
 
-  if (game.team[0].Player.length < 1 || game.team[1].Player.length < 1) {
+  if (game.teams[0].players.length < 1 || game.teams[1].players.length < 1) {
     throw new GraphQLOperationalError('Not enough players')
   }
 
   const updatedGame = await gameRepository.updateGameStatus(
     gameId,
-    GameStatus.RUNNING
+    GameStatus.WAITING_FOR_QUESTION
   )
   pubSub.publish('gameStateUpdated', gameId, { wtf: true })
   return updatedGame

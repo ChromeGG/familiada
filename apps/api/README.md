@@ -15,11 +15,12 @@ The project is written in TypeScript and attempts to maintain a high degree of t
 Useful commands:
 
 ```bash
+
 # (re)generate prisma client
 pnpm prisma generate
 
 # run test
-pnm run test <pattern>
+pnpm run test <pattern>
 ```
 
 Preview all Postgres logs
@@ -31,6 +32,8 @@ SET log_statement = 'all';
 
 ## Adding new migration
 
+Do some changes in `prisma.schema`, then run:
+
 ```bash
-pnpm prisma migrate dev --name <migration-name>
+pnpm migrate:dev
 ```

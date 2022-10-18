@@ -17,19 +17,14 @@ export const gameRepository = {
   },
   createGameWithTeams: async (gameId: Game['id'], numberOfRounds: number) => {
     return prisma.game.create({
-      include: { team: true },
+      include: { teams: true },
       data: {
         id: gameId,
-        currentScore: 0,
-        currentRound: 0,
         rounds: numberOfRounds,
         status: GameStatus.LOBBY,
-        team: {
+        teams: {
           createMany: {
-            data: [
-              { score: 0, color: TeamColor.RED },
-              { score: 0, color: TeamColor.BLUE },
-            ],
+            data: [{ color: TeamColor.RED }, { color: TeamColor.BLUE }],
           },
         },
       },
@@ -41,9 +36,9 @@ export const gameRepository = {
         id,
       },
       include: {
-        team: {
+        teams: {
           include: {
-            Player: true,
+            players: true,
           },
         },
       },

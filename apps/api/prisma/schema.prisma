@@ -19,45 +19,62 @@ enum TeamColor {
 }
 
 model Player {
-  id     Int    @id @default(autoincrement())
-  name   String
-  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  teamId Int
+  id                    Int                    @id @default(autoincrement())
+  name                  String
+  team                  Team                   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId                Int
+  gamesQuestionsPlayers GameQuestionsAnswers[]
 }
 
 model Team {
-  id                Int       @id @default(autoincrement())
-  color             TeamColor
-  Player            Player[]
-  Game              Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  gameId            String
-  answeringPlayerId Int?
-  score             Int
+  id                    Int       @id @default(autoincrement())
+  color                 TeamColor
+  players               Player[]
+  nextAnsweringPlayerId Int?
+  game                  Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId                String
 }
 
 model Game {
-  id             String           @id @unique
-  status         GameStatus       @default(LOBBY)
-  team           Team[]
-  rounds         Int
-  currentRound   Int
-  currentScore   Int
-  GamesQuestions GamesQuestions[]
+  id            String          @id @unique
+  status        GameStatus      @default(LOBBY)
+  teams         Team[]
+  rounds        Int
+  gameQuestions GameQuestions[]
 }
 
 enum GameStatus {
   LOBBY
-  RUNNING
+  WAITING_FOR_QUESTION
+  WAITING_FOR_ANSWERS
   FINISHED
 }
 
-model GamesQuestions {
-  question   Question @relation(fields: [questionId], references: [id])
-  questionId Int
-  Game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  gameId     String
+model GameQuestions {
+  id                   Int                    @id @default(autoincrement())
+  round                Int
+  question             Question               @relation(fields: [questionId], references: [id])
+  questionId           Int
+  game                 Game                   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId               String
+  gameQuestionsAnswers GameQuestionsAnswers[]
 
-  @@id([gameId, questionId])
+  @@unique([gameId, questionId])
+  @@unique([gameId, round])
+}
+
+model GameQuestionsAnswers {
+  id             Int           @id @default(autoincrement())
+  gameQuestions  GameQuestions @relation(fields: [gameQuestionId], references: [id], onDelete: Cascade)
+  gameQuestionId Int
+  player         Player        @relation(fields: [playerId], references: [id])
+  playerId       Int
+  priority       Int
+  text           String?
+  answerId       Int?
+  answer         Answer?       @relation(fields: [answerId], references: [id])
+
+  @@unique([gameQuestionId, playerId, priority])
 }
 
 enum Language {
@@ -66,20 +83,21 @@ enum Language {
 }
 
 model Question {
-  id             Int              @id @default(autoincrement())
-  text           String
-  language       Language
-  GamesQuestions GamesQuestions[]
-  answer         Answer[]
+  id            Int             @id @default(autoincrement())
+  text          String
+  language      Language
+  gameQuestions GameQuestions[]
+  answer        Answer[]
 }
 
 model Answer {
-  id         Int       @id @default(autoincrement())
-  label      String
-  points     Int
-  variants   Variant[]
-  Question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  questionId Int?
+  id                   Int                    @id @default(autoincrement())
+  label                String
+  points               Int
+  variants             Variant[]
+  question             Question               @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId           Int
+  gameQuestionsAnswers GameQuestionsAnswers[]
 }
 
 model Variant {
