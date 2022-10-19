@@ -56,13 +56,11 @@ type Player {
 }
 
 type Query {
-  me: Player!
   test(asd: TeamColor!): TeamColor!
 }
 
 type Subscription {
-  gameState(gameId: String!): Game!
-  players(gameId: String!): [Player!]!
+  gameInfo(gameId: String!): Game!
 }
 
 type Team {

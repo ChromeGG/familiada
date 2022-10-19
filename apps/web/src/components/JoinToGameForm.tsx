@@ -13,27 +13,22 @@ import {
   TextFieldElement,
   RadioButtonGroup,
 } from 'react-hook-form-mui'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
-import type { Team } from '../graphql/generated'
 import { useJoinToGameMutation } from '../graphql/generated'
+import { teamSelector } from '../store/game'
 
 import { meAtom } from '../store/me'
 import type { JoinToGameSchema } from '../validators/joinToGame.validator'
 import { useJoinToGameForm } from '../validators/joinToGame.validator'
 
-interface Props {
-  redTeamId: Team['id']
-  blueTeamId: Team['id']
-}
-
-const JoinToGameForm: FC<Props> = ({ redTeamId, blueTeamId }) => {
+const JoinToGameForm: FC = () => {
   const { t } = useTranslation()
 
   const form = useJoinToGameForm()
   const [, setMe] = useRecoilState(meAtom)
+  const { blueTeam, redTeam } = useRecoilValue(teamSelector)
 
-  // TODO add loading state
   const [joinToGameMutation, { loading }] = useJoinToGameMutation()
 
   const joinToGameHandler = async ({ name, teamId }: JoinToGameSchema) => {
@@ -68,11 +63,11 @@ const JoinToGameForm: FC<Props> = ({ redTeamId, blueTeamId }) => {
             name="teamId"
             options={[
               {
-                id: redTeamId,
+                id: redTeam.id,
                 label: t`team-red`,
               },
               {
-                id: blueTeamId,
+                id: blueTeam.id,
                 label: t`team-blue`,
               },
             ]}

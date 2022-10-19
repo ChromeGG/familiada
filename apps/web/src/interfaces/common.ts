@@ -8,6 +8,8 @@ import type {
 
 export type { TeamColor } from '../graphql/generated'
 
-export type Game = Omit<GqlGame, 'teams'>
-export type Team = Omit<GqlTeam, 'players'>
-export type Player = Pick<GqlPlayer, 'id' | 'name'>
+export type Game = Omit<GqlGame, 'teams' | '__typename'>
+export type Team = Omit<GqlTeam, 'players' | '__typename'>
+export type Player = Omit<GqlPlayer, 'team' | '__typename'>
+
+export type TeamWithPlayers = Team & { players: Player[] }

@@ -3,12 +3,16 @@ import { NextSeo } from 'next-seo'
 import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
 
+import { useEffect } from 'react'
+import { useRecoilState } from 'recoil'
+
 import Board from '../components/Board'
 import JoinToGameForm from '../components/JoinToGameForm'
 
 import TeamsSection from '../components/TeamsSection'
-import Stage from '../components/stage/Stage'
-import { TeamColor, useGameSubscription } from '../graphql/generated'
+import StageController from '../components/stages/StageController'
+import { GameStatus, useGameSubscription } from '../graphql/generated'
+import { globalGameState } from '../store/game'
 import { useMe } from '../store/me'
 
 const GameId = () => {
@@ -19,6 +23,13 @@ const GameId = () => {
 
   const { data } = useGameSubscription({ variables: { gameId } })
   const me = useMe()
+  const [, setGame] = useRecoilState(globalGameState)
+
+  useEffect(() => {
+    if (data) {
+      setGame(data.gameInfo)
+    }
+  }, [data])
 
   if (!data) {
     return (
@@ -29,12 +40,9 @@ const GameId = () => {
     )
   }
 
-  const { gameState } = data
-  // make helper function for this
-  const redTeamId =
-    gameState.teams.find(({ color }) => color === TeamColor.Red)?.id ?? ''
-  const blueTeamId =
-    gameState.teams.find(({ color }) => color === TeamColor.Blue)?.id ?? ''
+  const { gameInfo } = data
+
+  const isGameInLobby = gameInfo.status === GameStatus.Lobby
 
   return (
     <Container>
@@ -44,14 +52,12 @@ const GameId = () => {
           <Board />
         </Grid>
         <Grid item xs={12}>
-          <Stage status={gameState.status} />
+          <StageController status={gameInfo.status} />
         </Grid>
-        <TeamsSection gameId={gameId} />
+        <TeamsSection />
       </Grid>
       <Container sx={{ display: 'flex', justifyContent: 'center' }}>
-        {!me && (
-          <JoinToGameForm redTeamId={redTeamId} blueTeamId={blueTeamId} />
-        )}
+        {!me && isGameInLobby && <JoinToGameForm />}
       </Container>
     </Container>
   )

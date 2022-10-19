@@ -91,7 +91,6 @@ export type Player = {
 
 export type Query = {
   __typename?: 'Query';
-  me: Player;
   test: TeamColor;
 };
 
@@ -102,17 +101,11 @@ export type QueryTestArgs = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  gameState: Game;
-  players: Array<Player>;
+  gameInfo: Game;
 };
 
 
-export type SubscriptionGameStateArgs = {
-  gameId: Scalars['String'];
-};
-
-
-export type SubscriptionPlayersArgs = {
+export type SubscriptionGameInfoArgs = {
   gameId: Scalars['String'];
 };
 
@@ -143,24 +136,19 @@ export type JoinToGameMutationVariables = Exact<{
 
 export type JoinToGameMutation = { __typename?: 'Mutation', joinToGame: { __typename?: 'Player', id: string, name: string, team: { __typename?: 'Team', id: string, color: string } } };
 
-export type AsdQueryVariables = Exact<{ [key: string]: never; }>;
+export type StartGameMutationVariables = Exact<{
+  gameId: Scalars['ID'];
+}>;
 
 
-export type AsdQuery = { __typename?: 'Query', test: TeamColor };
+export type StartGameMutation = { __typename?: 'Mutation', startGame: { __typename?: 'Game', id: string, status: GameStatus } };
 
 export type GameSubscriptionVariables = Exact<{
   gameId: Scalars['String'];
 }>;
 
 
-export type GameSubscription = { __typename?: 'Subscription', gameState: { __typename?: 'Game', id: string, status: GameStatus, teams: Array<{ __typename?: 'Team', id: string, color: string }> } };
-
-export type PlayersSubscriptionVariables = Exact<{
-  gameId: Scalars['String'];
-}>;
-
-
-export type PlayersSubscription = { __typename?: 'Subscription', players: Array<{ __typename?: 'Player', id: string, name: string, team: { __typename?: 'Team', id: string, color: string } }> };
+export type GameSubscription = { __typename?: 'Subscription', gameInfo: { __typename?: 'Game', id: string, status: GameStatus, rounds: number, teams: Array<{ __typename?: 'Team', id: string, color: string, players: Array<{ __typename?: 'Player', id: string, name: string }> }> } };
 
 
 export const CreateGameDocument = gql`
@@ -243,46 +231,54 @@ export function useJoinToGameMutation(baseOptions?: Apollo.MutationHookOptions<J
 export type JoinToGameMutationHookResult = ReturnType<typeof useJoinToGameMutation>;
 export type JoinToGameMutationResult = Apollo.MutationResult<JoinToGameMutation>;
 export type JoinToGameMutationOptions = Apollo.BaseMutationOptions<JoinToGameMutation, JoinToGameMutationVariables>;
-export const AsdDocument = gql`
-    query asd {
-  test(asd: BLUE)
+export const StartGameDocument = gql`
+    mutation StartGame($gameId: ID!) {
+  startGame(gameId: $gameId) {
+    id
+    status
+  }
 }
     `;
+export type StartGameMutationFn = Apollo.MutationFunction<StartGameMutation, StartGameMutationVariables>;
 
 /**
- * __useAsdQuery__
+ * __useStartGameMutation__
  *
- * To run a query within a React component, call `useAsdQuery` and pass it any options that fit your needs.
- * When your component renders, `useAsdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useStartGameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartGameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useAsdQuery({
+ * const [startGameMutation, { data, loading, error }] = useStartGameMutation({
  *   variables: {
+ *      gameId: // value for 'gameId'
  *   },
  * });
  */
-export function useAsdQuery(baseOptions?: Apollo.QueryHookOptions<AsdQuery, AsdQueryVariables>) {
+export function useStartGameMutation(baseOptions?: Apollo.MutationHookOptions<StartGameMutation, StartGameMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AsdQuery, AsdQueryVariables>(AsdDocument, options);
+        return Apollo.useMutation<StartGameMutation, StartGameMutationVariables>(StartGameDocument, options);
       }
-export function useAsdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AsdQuery, AsdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AsdQuery, AsdQueryVariables>(AsdDocument, options);
-        }
-export type AsdQueryHookResult = ReturnType<typeof useAsdQuery>;
-export type AsdLazyQueryHookResult = ReturnType<typeof useAsdLazyQuery>;
-export type AsdQueryResult = Apollo.QueryResult<AsdQuery, AsdQueryVariables>;
+export type StartGameMutationHookResult = ReturnType<typeof useStartGameMutation>;
+export type StartGameMutationResult = Apollo.MutationResult<StartGameMutation>;
+export type StartGameMutationOptions = Apollo.BaseMutationOptions<StartGameMutation, StartGameMutationVariables>;
 export const GameDocument = gql`
     subscription Game($gameId: String!) {
-  gameState(gameId: $gameId) {
+  gameInfo(gameId: $gameId) {
     id
+    status
+    rounds
     status
     teams {
       id
       color
+      players {
+        id
+        name
+      }
     }
   }
 }
@@ -310,38 +306,3 @@ export function useGameSubscription(baseOptions: Apollo.SubscriptionHookOptions<
       }
 export type GameSubscriptionHookResult = ReturnType<typeof useGameSubscription>;
 export type GameSubscriptionResult = Apollo.SubscriptionResult<GameSubscription>;
-export const PlayersDocument = gql`
-    subscription Players($gameId: String!) {
-  players(gameId: $gameId) {
-    id
-    name
-    team {
-      id
-      color
-    }
-  }
-}
-    `;
-
-/**
- * __usePlayersSubscription__
- *
- * To run a query within a React component, call `usePlayersSubscription` and pass it any options that fit your needs.
- * When your component renders, `usePlayersSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePlayersSubscription({
- *   variables: {
- *      gameId: // value for 'gameId'
- *   },
- * });
- */
-export function usePlayersSubscription(baseOptions: Apollo.SubscriptionHookOptions<PlayersSubscription, PlayersSubscriptionVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<PlayersSubscription, PlayersSubscriptionVariables>(PlayersDocument, options);
-      }
-export type PlayersSubscriptionHookResult = ReturnType<typeof usePlayersSubscription>;
-export type PlayersSubscriptionResult = Apollo.SubscriptionResult<PlayersSubscription>;

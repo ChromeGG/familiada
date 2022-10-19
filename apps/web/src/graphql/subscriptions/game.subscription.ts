@@ -1,13 +1,19 @@
 import { gql } from '@apollo/client'
 
-const GAME = gql`
+export const GAME_SUBSCRIPTION = gql`
   subscription Game($gameId: String!) {
-    gameState(gameId: $gameId) {
+    gameInfo(gameId: $gameId) {
       id
+      status
+      rounds
       status
       teams {
         id
         color
+        players {
+          id
+          name
+        }
       }
     }
   }

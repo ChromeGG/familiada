@@ -57,7 +57,7 @@ const Game = builder.prismaObject('Game', {
 })
 
 builder.subscriptionFields((t) => ({
-  gameState: t.field({
+  gameInfo: t.field({
     type: Game,
     args: {
       gameId: t.arg.string(),
@@ -74,6 +74,23 @@ builder.subscriptionFields((t) => ({
       return getGameStatus(gameId)
     },
   }),
+  // boardState: t.field({
+  //   type: Game,
+  //   args: {
+  //     gameId: t.arg.string(),
+  //   },
+  //   subscribe: async (root, { gameId }, ctx) => {
+  //     return pipe(
+  //       Repeater.merge([
+  //         await getGameStatus(gameId),
+  //         ctx.pubSub.subscribe('gameStateUpdated', String(gameId)),
+  //       ])
+  //     )
+  //   },
+  //   resolve: async (_root, { gameId }) => {
+  //     return getGameStatus(gameId)
+  //   },
+  // }),
 }))
 
 builder.mutationFields((t) => {
@@ -101,12 +118,6 @@ builder.mutationFields((t) => {
         return joinToGame({ teamId: Number(teamId), playerName }, context)
       },
     }),
-    sendAnswer: t.withAuth({ player: true }).float({
-      resolve: (_, __, context) => {
-        console.log('~ context.player123', context.player)
-        return 0
-      },
-    }),
     startGame: t.withAuth({ player: true }).field({
       type: Game,
       args: startGameArgs,
@@ -115,6 +126,12 @@ builder.mutationFields((t) => {
       },
       resolve: async (_root, { gameId }, context) => {
         return startGame(String(gameId), context)
+      },
+    }),
+    sendAnswer: t.withAuth({ player: true }).float({
+      resolve: (_, __, context) => {
+        console.log('~ context.player123', context.player)
+        return 0
       },
     }),
   }
