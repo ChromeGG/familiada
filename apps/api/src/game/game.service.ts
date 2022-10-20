@@ -4,6 +4,7 @@ import type { Game, Team } from '../generated/prisma'
 import type { Context } from '../graphqlServer'
 import { playerRepository } from '../player/player.repository'
 import { teamRepository } from '../team/team.repository'
+import { setNextAnsweringPlayer } from '../team/team.service'
 
 import type { CreateGameArgs } from './contract/createGame.args'
 import { gameRepository } from './game.repository'
@@ -28,7 +29,9 @@ export const createGame = async ({ gameInput }: CreateGameArgs) => {
 
   // TODO check if user in this team exists and trow error
   // TODO this should be realized by user service method
-  await playerRepository.createPlayer(playerName, teamId)
+  const player = await playerRepository.createPlayer(playerName, teamId)
+
+  await setNextAnsweringPlayer(player.id, teamId)
 
   return game
 }
@@ -61,6 +64,11 @@ export const joinToGame = async (
 
   // TODO this should be realized by user service method
   const player = await playerRepository.createPlayer(playerName, teamId)
+
+  if (numberOfPlayers === 0) {
+    await setNextAnsweringPlayer(player.id, teamId)
+  }
+
   pubSub.publish('playerJoined', game.id, { wtf: true })
 
   return player

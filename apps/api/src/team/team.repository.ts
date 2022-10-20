@@ -1,4 +1,4 @@
-import type { Team } from '../generated/prisma'
+import type { Player, Team } from '../generated/prisma'
 import { prisma } from '../prisma'
 
 export const teamRepository = {
@@ -14,6 +14,15 @@ export const teamRepository = {
         game: true,
         players: true,
       },
+    })
+  },
+  updateTeamAnsweringPlayer: async (
+    playerId: Player['id'],
+    teamId: Team['id']
+  ) => {
+    return prisma.team.update({
+      where: { id: teamId },
+      data: { nextAnsweringPlayerId: playerId },
     })
   },
 }

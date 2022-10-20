@@ -9,7 +9,6 @@ const WaitingForQuestionStage = () => {
   const { t } = useTranslation()
 
   const handler = async () => {
-    // ! NEXT: Implement startGame
     // startGameMutation({ variables: { gameId: 'test' } })
   }
 

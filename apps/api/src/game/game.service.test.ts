@@ -25,11 +25,11 @@ describe('game.service.ts', () => {
 
       await createGame(input)
 
-      const dbGame = await Tester.db.game.findFirst()
+      const dbGame = await Tester.db.game.findFirstOrThrow()
       const [dbRedTeam, dbBlueTeam] = await Tester.db.team.findMany({
         orderBy: { color: 'asc' },
       })
-      const dbPlayer = await Tester.db.player.findFirst()
+      const dbPlayer = await Tester.db.player.findFirstOrThrow()
 
       expect(dbGame).toEqual<Game>({
         id: input.gameInput.gameId,
@@ -46,7 +46,7 @@ describe('game.service.ts', () => {
 
       expect(dbBlueTeam).toEqual<Team>({
         id: expect.any(Number),
-        nextAnsweringPlayerId: null,
+        nextAnsweringPlayerId: dbPlayer.id,
         gameId: input.gameInput.gameId,
         color: TeamColor.BLUE,
       })
@@ -101,6 +101,54 @@ describe('game.service.ts', () => {
         id: expect.any(Number),
         name: 'MyPlayer',
         teamId: blueTeam.id,
+      })
+    })
+
+    test('Should set next answering player id in team if it is first player in team', async () => {
+      const game = await Tester.game.create({
+        gameInput: { playerTeam: TeamColor.RED },
+      })
+
+      const player = await joinToGame(
+        { teamId: game.teams[1].id, playerName: 'MyPlayer' },
+        integrationContext
+      )
+
+      const blueTeam = await Tester.db.team.findUniqueOrThrow({
+        where: { id: game.teams[1].id },
+      })
+
+      expect(blueTeam).toEqual<Team>({
+        id: expect.any(Number),
+        nextAnsweringPlayerId: player.id,
+        gameId: game.id,
+        color: TeamColor.BLUE,
+      })
+    })
+
+    test('Should not set next answering player id in team if the team already has an player', async () => {
+      const game = await Tester.game.create({
+        gameInput: { playerTeam: TeamColor.RED },
+      })
+
+      const firstPlayer = await Tester.game.joinToGame({
+        teamId: game.teams[1].id,
+      })
+
+      await joinToGame(
+        { teamId: game.teams[1].id, playerName: 'MyPlayer' },
+        integrationContext
+      )
+
+      const blueTeam = await Tester.db.team.findUniqueOrThrow({
+        where: { id: game.teams[1].id },
+      })
+
+      expect(blueTeam).toMatchObject<Team>({
+        id: expect.any(Number),
+        nextAnsweringPlayerId: firstPlayer.id,
+        gameId: game.id,
+        color: TeamColor.BLUE,
       })
     })
   })

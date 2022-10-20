@@ -2,6 +2,7 @@ import { pipe, Repeater } from '@graphql-yoga/node'
 
 import { builder } from '../builder'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
+import type { Answer } from '../generated/prisma'
 import { GameStatus as PrismaGameStatus } from '../generated/prisma'
 import { PlayerGql } from '../player/player.schema'
 
@@ -92,6 +93,25 @@ builder.subscriptionFields((t) => ({
   //   },
   // }),
 }))
+
+// ? example shape of subscription
+// type GameState = {
+//   stage: {
+//     question: string
+//     playersAnswers: {
+//       player: typeof PlayerGql
+//       text: string
+//     }
+//   }
+//   board: {
+//     discoveredAnswers: Answer[]
+//     answersNumber: number
+//     answeringTeamFailures: number
+//     secondTeamFailures: number
+//     redTeamPoints: number
+//     blueTeamPoints: number
+//   }
+// }
 
 builder.mutationFields((t) => {
   return {
