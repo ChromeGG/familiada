@@ -1,20 +1,23 @@
 import { integrationSetup } from '../../tests/helpers'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
-import type { Player, Team } from '../generated/prisma'
-import { TeamColor } from '../generated/prisma'
+import type { Game, GameOptions, Player, Team } from '../generated/prisma'
+import { Language, GameStatus, TeamColor } from '../generated/prisma'
 
 import type { CreateGameArgs } from './contract/createGame.args'
-import type { Game } from './game.schema'
-import { GameStatus } from './game.schema'
 
-import { startGame, createGame, joinToGame } from './game.service'
+import {
+  startGame,
+  createGame,
+  joinToGame,
+  yieldQuestion,
+} from './game.service'
 
 const { integrationContext, Tester } = await integrationSetup()
 
 describe('game.service.ts', () => {
   describe(createGame.name, () => {
-    test('Should create a game with two teams and the player', async () => {
+    test('Should create a game with options, two teams and the player', async () => {
       const input: CreateGameArgs = {
         gameInput: {
           gameId: 'MyGameId',
@@ -25,7 +28,9 @@ describe('game.service.ts', () => {
 
       await createGame(input)
 
-      const dbGame = await Tester.db.game.findFirstOrThrow()
+      const dbGame = await Tester.db.game.findFirstOrThrow({
+        include: { gameOptions: true },
+      })
       const [dbRedTeam, dbBlueTeam] = await Tester.db.team.findMany({
         orderBy: { color: 'asc' },
       })
@@ -34,6 +39,11 @@ describe('game.service.ts', () => {
       expect(dbGame).toEqual<Game>({
         id: input.gameInput.gameId,
         status: GameStatus.LOBBY,
+      })
+
+      expect(dbGame.gameOptions).toEqual<GameOptions>({
+        id: input.gameInput.gameId,
+        language: Language.PL,
         rounds: 3,
       })
 
@@ -151,6 +161,10 @@ describe('game.service.ts', () => {
         color: TeamColor.BLUE,
       })
     })
+
+    test.todo('should throw an error if team is full')
+
+    test.todo('should throw an error if team is not in lobby state')
   })
 
   describe(startGame.name, () => {
@@ -197,5 +211,13 @@ describe('game.service.ts', () => {
         new GraphQLOperationalError('Game is not in lobby status')
       )
     })
+  })
+
+  describe(yieldQuestion.name, () => {
+    test.todo(
+      'should throw an error if game is not in waiting for question status'
+    )
+
+    test.todo('should throw an error if game has no questions')
   })
 })

@@ -11,7 +11,7 @@
     "generate": "pnpm -s run generate:prisma",
     "generate:prisma": "prisma generate",
     "migrate:deploy": "prisma migrate deploy",
-    "migrate:dev": "prisma migrate dev && prisma generate",
+    "migrate:dev": "prisma migrate dev && prisma generate && pnpm migrate:test:dev",
     "migrate:test:dev": "dotenv -e .env.test -- pnpm prisma db push",
     "start": "node dist/index",
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand 2>&1",

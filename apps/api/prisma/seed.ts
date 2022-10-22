@@ -5,8 +5,13 @@ const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 const seedDb = async () => {
   const game = await prisma.game.create({
     data: {
-      rounds: 3,
       id: 'ASD',
+      gameOptions: {
+        create: {
+          language: Language.PL,
+          rounds: 3,
+        },
+      },
     },
   })
 
@@ -28,7 +33,7 @@ const seedDb = async () => {
     data: {
       language: Language.PL,
       text: 'Więcej niz jedno zwierze to...',
-      answer: {
+      answers: {
         createMany: {
           data: [
             { label: 'Lama', points: 23 },
@@ -43,7 +48,7 @@ const seedDb = async () => {
     },
   })
 
-  const qWithVariants = await prisma.question.create({
+  const qWithAlternatives = await prisma.question.create({
     data: {
       language: Language.PL,
       text: 'Jaki przedmiot szkolny najmniej przydaje się w życiu?',
@@ -52,10 +57,10 @@ const seedDb = async () => {
 
   await prisma.answer.create({
     data: {
-      questionId: qWithVariants.id,
+      questionId: qWithAlternatives.id,
       label: 'WF',
       points: 18,
-      variants: {
+      alternatives: {
         createMany: {
           data: [{ text: 'Wychowanie Fizyczne' }, { text: 'Gimnastyka' }],
         },
@@ -65,10 +70,10 @@ const seedDb = async () => {
 
   await prisma.answer.create({
     data: {
-      questionId: qWithVariants.id,
+      questionId: qWithAlternatives.id,
       label: 'Zaj. Techniczne',
       points: 9,
-      variants: {
+      alternatives: {
         createMany: {
           data: [{ text: 'Zajęcia Techniczne' }, { text: 'Technika' }],
         },
@@ -78,10 +83,10 @@ const seedDb = async () => {
 
   await prisma.answer.createMany({
     data: [
-      { questionId: qWithVariants.id, label: 'Kanapka', points: 35 },
-      { questionId: qWithVariants.id, label: 'Muzyka', points: 13 },
-      { questionId: qWithVariants.id, label: 'Plastyka', points: 12 },
-      { questionId: qWithVariants.id, label: 'Chemia', points: 7 },
+      { questionId: qWithAlternatives.id, label: 'Kanapka', points: 35 },
+      { questionId: qWithAlternatives.id, label: 'Muzyka', points: 13 },
+      { questionId: qWithAlternatives.id, label: 'Plastyka', points: 12 },
+      { questionId: qWithAlternatives.id, label: 'Chemia', points: 7 },
     ],
   })
 
@@ -89,7 +94,7 @@ const seedDb = async () => {
     data: {
       language: Language.PL,
       text: 'Jakie jajka jemy poza jajami kurzymi?',
-      answer: {
+      answers: {
         createMany: {
           data: [
             { label: 'Kacze', points: 32 },

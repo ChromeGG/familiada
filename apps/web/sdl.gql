@@ -8,6 +8,19 @@ type AlreadyExistError implements Error {
   message: String!
 }
 
+type Alternative {
+  id: ID!
+  text: String!
+}
+
+type Answer {
+  alternatives: [Alternative!]!
+  id: ID!
+  label: String!
+  order: Int!
+  points: Int!
+}
+
 type BaseError implements Error {
   message: String!
 }
@@ -24,9 +37,14 @@ interface Error {
 
 type Game {
   id: ID!
-  rounds: Int!
   status: GameStatus!
   teams: [Team!]!
+}
+
+type GameOptions {
+  id: ID!
+  language: Language!
+  rounds: Int!
 }
 
 enum GameStatus {
@@ -34,6 +52,11 @@ enum GameStatus {
   LOBBY
   WAITING_FOR_ANSWERS
   WAITING_FOR_QUESTION
+}
+
+enum Language {
+  EN
+  PL
 }
 
 type Mutation {
@@ -57,6 +80,13 @@ type Player {
 
 type Query {
   test(asd: TeamColor!): TeamColor!
+}
+
+type Question {
+  answers: [Answer!]!
+  id: ID!
+  status: Language!
+  text: String!
 }
 
 type Subscription {

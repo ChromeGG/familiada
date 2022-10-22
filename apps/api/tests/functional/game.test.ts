@@ -1,5 +1,4 @@
-import { GameStatus } from '../../src/game/game.schema'
-import { TeamColor } from '../../src/generated/prisma'
+import { GameStatus, TeamColor } from '../../src/generated/prisma'
 
 import { functionalSetup } from '../helpers'
 
