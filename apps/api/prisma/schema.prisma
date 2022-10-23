@@ -19,18 +19,20 @@ enum TeamColor {
 }
 
 model Player {
-  id                    Int                    @id @default(autoincrement())
-  name                  String
-  team                  Team                   @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  teamId                Int
-  gamesQuestionsPlayers GameQuestionsAnswers[]
+  id                        Int                    @id @default(autoincrement())
+  name                      String
+  team                      Team                   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId                    Int
+  gamesQuestionsPlayers     GameQuestionsAnswers[]
+  teamByNextAnsweringPlayer Team?                  @relation("nextAnsweringPlayer")
 }
 
 model Team {
   id                    Int       @id @default(autoincrement())
   color                 TeamColor
   players               Player[]
-  nextAnsweringPlayerId Int?
+  nextAnsweringPlayerId Int?      @unique
+  nextAnsweringPlayer   Player?   @relation("nextAnsweringPlayer", fields: [nextAnsweringPlayerId], references: [id])
   game                  Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId                String
 }
@@ -39,8 +41,15 @@ model Game {
   id            String          @id @unique
   status        GameStatus      @default(LOBBY)
   teams         Team[]
-  rounds        Int
   gameQuestions GameQuestions[]
+  gameOptions   GameOptions?
+}
+
+model GameOptions {
+  id       String   @id @unique
+  game     Game     @relation(fields: [id], references: [id], onDelete: Cascade)
+  rounds   Int
+  language Language
 }
 
 enum GameStatus {
@@ -87,20 +96,20 @@ model Question {
   text          String
   language      Language
   gameQuestions GameQuestions[]
-  answer        Answer[]
+  answers       Answer[]
 }
 
 model Answer {
   id                   Int                    @id @default(autoincrement())
   label                String
   points               Int
-  variants             Variant[]
+  alternatives         Alternative[]
   question             Question               @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId           Int
   gameQuestionsAnswers GameQuestionsAnswers[]
 }
 
-model Variant {
+model Alternative {
   id       Int    @id @default(autoincrement())
   text     String
   answer   Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)

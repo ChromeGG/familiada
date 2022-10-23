@@ -30,9 +30,17 @@ CREATE TABLE "Team" (
 CREATE TABLE "Game" (
     "id" TEXT NOT NULL,
     "status" "GameStatus" NOT NULL DEFAULT 'LOBBY',
-    "rounds" INTEGER NOT NULL,
 
     CONSTRAINT "Game_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "GameOptions" (
+    "id" TEXT NOT NULL,
+    "rounds" INTEGER NOT NULL,
+    "language" "Language" NOT NULL,
+
+    CONSTRAINT "GameOptions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -77,16 +85,22 @@ CREATE TABLE "Answer" (
 );
 
 -- CreateTable
-CREATE TABLE "Variant" (
+CREATE TABLE "Alternative" (
     "id" SERIAL NOT NULL,
     "text" TEXT NOT NULL,
     "answerId" INTEGER NOT NULL,
 
-    CONSTRAINT "Variant_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Alternative_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Team_nextAnsweringPlayerId_key" ON "Team"("nextAnsweringPlayerId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Game_id_key" ON "Game"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "GameOptions_id_key" ON "GameOptions"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "GameQuestions_gameId_questionId_key" ON "GameQuestions"("gameId", "questionId");
@@ -101,7 +115,13 @@ CREATE UNIQUE INDEX "GameQuestionsAnswers_gameQuestionId_playerId_priority_key" 
 ALTER TABLE "Player" ADD CONSTRAINT "Player_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Team" ADD CONSTRAINT "Team_nextAnsweringPlayerId_fkey" FOREIGN KEY ("nextAnsweringPlayerId") REFERENCES "Player"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Team" ADD CONSTRAINT "Team_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES "Game"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "GameOptions" ADD CONSTRAINT "GameOptions_id_fkey" FOREIGN KEY ("id") REFERENCES "Game"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "GameQuestions" ADD CONSTRAINT "GameQuestions_questionId_fkey" FOREIGN KEY ("questionId") REFERENCES "Question"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -122,4 +142,4 @@ ALTER TABLE "GameQuestionsAnswers" ADD CONSTRAINT "GameQuestionsAnswers_answerId
 ALTER TABLE "Answer" ADD CONSTRAINT "Answer_questionId_fkey" FOREIGN KEY ("questionId") REFERENCES "Question"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Variant" ADD CONSTRAINT "Variant_answerId_fkey" FOREIGN KEY ("answerId") REFERENCES "Answer"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Alternative" ADD CONSTRAINT "Alternative_answerId_fkey" FOREIGN KEY ("answerId") REFERENCES "Answer"("id") ON DELETE CASCADE ON UPDATE CASCADE;

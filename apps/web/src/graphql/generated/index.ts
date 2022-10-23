@@ -21,6 +21,21 @@ export type AlreadyExistError = Error & {
   message: Scalars['String'];
 };
 
+export type Alternative = {
+  __typename?: 'Alternative';
+  id: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+export type Answer = {
+  __typename?: 'Answer';
+  alternatives: Array<Alternative>;
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  order: Scalars['Int'];
+  points: Scalars['Int'];
+};
+
 export type BaseError = Error & {
   __typename?: 'BaseError';
   message: Scalars['String'];
@@ -39,9 +54,15 @@ export type Error = {
 export type Game = {
   __typename?: 'Game';
   id: Scalars['ID'];
-  rounds: Scalars['Int'];
   status: GameStatus;
   teams: Array<Team>;
+};
+
+export type GameOptions = {
+  __typename?: 'GameOptions';
+  id: Scalars['ID'];
+  language: Language;
+  rounds: Scalars['Int'];
 };
 
 export enum GameStatus {
@@ -51,12 +72,18 @@ export enum GameStatus {
   WaitingForQuestion = 'WAITING_FOR_QUESTION'
 }
 
+export enum Language {
+  En = 'EN',
+  Pl = 'PL'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   createGame: MutationCreateGameResult;
   joinToGame: Player;
   sendAnswer: Scalars['Float'];
   startGame: Game;
+  yieldQuestion: Question;
 };
 
 
@@ -72,6 +99,11 @@ export type MutationJoinToGameArgs = {
 
 
 export type MutationStartGameArgs = {
+  gameId: Scalars['ID'];
+};
+
+
+export type MutationYieldQuestionArgs = {
   gameId: Scalars['ID'];
 };
 
@@ -97,6 +129,13 @@ export type Query = {
 
 export type QueryTestArgs = {
   asd: TeamColor;
+};
+
+export type Question = {
+  __typename?: 'Question';
+  id: Scalars['ID'];
+  language: Language;
+  text: Scalars['String'];
 };
 
 export type Subscription = {
@@ -143,12 +182,19 @@ export type StartGameMutationVariables = Exact<{
 
 export type StartGameMutation = { __typename?: 'Mutation', startGame: { __typename?: 'Game', id: string, status: GameStatus } };
 
+export type YieldQuestionMutationVariables = Exact<{
+  gameId: Scalars['ID'];
+}>;
+
+
+export type YieldQuestionMutation = { __typename?: 'Mutation', yieldQuestion: { __typename?: 'Question', id: string, text: string } };
+
 export type GameSubscriptionVariables = Exact<{
   gameId: Scalars['String'];
 }>;
 
 
-export type GameSubscription = { __typename?: 'Subscription', gameInfo: { __typename?: 'Game', id: string, status: GameStatus, rounds: number, teams: Array<{ __typename?: 'Team', id: string, color: string, players: Array<{ __typename?: 'Player', id: string, name: string }> }> } };
+export type GameSubscription = { __typename?: 'Subscription', gameInfo: { __typename?: 'Game', id: string, status: GameStatus, teams: Array<{ __typename?: 'Team', id: string, color: string, players: Array<{ __typename?: 'Player', id: string, name: string }> }> } };
 
 
 export const CreateGameDocument = gql`
@@ -265,12 +311,44 @@ export function useStartGameMutation(baseOptions?: Apollo.MutationHookOptions<St
 export type StartGameMutationHookResult = ReturnType<typeof useStartGameMutation>;
 export type StartGameMutationResult = Apollo.MutationResult<StartGameMutation>;
 export type StartGameMutationOptions = Apollo.BaseMutationOptions<StartGameMutation, StartGameMutationVariables>;
+export const YieldQuestionDocument = gql`
+    mutation YieldQuestion($gameId: ID!) {
+  yieldQuestion(gameId: $gameId) {
+    id
+    text
+  }
+}
+    `;
+export type YieldQuestionMutationFn = Apollo.MutationFunction<YieldQuestionMutation, YieldQuestionMutationVariables>;
+
+/**
+ * __useYieldQuestionMutation__
+ *
+ * To run a mutation, you first call `useYieldQuestionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useYieldQuestionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [yieldQuestionMutation, { data, loading, error }] = useYieldQuestionMutation({
+ *   variables: {
+ *      gameId: // value for 'gameId'
+ *   },
+ * });
+ */
+export function useYieldQuestionMutation(baseOptions?: Apollo.MutationHookOptions<YieldQuestionMutation, YieldQuestionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<YieldQuestionMutation, YieldQuestionMutationVariables>(YieldQuestionDocument, options);
+      }
+export type YieldQuestionMutationHookResult = ReturnType<typeof useYieldQuestionMutation>;
+export type YieldQuestionMutationResult = Apollo.MutationResult<YieldQuestionMutation>;
+export type YieldQuestionMutationOptions = Apollo.BaseMutationOptions<YieldQuestionMutation, YieldQuestionMutationVariables>;
 export const GameDocument = gql`
     subscription Game($gameId: String!) {
   gameInfo(gameId: $gameId) {
     id
-    status
-    rounds
     status
     teams {
       id
