@@ -4,6 +4,7 @@ import type { GameSubscription } from '../graphql/generated'
 import { TeamColor } from '../graphql/generated'
 import type { TeamWithPlayers } from '../interfaces/common'
 
+//TODO remove __typename from it
 export const globalGameState = atom<GameSubscription['gameInfo'] | null>({
   key: 'globalGameState',
   default: null,
@@ -20,6 +21,15 @@ const blueTeamPlaceholder: TeamWithPlayers = {
   color: TeamColor.Blue,
   players: [],
 }
+
+export const gameSelector = selector({
+  key: 'gameSelector',
+  get: ({ get }) => {
+    return get(globalGameState)
+  },
+})
+
+export const useGame = () => useRecoilValue(gameSelector)
 
 export const teamSelector = selector<{
   redTeam: TeamWithPlayers

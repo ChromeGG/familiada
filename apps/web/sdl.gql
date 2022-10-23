@@ -84,9 +84,8 @@ type Query {
 }
 
 type Question {
-  answers: [Answer!]!
   id: ID!
-  status: Language!
+  language: Language!
   text: String!
 }
 

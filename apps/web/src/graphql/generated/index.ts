@@ -133,9 +133,8 @@ export type QueryTestArgs = {
 
 export type Question = {
   __typename?: 'Question';
-  answers: Array<Answer>;
   id: Scalars['ID'];
-  status: Language;
+  language: Language;
   text: Scalars['String'];
 };
 
@@ -182,6 +181,13 @@ export type StartGameMutationVariables = Exact<{
 
 
 export type StartGameMutation = { __typename?: 'Mutation', startGame: { __typename?: 'Game', id: string, status: GameStatus } };
+
+export type YieldQuestionMutationVariables = Exact<{
+  gameId: Scalars['ID'];
+}>;
+
+
+export type YieldQuestionMutation = { __typename?: 'Mutation', yieldQuestion: { __typename?: 'Question', id: string, text: string } };
 
 export type GameSubscriptionVariables = Exact<{
   gameId: Scalars['String'];
@@ -305,6 +311,40 @@ export function useStartGameMutation(baseOptions?: Apollo.MutationHookOptions<St
 export type StartGameMutationHookResult = ReturnType<typeof useStartGameMutation>;
 export type StartGameMutationResult = Apollo.MutationResult<StartGameMutation>;
 export type StartGameMutationOptions = Apollo.BaseMutationOptions<StartGameMutation, StartGameMutationVariables>;
+export const YieldQuestionDocument = gql`
+    mutation YieldQuestion($gameId: ID!) {
+  yieldQuestion(gameId: $gameId) {
+    id
+    text
+  }
+}
+    `;
+export type YieldQuestionMutationFn = Apollo.MutationFunction<YieldQuestionMutation, YieldQuestionMutationVariables>;
+
+/**
+ * __useYieldQuestionMutation__
+ *
+ * To run a mutation, you first call `useYieldQuestionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useYieldQuestionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [yieldQuestionMutation, { data, loading, error }] = useYieldQuestionMutation({
+ *   variables: {
+ *      gameId: // value for 'gameId'
+ *   },
+ * });
+ */
+export function useYieldQuestionMutation(baseOptions?: Apollo.MutationHookOptions<YieldQuestionMutation, YieldQuestionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<YieldQuestionMutation, YieldQuestionMutationVariables>(YieldQuestionDocument, options);
+      }
+export type YieldQuestionMutationHookResult = ReturnType<typeof useYieldQuestionMutation>;
+export type YieldQuestionMutationResult = Apollo.MutationResult<YieldQuestionMutation>;
+export type YieldQuestionMutationOptions = Apollo.BaseMutationOptions<YieldQuestionMutation, YieldQuestionMutationVariables>;
 export const GameDocument = gql`
     subscription Game($gameId: String!) {
   gameInfo(gameId: $gameId) {

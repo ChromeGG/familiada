@@ -9,7 +9,8 @@ export const QuestionGql = builder.prismaObject('Question', {
   fields: (t) => ({
     id: t.exposeID('id'),
     text: t.exposeString('text'),
-    status: t.expose('language', { type: LanguageGql }),
-    answers: t.relation('answers'),
+    language: t.expose('language', { type: LanguageGql }),
+    // TODO This shouldn't be here. Maybe rename the object to GameQuestion?
+    // answers: t.relation('answers'),
   }),
 })
