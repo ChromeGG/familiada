@@ -2,29 +2,27 @@ import { pipe, Repeater } from '@graphql-yoga/node'
 
 import { builder } from '../builder'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
-import type { Answer } from '../generated/prisma'
-import { GameStatus as PrismaGameStatus } from '../generated/prisma'
+import { GameStatus, Language } from '../generated/prisma'
 import { PlayerGql } from '../player/player.schema'
+import { LanguageGql, QuestionGql } from '../question/question.schema'
 
 import { createGameArgs } from './contract/createGame.args'
 import { joinToGameArgs } from './contract/joinToGame.args'
 import { startGameArgs } from './contract/startGame.args'
+import { yieldQuestionArgs } from './contract/yieldsQuestion.args'
 
 import {
   createGame,
   getGameStatus,
   joinToGame,
   startGame,
+  yieldQuestion,
 } from './game.service'
 import {
   createGameValidation,
   joinToGameValidation,
   startGameValidation,
 } from './game.validator'
-
-export type { Game } from '../generated/prisma'
-
-export const GameStatus = PrismaGameStatus
 
 // could be useful in future
 // type ShapeFromInput<T> = T extends InputRef<infer U> ? U : never
@@ -34,32 +32,26 @@ export const GameStatusGql = builder.enumType(GameStatus, {
   name: 'GameStatus',
 })
 
-const Game = builder.prismaObject('Game', {
+const GameOptionsGql = builder.prismaObject('GameOptions', {
+  fields: (t) => ({
+    id: t.exposeID('id'),
+    rounds: t.exposeInt('rounds'),
+    language: t.expose('language', { type: LanguageGql }),
+  }),
+})
+
+const GameGql = builder.prismaObject('Game', {
   fields: (t) => ({
     id: t.exposeID('id'),
     status: t.expose('status', { type: GameStatusGql }),
-    rounds: t.exposeInt('rounds'),
     teams: t.relation('teams'),
-
-    /* dynamic things, could be a separate subscription/object
-     answeringPlayers: [PlayerGql]
-     sendedResponse: {
-       player: Player
-       text: String
-     }
-     boardState: {
-       discoveredAnswers: [AnswerGql],
-       answersNumber: Int,
-       answeringTeamFailures: Int (0-3),
-       secondTeamFailure: boolean
-     }
-     */
+    // options: t.relation('gameOptions'),
   }),
 })
 
 builder.subscriptionFields((t) => ({
   gameInfo: t.field({
-    type: Game,
+    type: GameGql,
     args: {
       gameId: t.arg.string(),
     },
@@ -120,12 +112,19 @@ builder.mutationFields((t) => {
       validate: {
         schema: createGameValidation,
       },
-      type: Game,
+      type: GameGql,
       errors: {
         types: [AlreadyExistError],
       },
-      resolve: async (_root, args, context) => {
-        return createGame(args)
+      resolve: async (_root, { gameInput }, context) => {
+        const { gameId, playerName, playerTeam } = gameInput
+        return createGame({
+          gameId,
+          playerName,
+          playerTeam,
+          language: Language.PL,
+          rounds: 3,
+        })
       },
     }),
     joinToGame: t.field({
@@ -139,13 +138,20 @@ builder.mutationFields((t) => {
       },
     }),
     startGame: t.withAuth({ player: true }).field({
-      type: Game,
+      type: GameGql,
       args: startGameArgs,
       validate: {
         schema: startGameValidation,
       },
       resolve: async (_root, { gameId }, context) => {
         return startGame(String(gameId), context)
+      },
+    }),
+    yieldQuestion: t.withAuth({ player: true }).field({
+      type: QuestionGql,
+      args: yieldQuestionArgs,
+      resolve: async (_root, { gameId }, context) => {
+        return yieldQuestion(String(gameId), context)
       },
     }),
     sendAnswer: t.withAuth({ player: true }).float({

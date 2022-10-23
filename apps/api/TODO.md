@@ -9,3 +9,7 @@
 7. Try to use ts-node-dev or node-dev for `pnpm run dev`
 8. Docker container with production build?
 9. Add jest-extended
+10. Language and rounds should be given from FE mutation (now they're hardcoded)
+11. Add restricted games ID (e.g. for `/faq` page) via .env?
+12. Add auth
+13.

@@ -1,5 +1,4 @@
-import { GameStatus } from '../../src/game/game.schema'
-import { TeamColor } from '../../src/generated/prisma'
+import { GameStatus, TeamColor } from '../../src/generated/prisma'
 
 import { functionalSetup } from '../helpers'
 
@@ -38,7 +37,7 @@ describe('Game', () => {
     })
 
     test('Should handle error if game already exist', async () => {
-      await Tester.game.create({ gameInput: { gameId: 'EXIST' } })
+      await Tester.game.create({ gameId: 'EXIST' })
 
       const response = await Tester.sendGraphql({
         query: `#graphql
@@ -100,7 +99,7 @@ describe('Game', () => {
   describe('startGame mutation', () => {
     test('should start a game with two players in different teams', async () => {
       const game = await Tester.game.create({
-        gameInput: { playerTeam: TeamColor.RED },
+        playerTeam: TeamColor.RED,
       })
       const [, blueTeam] = game.teams
       await Tester.game.joinToGame({ teamId: blueTeam.id })
