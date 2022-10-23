@@ -116,8 +116,15 @@ builder.mutationFields((t) => {
       errors: {
         types: [AlreadyExistError],
       },
-      resolve: async (_root, args, context) => {
-        return createGame(args)
+      resolve: async (_root, { gameInput }, context) => {
+        const { gameId, playerName, playerTeam } = gameInput
+        return createGame({
+          gameId,
+          playerName,
+          playerTeam,
+          language: Language.PL,
+          rounds: 3,
+        })
       },
     }),
     joinToGame: t.field({
@@ -140,13 +147,13 @@ builder.mutationFields((t) => {
         return startGame(String(gameId), context)
       },
     }),
-    // yieldQuestion: t.withAuth({ player: true }).field({
-    //   type: QuestionGql,
-    //   args: yieldQuestionArgs,
-    //   resolve: async (_root, { gameId }, context) => {
-    //     return yieldQuestion(String(gameId), context)
-    //   },
-    // }),
+    yieldQuestion: t.withAuth({ player: true }).field({
+      type: QuestionGql,
+      args: yieldQuestionArgs,
+      resolve: async (_root, { gameId }, context) => {
+        return yieldQuestion(String(gameId), context)
+      },
+    }),
     sendAnswer: t.withAuth({ player: true }).float({
       resolve: (_, __, context) => {
         console.log('~ context.player123', context.player)

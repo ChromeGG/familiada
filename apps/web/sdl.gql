@@ -64,6 +64,7 @@ type Mutation {
   joinToGame(playerName: String!, teamId: ID!): Player!
   sendAnswer: Float!
   startGame(gameId: ID!): Game!
+  yieldQuestion(gameId: ID!): Question!
 }
 
 union MutationCreateGameResult = AlreadyExistError | BaseError | MutationCreateGameSuccess

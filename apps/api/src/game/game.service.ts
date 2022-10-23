@@ -1,5 +1,3 @@
-import { assert } from 'console'
-
 import { Language } from '@prisma/client'
 
 import { AlreadyExistError } from '../errors/AlreadyExistError'
@@ -12,13 +10,24 @@ import { getRandomQuestion } from '../question/question.service'
 import { teamRepository } from '../team/team.repository'
 import { setNextAnsweringPlayer } from '../team/team.service'
 
-import type { CreateGameArgs } from './contract/createGame.args'
 import { gameRepository } from './game.repository'
+import { obtainNextAnsweringPlayersIds } from './utils/obtainNextAnsweringPlayersIds.utils'
 
-const numberOfRounds = 3
+interface CreateGameInput {
+  gameId: Game['id']
+  playerName: string
+  playerTeam: Team['color']
+  language: Language
+  rounds: number
+}
 
-export const createGame = async ({ gameInput }: CreateGameArgs) => {
-  const { gameId, playerName, playerTeam } = gameInput
+export const createGame = async ({
+  gameId,
+  playerName,
+  playerTeam,
+  language,
+  rounds,
+}: CreateGameInput) => {
   const isExistingGame = await gameRepository.findUnique(gameId)
 
   if (isExistingGame) {
@@ -28,8 +37,8 @@ export const createGame = async ({ gameInput }: CreateGameArgs) => {
   // TODO this should be in transaction block
   // https://www.prisma.io/docs/guides/performance-and-optimization/prisma-client-transactions-guide#independent-writes
   const game = await gameRepository.createGameWithTeams(gameId, {
-    rounds: numberOfRounds,
-    language: Language.EN,
+    rounds,
+    language,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -131,8 +140,13 @@ export const yieldQuestion = async (
     nextAnsweringPlayerId ? [nextAnsweringPlayerId] : []
   )
 
+  const { bluePlayerId, redPlayerId } = obtainNextAnsweringPlayersIds(
+    game.teams
+  )
+
   const newGameState = await prisma.game.update({
     data: {
+      status: GameStatus.WAITING_FOR_ANSWERS,
       gameQuestions: {
         create: {
           round: game.gameQuestions.length + 1,
@@ -148,15 +162,24 @@ export const yieldQuestion = async (
         },
       },
       teams: {
-        // update: {
-        //   data: {
-        //     nextAnsweringPlayerId: 1,
-        //   },
-        //   where: {},
-        // },
-        // connect: {
-        //   id:
-        // }
+        updateMany: [
+          {
+            data: {
+              nextAnsweringPlayerId: redPlayerId,
+            },
+            where: {
+              id: game.teams[0].id,
+            },
+          },
+          {
+            data: {
+              nextAnsweringPlayerId: bluePlayerId,
+            },
+            where: {
+              id: game.teams[1].id,
+            },
+          },
+        ],
       },
     },
     where: {

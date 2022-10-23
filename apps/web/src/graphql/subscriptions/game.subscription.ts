@@ -5,8 +5,6 @@ export const GAME_SUBSCRIPTION = gql`
     gameInfo(gameId: $gameId) {
       id
       status
-      rounds
-      status
       teams {
         id
         color

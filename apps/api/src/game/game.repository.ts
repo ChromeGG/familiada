@@ -43,6 +43,7 @@ export const gameRepository = {
       },
       include: {
         teams: {
+          orderBy: { color: 'asc' },
           include: {
             players: true,
           },

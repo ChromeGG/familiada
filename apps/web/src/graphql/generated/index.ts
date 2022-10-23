@@ -21,6 +21,21 @@ export type AlreadyExistError = Error & {
   message: Scalars['String'];
 };
 
+export type Alternative = {
+  __typename?: 'Alternative';
+  id: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+export type Answer = {
+  __typename?: 'Answer';
+  alternatives: Array<Alternative>;
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  order: Scalars['Int'];
+  points: Scalars['Int'];
+};
+
 export type BaseError = Error & {
   __typename?: 'BaseError';
   message: Scalars['String'];
@@ -39,9 +54,15 @@ export type Error = {
 export type Game = {
   __typename?: 'Game';
   id: Scalars['ID'];
-  rounds: Scalars['Int'];
   status: GameStatus;
   teams: Array<Team>;
+};
+
+export type GameOptions = {
+  __typename?: 'GameOptions';
+  id: Scalars['ID'];
+  language: Language;
+  rounds: Scalars['Int'];
 };
 
 export enum GameStatus {
@@ -51,12 +72,18 @@ export enum GameStatus {
   WaitingForQuestion = 'WAITING_FOR_QUESTION'
 }
 
+export enum Language {
+  En = 'EN',
+  Pl = 'PL'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   createGame: MutationCreateGameResult;
   joinToGame: Player;
   sendAnswer: Scalars['Float'];
   startGame: Game;
+  yieldQuestion: Question;
 };
 
 
@@ -72,6 +99,11 @@ export type MutationJoinToGameArgs = {
 
 
 export type MutationStartGameArgs = {
+  gameId: Scalars['ID'];
+};
+
+
+export type MutationYieldQuestionArgs = {
   gameId: Scalars['ID'];
 };
 
@@ -97,6 +129,14 @@ export type Query = {
 
 export type QueryTestArgs = {
   asd: TeamColor;
+};
+
+export type Question = {
+  __typename?: 'Question';
+  answers: Array<Answer>;
+  id: Scalars['ID'];
+  status: Language;
+  text: Scalars['String'];
 };
 
 export type Subscription = {
@@ -148,7 +188,7 @@ export type GameSubscriptionVariables = Exact<{
 }>;
 
 
-export type GameSubscription = { __typename?: 'Subscription', gameInfo: { __typename?: 'Game', id: string, status: GameStatus, rounds: number, teams: Array<{ __typename?: 'Team', id: string, color: string, players: Array<{ __typename?: 'Player', id: string, name: string }> }> } };
+export type GameSubscription = { __typename?: 'Subscription', gameInfo: { __typename?: 'Game', id: string, status: GameStatus, teams: Array<{ __typename?: 'Team', id: string, color: string, players: Array<{ __typename?: 'Player', id: string, name: string }> }> } };
 
 
 export const CreateGameDocument = gql`
@@ -269,8 +309,6 @@ export const GameDocument = gql`
     subscription Game($gameId: String!) {
   gameInfo(gameId: $gameId) {
     id
-    status
-    rounds
     status
     teams {
       id
