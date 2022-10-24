@@ -17,7 +17,7 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
-  "conventionalCommits.scopes": ["player", "game", "team", "State"],
+  "conventionalCommits.scopes": ["player", "game", "team", "state"],
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.promptBody": false
 }

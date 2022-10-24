@@ -21,8 +21,25 @@ type Answer {
   points: Int!
 }
 
+type AnsweringPlayer {
+  id: ID!
+  text: String
+}
+
+type AnsweringTeam {
+  color: TeamColor!
+  failures: Int!
+  points: Int!
+}
+
 type BaseError implements Error {
   message: String!
+}
+
+type Board {
+  answersNumber: Int!
+  discoveredAnswers: [Answer!]!
+  teams: [AnsweringTeam!]!
 }
 
 input CreateGameInput {
@@ -89,8 +106,19 @@ type Question {
   text: String!
 }
 
+type Round {
+  board: Board!
+  stage: Stage!
+}
+
+type Stage {
+  answeringPlayers: [AnsweringPlayer!]!
+  question: String!
+}
+
 type Subscription {
   gameInfo(gameId: String!): Game!
+  state(gameId: ID!): Round!
 }
 
 type Team {

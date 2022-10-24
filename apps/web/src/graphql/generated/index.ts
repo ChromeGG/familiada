@@ -36,9 +36,29 @@ export type Answer = {
   points: Scalars['Int'];
 };
 
+export type AnsweringPlayer = {
+  __typename?: 'AnsweringPlayer';
+  id: Scalars['ID'];
+  text?: Maybe<Scalars['String']>;
+};
+
+export type AnsweringTeam = {
+  __typename?: 'AnsweringTeam';
+  color: TeamColor;
+  failures: Scalars['Int'];
+  points: Scalars['Int'];
+};
+
 export type BaseError = Error & {
   __typename?: 'BaseError';
   message: Scalars['String'];
+};
+
+export type Board = {
+  __typename?: 'Board';
+  answersNumber: Scalars['Int'];
+  discoveredAnswers: Array<Answer>;
+  teams: Array<AnsweringTeam>;
 };
 
 export type CreateGameInput = {
@@ -138,14 +158,32 @@ export type Question = {
   text: Scalars['String'];
 };
 
+export type Round = {
+  __typename?: 'Round';
+  board: Board;
+  stage: Stage;
+};
+
+export type Stage = {
+  __typename?: 'Stage';
+  answeringPlayers: Array<AnsweringPlayer>;
+  question: Scalars['String'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   gameInfo: Game;
+  state: Round;
 };
 
 
 export type SubscriptionGameInfoArgs = {
   gameId: Scalars['String'];
+};
+
+
+export type SubscriptionStateArgs = {
+  gameId: Scalars['ID'];
 };
 
 export type Team = {
@@ -195,6 +233,13 @@ export type GameSubscriptionVariables = Exact<{
 
 
 export type GameSubscription = { __typename?: 'Subscription', gameInfo: { __typename?: 'Game', id: string, status: GameStatus, teams: Array<{ __typename?: 'Team', id: string, color: string, players: Array<{ __typename?: 'Player', id: string, name: string }> }> } };
+
+export type RoundSubscriptionVariables = Exact<{
+  gameId: Scalars['ID'];
+}>;
+
+
+export type RoundSubscription = { __typename?: 'Subscription', state: { __typename?: 'Round', stage: { __typename?: 'Stage', question: string, answeringPlayers: Array<{ __typename?: 'AnsweringPlayer', id: string, text?: string | null }> }, board: { __typename?: 'Board', answersNumber: number, discoveredAnswers: Array<{ __typename?: 'Answer', id: string, label: string, order: number, points: number }>, teams: Array<{ __typename?: 'AnsweringTeam', color: TeamColor, failures: number, points: number }> } } };
 
 
 export const CreateGameDocument = gql`
@@ -384,3 +429,53 @@ export function useGameSubscription(baseOptions: Apollo.SubscriptionHookOptions<
       }
 export type GameSubscriptionHookResult = ReturnType<typeof useGameSubscription>;
 export type GameSubscriptionResult = Apollo.SubscriptionResult<GameSubscription>;
+export const RoundDocument = gql`
+    subscription Round($gameId: ID!) {
+  state(gameId: $gameId) {
+    stage {
+      answeringPlayers {
+        id
+        text
+      }
+      question
+    }
+    board {
+      discoveredAnswers {
+        id
+        label
+        order
+        points
+      }
+      answersNumber
+      teams {
+        color
+        failures
+        points
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useRoundSubscription__
+ *
+ * To run a query within a React component, call `useRoundSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useRoundSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundSubscription({
+ *   variables: {
+ *      gameId: // value for 'gameId'
+ *   },
+ * });
+ */
+export function useRoundSubscription(baseOptions: Apollo.SubscriptionHookOptions<RoundSubscription, RoundSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<RoundSubscription, RoundSubscriptionVariables>(RoundDocument, options);
+      }
+export type RoundSubscriptionHookResult = ReturnType<typeof useRoundSubscription>;
+export type RoundSubscriptionResult = Apollo.SubscriptionResult<RoundSubscription>;

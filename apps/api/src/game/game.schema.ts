@@ -67,43 +67,7 @@ builder.subscriptionFields((t) => ({
       return getGameStatus(gameId)
     },
   }),
-  // board: t.field({
-  //   type: Game,
-  //   args: {
-  //     gameId: t.arg.string(),
-  //   },
-  //   subscribe: async (root, { gameId }, ctx) => {
-  //     return pipe(
-  //       Repeater.merge([
-  //         await getGameStatus(gameId),
-  //         ctx.pubSub.subscribe('gameStateUpdated', String(gameId)),
-  //       ])
-  //     )
-  //   },
-  //   resolve: async (_root, { gameId }) => {
-  //     return getGameStatus(gameId)
-  //   },
-  // }),
 }))
-
-// ? example shape of subscription
-// type GameState = {
-//   stage: {
-//     question: string
-//     playersAnswers: {
-//       player: typeof PlayerGql
-//       text: string
-//     }
-//   }
-//   board: {
-//     discoveredAnswers: Answer[]
-//     answersNumber: number
-//     answeringTeamFailures: number
-//     secondTeamFailures: number
-//     redTeamPoints: number
-//     blueTeamPoints: number
-//   }
-// }
 
 builder.mutationFields((t) => {
   return {
@@ -147,6 +111,8 @@ builder.mutationFields((t) => {
         return startGame(String(gameId), context)
       },
     }),
+    // TODO add validation
+    // TODO add auth, then remove gameId from args, and get it from context
     yieldQuestion: t.withAuth({ player: true }).field({
       type: QuestionGql,
       args: yieldQuestionArgs,
