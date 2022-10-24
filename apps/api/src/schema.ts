@@ -5,6 +5,7 @@ import './team/team.schema'
 import './game/game.schema'
 import './answer/answer.schema'
 import './question/question.schema'
+import './board/board.schema'
 import './errors/error.schema'
 
 // TODO maybe we can get rid of that boilerplate code?

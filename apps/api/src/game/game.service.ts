@@ -28,7 +28,7 @@ export const createGame = async ({
   language,
   rounds,
 }: CreateGameInput) => {
-  const isExistingGame = await gameRepository.findUnique(gameId)
+  const isExistingGame = await gameRepository.findById(gameId)
 
   if (isExistingGame) {
     throw new AlreadyExistError()
@@ -84,7 +84,7 @@ export const joinToGame = async (
     await setNextAnsweringPlayer(player.id, teamId)
   }
 
-  pubSub.publish('playerJoined', game.id, { wtf: true })
+  pubSub.publish('gameStateUpdated', game.id, { wtf: true })
 
   return player
 }
@@ -144,7 +144,7 @@ export const yieldQuestion = async (
     game.teams
   )
 
-  const newGameState = await prisma.game.update({
+  await prisma.game.update({
     data: {
       status: GameStatus.WAITING_FOR_ANSWERS,
       gameQuestions: {

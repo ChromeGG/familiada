@@ -22,9 +22,8 @@ export interface Context extends YogaInitialContext {
 }
 
 type PubSubArgs = {
-  // TODO fix TS, payload shouldn't be required
-  playerJoined: [gamieId: Game['id'], payload: { wtf: true }]
   gameStateUpdated: [gameId: Game['id'], payload: { wtf: true }]
+  boardUpdate: [gameId: Game['id'], payload: { wtf: true }]
 }
 
 export const createPubSub = () => createYogaPubSub<PubSubArgs>()

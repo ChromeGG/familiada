@@ -1,6 +1,6 @@
 import { builder } from '../builder'
 
-const AnswerGql = builder.prismaObject('Answer', {
+export const AnswerGql = builder.prismaObject('Answer', {
   fields: (t) => ({
     id: t.exposeID('id'),
     points: t.exposeInt('points'),

@@ -67,7 +67,7 @@ builder.subscriptionFields((t) => ({
       return getGameStatus(gameId)
     },
   }),
-  // boardState: t.field({
+  // board: t.field({
   //   type: Game,
   //   args: {
   //     gameId: t.arg.string(),
