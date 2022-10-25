@@ -31,9 +31,9 @@ export const builder = new SchemaBuilder<{
     ValidationPlugin,
     ComplexityPlugin,
   ],
-  authScopes: () => ({
+  authScopes: ({ player }) => ({
     public: true,
-    player: true,
+    player: !!player,
   }),
   errorOptions: {
     defaultTypes: [GraphQLOperationalError],

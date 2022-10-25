@@ -3,7 +3,7 @@ import helmet from '@fastify/helmet'
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import fastify from 'fastify'
 
-import type { Player, Team } from './generated/prisma'
+import type { Game, Player, Team } from './generated/prisma'
 
 import { createGraphqlServer } from './graphqlServer'
 
@@ -12,7 +12,9 @@ import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
 
 export interface AuthenticatedPlayer extends Player {
-  team: Team
+  team: Team & {
+    game: Game
+  }
 }
 
 export async function createHttpServer(
