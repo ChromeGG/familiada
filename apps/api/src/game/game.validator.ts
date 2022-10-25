@@ -16,9 +16,3 @@ export const joinToGameValidation = z.object({
 })
 
 export type JoinToGameValidation = Z.infer<typeof joinToGameValidation>
-
-export const startGameValidation = z.object({
-  gameId: z.gameId(),
-})
-
-export type StartGameValidation = Z.infer<typeof joinToGameValidation>

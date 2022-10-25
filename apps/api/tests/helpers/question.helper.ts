@@ -11,8 +11,7 @@ export const getQuestionTester = async ({ prisma }: Context) => {
     // TODO create real implementation in code for this and reuse it here
     create: async ({ language, text }: Partial<QuestionInput> = {}) => {
       const prismaInput = {
-        language:
-          language ?? faker.helpers.arrayElement(Object.values(Language)),
+        language: language ?? Language.PL,
         text: text ?? faker.lorem.sentence().replace(/.$/, '?'),
       }
       return prisma.question.create({

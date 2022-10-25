@@ -26,10 +26,8 @@ export const getGameTester = async (context: Context) => {
       const input = {
         gameId: gameId || faker.random.word(),
         playerName: playerName || faker.name.firstName(),
-        playerTeam:
-          playerTeam || faker.helpers.arrayElement(Object.values(TeamColor)),
-        language:
-          language || faker.helpers.arrayElement(Object.values(Language)),
+        playerTeam: playerTeam || TeamColor.RED,
+        language: language || Language.PL,
         rounds: rounds || 3,
       }
       return createGame(input)

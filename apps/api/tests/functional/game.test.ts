@@ -98,30 +98,62 @@ describe('Game', () => {
 
   describe('startGame mutation', () => {
     test('should start a game with two players in different teams', async () => {
-      const game = await Tester.game.create({
-        playerTeam: TeamColor.RED,
-      })
+      const game = await Tester.game.create()
       const [, blueTeam] = game.teams
-      await Tester.game.joinToGame({ teamId: blueTeam.id })
+      const bluePlayer = await Tester.game.joinToGame({ teamId: blueTeam.id })
 
-      const res = await Tester.sendGraphql({
-        query: `#graphql
-        mutation StartGame($gameId: ID!) {
-          startGame(gameId: $gameId) {
+      const res = await Tester.sendGraphql(
+        {
+          query: `#graphql
+        mutation StartGame {
+          startGame {
             id
             status
           }
         }`,
-        variables: {
-          gameId: game.id,
         },
-      })
+        { headers: { authorization: bluePlayer.id } }
+      )
 
       expect(res.json()).toEqual({
         data: {
           startGame: {
             id: expect.any(String),
             status: GameStatus.WAITING_FOR_QUESTION,
+          },
+        },
+      })
+    })
+  })
+
+  describe('yieldQuestion mutation', () => {
+    test('should yield a question', async () => {
+      const game = await Tester.game.create({
+        playerTeam: TeamColor.RED,
+      })
+      const [, blueTeam] = game.teams
+      const bluePlayer = await Tester.game.joinToGame({ teamId: blueTeam.id })
+      await Tester.game.startGame(game.id)
+      const question = await Tester.question.create()
+
+      const res = await Tester.sendGraphql(
+        {
+          query: `#graphql
+          mutation YieldQuestion {
+          yieldQuestion {
+            id
+            text
+          }
+        }`,
+        },
+        { headers: { authorization: bluePlayer.id } }
+      )
+
+      expect(res.json()).toEqual({
+        data: {
+          yieldQuestion: {
+            id: String(question.id),
+            text: question.text,
           },
         },
       })

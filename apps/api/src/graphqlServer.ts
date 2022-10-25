@@ -45,7 +45,7 @@ export const createGraphqlServer = async (server: FastifyInstance) => {
     context: async ({ request, req, reply }) => {
       // TODO probably player header should be obtained from other place
       // TODO validate it
-      const playerId = req.headers['player-id'] as string
+      const playerId = req.headers.authorization
       let player: AuthenticatedPlayer | undefined
       if (playerId) {
         player = await prisma.player.findUniqueOrThrow({
@@ -53,7 +53,6 @@ export const createGraphqlServer = async (server: FastifyInstance) => {
           include: { team: { include: { game: true } } },
         })
       }
-
       return {
         prisma,
         req,

@@ -8,8 +8,6 @@ import { LanguageGql, QuestionGql } from '../question/question.schema'
 
 import { createGameArgs } from './contract/createGame.args'
 import { joinToGameArgs } from './contract/joinToGame.args'
-import { startGameArgs } from './contract/startGame.args'
-import { yieldQuestionArgs } from './contract/yieldsQuestion.args'
 
 import {
   createGame,
@@ -18,11 +16,7 @@ import {
   startGame,
   yieldQuestion,
 } from './game.service'
-import {
-  createGameValidation,
-  joinToGameValidation,
-  startGameValidation,
-} from './game.validator'
+import { createGameValidation, joinToGameValidation } from './game.validator'
 
 // could be useful in future
 // type ShapeFromInput<T> = T extends InputRef<infer U> ? U : never
@@ -103,21 +97,16 @@ builder.mutationFields((t) => {
     }),
     startGame: t.withAuth({ player: true }).field({
       type: GameGql,
-      args: startGameArgs,
-      validate: {
-        schema: startGameValidation,
-      },
-      resolve: async (_root, { gameId }, context) => {
-        return startGame(String(gameId), context)
+      resolve: async (_root, _args, context) => {
+        const { gameId } = context.player.team
+        return startGame(gameId, context)
       },
     }),
-    // TODO add validation
-    // TODO add auth, then remove gameId from args, and get it from context
     yieldQuestion: t.withAuth({ player: true }).field({
       type: QuestionGql,
-      args: yieldQuestionArgs,
-      resolve: async (_root, { gameId }, context) => {
-        return yieldQuestion(String(gameId), context)
+      resolve: async (_root, _args, context) => {
+        const { gameId } = context.player.team
+        return yieldQuestion(gameId, context)
       },
     }),
     sendAnswer: t.withAuth({ player: true }).float({
