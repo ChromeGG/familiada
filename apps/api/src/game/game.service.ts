@@ -116,7 +116,7 @@ export const startGame = async (gameId: Game['id'], { pubSub }: Context) => {
 
 export const yieldQuestion = async (
   gameId: Game['id'],
-  { pubSub, prisma }: Context
+  { pubSub }: Context
 ): Promise<Question> => {
   const game = await gameRepository.getGameForYieldQuestion(gameId)
 
@@ -136,7 +136,7 @@ export const yieldQuestion = async (
 
   const question = await getRandomQuestion(Language.PL)
 
-  const answeringPlayers = game.teams.flatMap(({ nextAnsweringPlayerId }) =>
+  const answeringPlayersIds = game.teams.flatMap(({ nextAnsweringPlayerId }) =>
     nextAnsweringPlayerId ? [nextAnsweringPlayerId] : []
   )
 
@@ -144,47 +144,15 @@ export const yieldQuestion = async (
     game.teams
   )
 
-  await prisma.game.update({
-    data: {
-      status: GameStatus.WAITING_FOR_ANSWERS,
-      gameQuestions: {
-        create: {
-          round: game.gameQuestions.length + 1,
-          questionId: question.id,
-          gameQuestionsAnswers: {
-            createMany: {
-              data: answeringPlayers.map((playerId) => ({
-                playerId,
-                priority: 0,
-              })),
-            },
-          },
-        },
-      },
-      teams: {
-        updateMany: [
-          {
-            data: {
-              nextAnsweringPlayerId: redPlayerId,
-            },
-            where: {
-              id: game.teams[0].id,
-            },
-          },
-          {
-            data: {
-              nextAnsweringPlayerId: bluePlayerId,
-            },
-            where: {
-              id: game.teams[1].id,
-            },
-          },
-        ],
-      },
-    },
-    where: {
-      id: gameId,
-    },
+  await gameRepository.prepareQuestions({
+    answeringPlayersIds,
+    gameId,
+    bluePlayerId,
+    redPlayerId,
+    redTeamId: game.teams[0].id,
+    blueTeamId: game.teams[1].id,
+    currentQuestionId: question.id,
+    currentRound: game.gameQuestions.length + 1,
   })
   // pubSub.publish('gameStateUpdated', gameId, { wtf: true })
   return question

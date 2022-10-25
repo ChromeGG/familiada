@@ -1,4 +1,6 @@
+import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
 import type { Answer, Game, TeamColor } from '../generated/prisma'
+import { GameStatus } from '../generated/prisma'
 
 import { roundRepository } from './round.repository'
 
@@ -24,7 +26,16 @@ const getStage = async ({ gameQuestions }: RoundData): Promise<Stage> => {
   }
 }
 
-const getBoard = async ({ gameQuestions }: RoundData): Promise<Board> => {
+const getBoard = async ({
+  gameQuestions,
+  status,
+}: RoundData): Promise<Board> => {
+  if (status === GameStatus.LOBBY || GameStatus.FINISHED) {
+    throw new GraphQLOperationalError(
+      'Game is in lobby or finished status, no board'
+    )
+  }
+
   const currentRound = gameQuestions.at(-1)
   if (!currentRound) {
     throw new TypeError('No current round')
@@ -39,14 +50,17 @@ const getBoard = async ({ gameQuestions }: RoundData): Promise<Board> => {
 
   const aggregatedTeams = currentGameQuestionsAnswers.reduce<
     Record<TeamColor, AnsweringTeam>
-  >((acc, { answer, player }) => {
+  >((acc, { answer, player, gameQuestionId }) => {
     const { team } = player
     const { color } = team
 
     if (!acc[color]) {
       acc[color] = { color: team.color, failures: 0, points: 0 }
     } else {
-      acc[color].failures += answer ? 0 : 1
+      if (gameQuestionId === currentRound.id) {
+        acc[color].failures += answer ? 0 : 1
+      }
+
       acc[color].points += answer?.points || 0
     }
 

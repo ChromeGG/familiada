@@ -2,7 +2,12 @@ import { faker } from '@faker-js/faker'
 import type { PartialDeep } from 'type-fest'
 
 import type { JoinToGameInput } from '../../src/game/game.service'
-import { createGame, joinToGame, startGame } from '../../src/game/game.service'
+import {
+  createGame,
+  joinToGame,
+  startGame,
+  yieldQuestion,
+} from '../../src/game/game.service'
 import type { Game } from '../../src/generated/prisma'
 import { Language, TeamColor } from '../../src/generated/prisma'
 import type { Context } from '../../src/graphqlServer'
@@ -41,6 +46,11 @@ export const getGameTester = async (context: Context) => {
     },
     startGame: async (gameId: Game['id']): ReturnType<typeof startGame> => {
       return startGame(gameId, context)
+    },
+    yieldQuestion: async (
+      gameId: Game['id']
+    ): ReturnType<typeof yieldQuestion> => {
+      return yieldQuestion(gameId, context)
     },
   }
 }
