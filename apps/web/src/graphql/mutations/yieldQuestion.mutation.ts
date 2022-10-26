@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 const YIELD_QUESTION = gql`
-  mutation YieldQuestion($gameId: ID!) {
-    yieldQuestion(gameId: $gameId) {
+  mutation YieldQuestion {
+    yieldQuestion {
       id
       text
     }

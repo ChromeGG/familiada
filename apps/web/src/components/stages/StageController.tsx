@@ -10,7 +10,6 @@ interface Props {
 }
 
 const StageController: FC<Props> = ({ status }) => {
-  console.log(status)
   if (status === GameStatus.Lobby) {
     return <LobbyStage />
   }

@@ -80,8 +80,8 @@ type Mutation {
   createGame(gameInput: CreateGameInput!): MutationCreateGameResult!
   joinToGame(playerName: String!, teamId: ID!): Player!
   sendAnswer: Float!
-  startGame(gameId: ID!): Game!
-  yieldQuestion(gameId: ID!): Question!
+  startGame: Game!
+  yieldQuestion: Question!
 }
 
 union MutationCreateGameResult = AlreadyExistError | BaseError | MutationCreateGameSuccess

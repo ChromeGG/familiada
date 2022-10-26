@@ -111,7 +111,6 @@ builder.mutationFields((t) => {
     }),
     sendAnswer: t.withAuth({ player: true }).float({
       resolve: (_, __, context) => {
-        console.log('~ context.player123', context.player)
         return 0
       },
     }),

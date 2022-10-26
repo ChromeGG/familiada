@@ -119,7 +119,6 @@ export const yieldQuestion = async (
   { pubSub }: Context
 ): Promise<Question> => {
   const game = await gameRepository.getGameForYieldQuestion(gameId)
-  console.log('game', game)
 
   if (game.gameOptions === null) {
     throw new TypeError('Game options cannot be null')

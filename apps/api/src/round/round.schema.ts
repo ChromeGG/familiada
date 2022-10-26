@@ -136,7 +136,6 @@ builder.subscriptionFields((t) => ({
       schema: roundArgsValidation,
     },
     subscribe: async (_root, { gameId }, ctx) => {
-      console.log('subscribe', gameId)
       return pipe(
         Repeater.merge([
           await getRoundInfo(String(gameId)),
@@ -145,7 +144,6 @@ builder.subscriptionFields((t) => ({
       )
     },
     resolve: async (_root, { gameId }) => {
-      console.log('gameId', gameId)
       return getRoundInfo(String(gameId))
     },
   }),

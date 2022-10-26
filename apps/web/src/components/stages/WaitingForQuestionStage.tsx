@@ -10,7 +10,7 @@ const WaitingForQuestionStage = () => {
 
   const [yieldQuestionMutation] = useYieldQuestionMutation()
   const handler = async () => {
-    yieldQuestionMutation({ variables: { gameId: game?.id ?? '' } })
+    yieldQuestionMutation()
   }
 
   return (

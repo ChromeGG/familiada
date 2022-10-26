@@ -40,10 +40,12 @@ const JoinToGameForm: FC = () => {
     })
 
     // TODO how to handle it?
-    if (!data) {
+    if (!data?.joinToGame) {
       throw new Error('No data')
     }
-
+    if (typeof window !== 'undefined') {
+      sessionStorage?.setItem('token', data.joinToGame.id)
+    }
     setMe(data.joinToGame)
   }
 

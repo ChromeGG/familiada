@@ -117,16 +117,6 @@ export type MutationJoinToGameArgs = {
   teamId: Scalars['ID'];
 };
 
-
-export type MutationStartGameArgs = {
-  gameId: Scalars['ID'];
-};
-
-
-export type MutationYieldQuestionArgs = {
-  gameId: Scalars['ID'];
-};
-
 export type MutationCreateGameResult = AlreadyExistError | BaseError | MutationCreateGameSuccess;
 
 export type MutationCreateGameSuccess = {
@@ -213,16 +203,12 @@ export type JoinToGameMutationVariables = Exact<{
 
 export type JoinToGameMutation = { __typename?: 'Mutation', joinToGame: { __typename?: 'Player', id: string, name: string, team: { __typename?: 'Team', id: string, color: string } } };
 
-export type StartGameMutationVariables = Exact<{
-  gameId: Scalars['ID'];
-}>;
+export type StartGameMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type StartGameMutation = { __typename?: 'Mutation', startGame: { __typename?: 'Game', id: string, status: GameStatus } };
 
-export type YieldQuestionMutationVariables = Exact<{
-  gameId: Scalars['ID'];
-}>;
+export type YieldQuestionMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type YieldQuestionMutation = { __typename?: 'Mutation', yieldQuestion: { __typename?: 'Question', id: string, text: string } };
@@ -323,8 +309,8 @@ export type JoinToGameMutationHookResult = ReturnType<typeof useJoinToGameMutati
 export type JoinToGameMutationResult = Apollo.MutationResult<JoinToGameMutation>;
 export type JoinToGameMutationOptions = Apollo.BaseMutationOptions<JoinToGameMutation, JoinToGameMutationVariables>;
 export const StartGameDocument = gql`
-    mutation StartGame($gameId: ID!) {
-  startGame(gameId: $gameId) {
+    mutation StartGame {
+  startGame {
     id
     status
   }
@@ -345,7 +331,6 @@ export type StartGameMutationFn = Apollo.MutationFunction<StartGameMutation, Sta
  * @example
  * const [startGameMutation, { data, loading, error }] = useStartGameMutation({
  *   variables: {
- *      gameId: // value for 'gameId'
  *   },
  * });
  */
@@ -357,8 +342,8 @@ export type StartGameMutationHookResult = ReturnType<typeof useStartGameMutation
 export type StartGameMutationResult = Apollo.MutationResult<StartGameMutation>;
 export type StartGameMutationOptions = Apollo.BaseMutationOptions<StartGameMutation, StartGameMutationVariables>;
 export const YieldQuestionDocument = gql`
-    mutation YieldQuestion($gameId: ID!) {
-  yieldQuestion(gameId: $gameId) {
+    mutation YieldQuestion {
+  yieldQuestion {
     id
     text
   }
@@ -379,7 +364,6 @@ export type YieldQuestionMutationFn = Apollo.MutationFunction<YieldQuestionMutat
  * @example
  * const [yieldQuestionMutation, { data, loading, error }] = useYieldQuestionMutation({
  *   variables: {
- *      gameId: // value for 'gameId'
  *   },
  * });
  */

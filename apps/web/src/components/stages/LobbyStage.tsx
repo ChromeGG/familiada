@@ -16,7 +16,10 @@ const LobbyStage = () => {
 
   const [startGameMutation] = useStartGameMutation()
   const startGame = async () => {
-    startGameMutation({ variables: { gameId: game?.id || '' } })
+    const token = sessionStorage?.getItem('token') || ''
+    startGameMutation({
+      context: { headers: { authorization: token } },
+    })
   }
 
   return (
