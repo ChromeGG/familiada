@@ -3,6 +3,7 @@ import type { PartialDeep } from 'type-fest'
 
 import type { JoinToGameInput } from '../../src/game/game.service'
 import {
+  answerQuestion,
   createGame,
   joinToGame,
   startGame,
@@ -10,7 +11,7 @@ import {
 } from '../../src/game/game.service'
 import type { Game } from '../../src/generated/prisma'
 import { Language, TeamColor } from '../../src/generated/prisma'
-import type { Context } from '../../src/graphqlServer'
+import type { AuthenticatedContext, Context } from '../../src/graphqlServer'
 
 export const getGameTester = async (context: Context) => {
   return {
@@ -49,6 +50,13 @@ export const getGameTester = async (context: Context) => {
       gameId: Game['id']
     ): ReturnType<typeof yieldQuestion> => {
       return yieldQuestion(gameId, context)
+    },
+    answerQuestion: async (
+      rawAnswerText = '',
+      { player }: Pick<AuthenticatedContext, 'player'>
+    ): ReturnType<typeof answerQuestion> => {
+      rawAnswerText ||= faker.lorem.word()
+      return answerQuestion(rawAnswerText, { ...context, player })
     },
   }
 }

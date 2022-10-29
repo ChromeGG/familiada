@@ -22,6 +22,10 @@ export interface Context extends YogaInitialContext {
   player?: AuthenticatedPlayer
 }
 
+export interface AuthenticatedContext extends Context {
+  player: AuthenticatedPlayer
+}
+
 type PubSubArgs = {
   gameStateUpdated: [gameId: Game['id'], payload: { wtf: true }]
   boardUpdate: [gameId: Game['id'], payload: { wtf: true }]

@@ -4,14 +4,16 @@ import { AlreadyExistError } from '../errors/AlreadyExistError'
 import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
 import type { Game, Question, Team } from '../generated/prisma'
 import { GameStatus } from '../generated/prisma'
-import type { Context } from '../graphqlServer'
+import type { Context, AuthenticatedContext } from '../graphqlServer'
 import { playerRepository } from '../player/player.repository'
 import { getRandomQuestion } from '../question/question.service'
 import { teamRepository } from '../team/team.repository'
 import { setNextAnsweringPlayer } from '../team/team.service'
 
 import { gameRepository } from './game.repository'
-import { obtainNextAnsweringPlayersIds } from './utils/obtainNextAnsweringPlayersIds.utils'
+import { checkAnswer } from './utils/checkAnswer.util'
+import { getAnsweringPlayersIds } from './utils/getAnsweringPlayers.util'
+import { obtainNextAnsweringPlayersIds } from './utils/obtainNextAnsweringPlayersIds.util'
 
 interface CreateGameInput {
   gameId: Game['id']
@@ -96,8 +98,6 @@ export const getGameStatus = async (gameId: Game['id']) => {
 export const startGame = async (gameId: Game['id'], { pubSub }: Context) => {
   const game = await gameRepository.getGameWithTeamsAndPlayers(gameId)
 
-  // TODO check if player has permission to start game
-
   if (game.status !== GameStatus.LOBBY) {
     throw new GraphQLOperationalError('Game is not in lobby status')
   }
@@ -156,4 +156,63 @@ export const yieldQuestion = async (
   })
   // pubSub.publish('gameStateUpdated', gameId, { wtf: true })
   return question
+}
+
+export const answerQuestion = async (
+  rawAnswerText: string,
+  { player, pubSub }: AuthenticatedContext
+) => {
+  const gameId = player.team.gameId
+  const playerId = player.id
+  const game = await gameRepository.getGameForAnswerQuestion(gameId)
+
+  if (game.status !== GameStatus.WAITING_FOR_ANSWERS) {
+    throw new GraphQLOperationalError(
+      'Game is not in waiting for answer status'
+    )
+  }
+
+  const currentQuestion = game.gameQuestions[game.gameQuestions.length - 1]
+
+  const answeringPlayers = getAnsweringPlayersIds(
+    currentQuestion.gameQuestionsAnswers
+  )
+
+  if (!answeringPlayers.some((id) => id === playerId)) {
+    throw new GraphQLOperationalError('Player is not answering now')
+  }
+
+  const answeringRecord = currentQuestion.gameQuestionsAnswers.find(
+    ({ playerId }) => playerId === player.id
+  )
+
+  if (!answeringRecord) {
+    throw new TypeError('Answer must be there')
+  }
+
+  if (answeringRecord.text) {
+    throw new GraphQLOperationalError('Player already answered')
+  }
+
+  const answer = checkAnswer(rawAnswerText, currentQuestion.question.answers)
+
+  const isDuplicate = currentQuestion.gameQuestionsAnswers.some(
+    ({ answerId }) => answerId === answer?.id
+  )
+
+  if (!answer || isDuplicate) {
+    await gameRepository.updateGameQuestionAnswer(
+      answeringRecord.id,
+      rawAnswerText
+    )
+    return false
+  }
+
+  await gameRepository.updateGameQuestionAnswer(
+    answeringRecord.id,
+    rawAnswerText,
+    answer.id
+  )
+
+  return true
 }

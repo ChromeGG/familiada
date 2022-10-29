@@ -6,17 +6,24 @@ import { GameStatus, Language } from '../generated/prisma'
 import { PlayerGql } from '../player/player.schema'
 import { LanguageGql, QuestionGql } from '../question/question.schema'
 
+import { answerQuestionArgs } from './contract/answerQuestion.args'
+
 import { createGameArgs } from './contract/createGame.args'
 import { joinToGameArgs } from './contract/joinToGame.args'
 
 import {
+  answerQuestion,
   createGame,
   getGameStatus,
   joinToGame,
   startGame,
   yieldQuestion,
 } from './game.service'
-import { createGameValidation, joinToGameValidation } from './game.validator'
+import {
+  answerQuestionValidation,
+  createGameValidation,
+  joinToGameValidation,
+} from './game.validator'
 
 // could be useful in future
 // type ShapeFromInput<T> = T extends InputRef<infer U> ? U : never
@@ -109,9 +116,13 @@ builder.mutationFields((t) => {
         return yieldQuestion(gameId, context)
       },
     }),
-    sendAnswer: t.withAuth({ player: true }).float({
-      resolve: (_, __, context) => {
-        return 0
+    sendAnswer: t.withAuth({ player: true }).boolean({
+      args: answerQuestionArgs,
+      validate: {
+        schema: answerQuestionValidation,
+      },
+      resolve: async (_, { answer }, context) => {
+        return answerQuestion(answer, context)
       },
     }),
   }

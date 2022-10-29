@@ -44,6 +44,7 @@ importers:
       nodemon: 2.0.20
       pino-pretty: 9.1.1
       prisma: 4.4.0
+      remove-accents: 0.4.3
       tozod: 3.0.0
       ts-jest: 28.0.8
       ts-node: 10.9.1
@@ -71,6 +72,7 @@ importers:
       fastify-plugin: 4.2.1
       graphql: 16.6.0
       graphql-scalars: 1.18.0_graphql@16.6.0
+      remove-accents: 0.4.3
       tozod: 3.0.0_zod@3.19.1
       zod: 3.19.1
       zod-to-json-schema: 3.18.1_zod@3.19.1
@@ -1216,7 +1218,7 @@ packages:
     resolution: {integrity: sha512-IRnids8lblQ8e1i8h4JLyfJmebXE+ohcj8x8X/+Ew6ZB4H0Ui05z5YL6q5FOcl0zItVpu4adRzeyVNNUwmduIg==}
     dependencies:
       ajv: 8.11.0
-      ajv-formats: 2.1.1
+      ajv-formats: 2.1.1_ajv@8.11.0
       fast-uri: 2.1.0
     dev: false
 
@@ -3410,8 +3412,10 @@ packages:
       indent-string: 4.0.0
     dev: true
 
-  /ajv-formats/2.1.1:
+  /ajv-formats/2.1.1_ajv@8.11.0:
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
+    peerDependencies:
+      ajv: ^8.0.0
     peerDependenciesMeta:
       ajv:
         optional: true
@@ -5007,7 +5011,7 @@ packages:
     dependencies:
       '@fastify/deepmerge': 1.1.0
       ajv: 8.11.0
-      ajv-formats: 2.1.1
+      ajv-formats: 2.1.1_ajv@8.11.0
       fast-uri: 2.1.0
       rfdc: 1.3.0
     dev: false
@@ -7680,6 +7684,10 @@ packages:
   /remedial/1.0.8:
     resolution: {integrity: sha512-/62tYiOe6DzS5BqVsNpH/nkGlX45C/Sp6V+NtiN6JQNS1Viay7cWkazmRkrQrdFj2eshDe96SIQNIoMxqhzBOg==}
     dev: true
+
+  /remove-accents/0.4.3:
+    resolution: {integrity: sha512-bwzzFccF6RgWWt+KrcEpCDMw9uCwz5GCdyo+r4p2hu6PhqtlEMOXEO0uPAw6XmVYAnODxHaqLanhUY1lqmsNFw==}
+    dev: false
 
   /remove-trailing-separator/1.1.0:
     resolution: {integrity: sha512-/hS+Y0u3aOfIETiaiirUFwDBDzmXPvO+jAfKTitUngIPzdKc6Z0LoFjM/CK5PL4C+eKwHohlHAb6H0VFfmmUsw==}

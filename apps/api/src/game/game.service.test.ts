@@ -9,6 +9,7 @@ import {
   createGame,
   joinToGame,
   yieldQuestion,
+  answerQuestion,
 } from './game.service'
 
 const { integrationContext, Tester } = await integrationSetup()
@@ -285,5 +286,151 @@ describe('game.service.ts', () => {
     )
 
     test.todo('should throw an error if game has no questions')
+  })
+
+  describe(answerQuestion.name, () => {
+    // ! NEXT: Before each test create game with two teams and two players in each team
+    test('should throw an error if player is not answering player', async () => {
+      await Tester.question.create()
+      const game = await Tester.game.create({
+        playerTeam: TeamColor.RED,
+      })
+      const [, blueTeam] = game.teams
+      await Tester.game.joinToGame({
+        teamId: blueTeam.id,
+      })
+      const redPlayer2 = await Tester.game.joinToGame({
+        teamId: blueTeam.id,
+      })
+      const redPlayer2context = await Tester.db.player.findUniqueOrThrow({
+        include: { team: { include: { game: true } } },
+        where: { id: redPlayer2.id },
+      })
+      await Tester.game.startGame(game.id)
+      await Tester.game.yieldQuestion(game.id)
+
+      const answerQuestionFunc = answerQuestion('lol', {
+        ...integrationContext,
+        player: redPlayer2context,
+      })
+
+      await expect(answerQuestionFunc).rejects.toThrow(
+        new GraphQLOperationalError('Player is not answering now')
+      )
+    })
+
+    test('should return true if answer was correct', async () => {
+      const question = await Tester.question.create()
+      const answer = await Tester.answer.create({
+        label: 'cat',
+        questionId: question.id,
+      })
+      const game = await Tester.game.create({
+        playerTeam: TeamColor.RED,
+      })
+      const [, blueTeam] = game.teams
+      const bluePlayer = await Tester.game.joinToGame({
+        teamId: blueTeam.id,
+      })
+      await Tester.game.startGame(game.id)
+      await Tester.game.yieldQuestion(game.id)
+
+      const bluePlayerContext = await Tester.db.player.findUniqueOrThrow({
+        include: { team: { include: { game: true } } },
+        where: { id: bluePlayer.id },
+      })
+
+      const result = await answerQuestion('cat', {
+        ...integrationContext,
+        player: bluePlayerContext,
+      })
+
+      const answerRecord = await Tester.db.gameQuestionsAnswers.findFirst({
+        where: { playerId: bluePlayer.id },
+      })
+
+      expect(result).toEqual(true)
+      expect(answerRecord).toMatchObject({
+        playerId: bluePlayer.id,
+        text: 'cat',
+        answerId: answer.id,
+      })
+    })
+
+    test('should return false if answer was correct', async () => {
+      const question = await Tester.question.create()
+      await Tester.answer.create({ label: 'cat', questionId: question.id })
+      const game = await Tester.game.create({
+        playerTeam: TeamColor.RED,
+      })
+      const [, blueTeam] = game.teams
+      const bluePlayer = await Tester.game.joinToGame({
+        teamId: blueTeam.id,
+      })
+      await Tester.game.startGame(game.id)
+      await Tester.game.yieldQuestion(game.id)
+
+      const bluePlayerContext = await Tester.db.player.findUniqueOrThrow({
+        include: { team: { include: { game: true } } },
+        where: { id: bluePlayer.id },
+      })
+
+      const result = await answerQuestion('dog', {
+        ...integrationContext,
+        player: bluePlayerContext,
+      })
+
+      const answerRecord = await Tester.db.gameQuestionsAnswers.findFirst({
+        where: { playerId: bluePlayer.id },
+      })
+
+      expect(result).toEqual(false)
+      expect(answerRecord).toMatchObject({
+        playerId: bluePlayer.id,
+        text: 'dog',
+        answerId: null,
+      })
+    })
+
+    test('should return false if answer was used', async () => {
+      const question = await Tester.question.create()
+      await Tester.answer.create({ label: 'cat', questionId: question.id })
+      const game = await Tester.game.create({
+        playerTeam: TeamColor.RED,
+      })
+      const [, blueTeam] = game.teams
+      const bluePlayer = await Tester.game.joinToGame({
+        teamId: blueTeam.id,
+      })
+      await Tester.game.startGame(game.id)
+      await Tester.game.yieldQuestion(game.id)
+
+      const bluePlayerContext = await Tester.db.player.findUniqueOrThrow({
+        include: { team: { include: { game: true } } },
+        where: { id: bluePlayer.id },
+      })
+      const redPlayerContext = await Tester.db.player.findFirstOrThrow({
+        include: { team: { include: { game: true } } },
+        where: { team: { color: TeamColor.RED } },
+      })
+
+      await Tester.game.answerQuestion('cat', { player: redPlayerContext })
+
+      const result = await answerQuestion('cat', {
+        ...integrationContext,
+        player: bluePlayerContext,
+      })
+
+      const answerRecord = await Tester.db.gameQuestionsAnswers.findFirst({
+        where: { playerId: bluePlayer.id },
+      })
+
+      expect(result).toEqual(false)
+      expect(answerRecord).toMatchObject({
+        playerId: bluePlayer.id,
+        text: 'cat',
+        answerId: null,
+      })
+    })
   })
 })

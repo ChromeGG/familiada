@@ -2,6 +2,8 @@ import type { FastifyInstance, InjectOptions } from 'fastify'
 
 import type { Context } from '../src/graphqlServer'
 
+import { getAnswerTester } from './helpers/answer.helper'
+
 import { getGameTester } from './helpers/game.helper'
 import { getPlayerTester } from './helpers/player.helper'
 import { getQuestionTester } from './helpers/question.helper'
@@ -13,6 +15,7 @@ export const getTester = async (context: Context) => {
     team: await getTeamTester(context),
     player: await getPlayerTester(context),
     question: await getQuestionTester(context),
+    answer: await getAnswerTester(context),
     db: context.prisma,
   }
 }

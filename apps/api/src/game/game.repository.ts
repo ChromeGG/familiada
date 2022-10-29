@@ -1,6 +1,8 @@
 import type {
+  Answer,
   Game,
   GameOptions,
+  GameQuestionsAnswers,
   Player,
   Question,
   Team,
@@ -144,6 +146,52 @@ export const gameRepository = {
       },
       where: {
         id: gameId,
+      },
+    })
+  },
+  getGameForAnswerQuestion: async (gameId: Game['id']) => {
+    return prisma.game.findUniqueOrThrow({
+      include: {
+        teams: true,
+        gameQuestions: {
+          include: {
+            question: {
+              include: {
+                answers: {
+                  include: {
+                    alternatives: true,
+                  },
+                },
+              },
+            },
+            gameQuestionsAnswers: {
+              orderBy: {
+                priority: 'asc',
+              },
+            },
+          },
+          orderBy: {
+            round: 'asc',
+          },
+        },
+      },
+      where: {
+        id: gameId,
+      },
+    })
+  },
+  updateGameQuestionAnswer: async (
+    gameQuestionAnswerId: GameQuestionsAnswers['id'],
+    text: string,
+    answerId?: Answer['id']
+  ) => {
+    return prisma.gameQuestionsAnswers.update({
+      data: {
+        text,
+        answerId,
+      },
+      where: {
+        id: gameQuestionAnswerId,
       },
     })
   },

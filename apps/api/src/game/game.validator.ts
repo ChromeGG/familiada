@@ -16,3 +16,7 @@ export const joinToGameValidation = z.object({
 })
 
 export type JoinToGameValidation = Z.infer<typeof joinToGameValidation>
+
+export const answerQuestionValidation = z.object({
+  answer: z.string().min(1).max(100),
+})

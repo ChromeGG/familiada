@@ -8,9 +8,8 @@ import ValidationPlugin from '@pothos/plugin-validation'
 import { AuthError } from './errors/AuthError'
 import { GraphQLOperationalError } from './errors/GraphQLOperationalError'
 import type PrismaTypes from './generated/pothos-types'
-import type { Context } from './graphqlServer'
+import type { AuthenticatedContext, Context } from './graphqlServer'
 import { prisma } from './prisma'
-import type { AuthenticatedPlayer } from './server'
 
 export const builder = new SchemaBuilder<{
   Context: Context
@@ -21,7 +20,7 @@ export const builder = new SchemaBuilder<{
     player: boolean
   }
   AuthContexts: {
-    player: Context & { player: AuthenticatedPlayer }
+    player: AuthenticatedContext
   }
 }>({
   plugins: [
