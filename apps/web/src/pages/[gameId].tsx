@@ -11,11 +11,7 @@ import JoinToGameForm from '../components/JoinToGameForm'
 
 import TeamsSection from '../components/TeamsSection'
 import StageController from '../components/stages/StageController'
-import {
-  GameStatus,
-  useGameSubscription,
-  useRoundSubscription,
-} from '../graphql/generated'
+import { GameStatus, useGameSubscription } from '../graphql/generated'
 import { globalGameState } from '../store/game'
 import { useMe } from '../store/me'
 
@@ -25,9 +21,11 @@ const GameId = () => {
 
   const gameId = query.gameId as string
 
-  const { data } = useGameSubscription({ variables: { gameId } })
-  const { data: data2 } = useRoundSubscription({ variables: { gameId } })
-  console.log('data2', data2)
+  const { data, error } = useGameSubscription({
+    variables: { gameId },
+  })
+  console.log('error', error)
+
   const me = useMe()
   const [, setGame] = useRecoilState(globalGameState)
 
@@ -55,7 +53,7 @@ const GameId = () => {
       <NextSeo title={gameId} />
       <Grid container spacing={2} p={1}>
         <Grid item xs={12}>
-          <Board />
+          <Board gameId={gameInfo.id} />
         </Grid>
         <Grid item xs={12}>
           <StageController status={gameInfo.status} />

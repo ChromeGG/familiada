@@ -9,6 +9,14 @@ const { Tester } = await integrationSetup()
 
 describe('round.service.ts', () => {
   describe(getRoundInfo.name, () => {
+    test('should return null if game has no round yet', async () => {
+      const { id } = await Tester.game.create()
+
+      const round = await getRoundInfo(id)
+
+      expect(round).toBeNull()
+    })
+
     test('Should return two users and starting state at first iteration', async () => {
       const game = await Tester.game.create({
         language: Language.PL,

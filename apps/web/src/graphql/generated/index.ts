@@ -101,7 +101,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createGame: MutationCreateGameResult;
   joinToGame: Player;
-  sendAnswer: Scalars['Float'];
+  sendAnswer: Scalars['Boolean'];
   startGame: Game;
   yieldQuestion: Question;
 };
@@ -115,6 +115,11 @@ export type MutationCreateGameArgs = {
 export type MutationJoinToGameArgs = {
   playerName: Scalars['String'];
   teamId: Scalars['ID'];
+};
+
+
+export type MutationSendAnswerArgs = {
+  answer: Scalars['String'];
 };
 
 export type MutationCreateGameResult = AlreadyExistError | BaseError | MutationCreateGameSuccess;
@@ -163,7 +168,7 @@ export type Stage = {
 export type Subscription = {
   __typename?: 'Subscription';
   gameInfo: Game;
-  state: Round;
+  state?: Maybe<Round>;
 };
 
 
@@ -225,7 +230,7 @@ export type RoundSubscriptionVariables = Exact<{
 }>;
 
 
-export type RoundSubscription = { __typename?: 'Subscription', state: { __typename?: 'Round', stage: { __typename?: 'Stage', question: string, answeringPlayers: Array<{ __typename?: 'AnsweringPlayer', id: string, text?: string | null }> }, board: { __typename?: 'Board', answersNumber: number, discoveredAnswers: Array<{ __typename?: 'Answer', id: string, label: string, order: number, points: number }>, teams: Array<{ __typename?: 'AnsweringTeam', color: TeamColor, failures: number, points: number }> } } };
+export type RoundSubscription = { __typename?: 'Subscription', state?: { __typename?: 'Round', stage: { __typename?: 'Stage', question: string, answeringPlayers: Array<{ __typename?: 'AnsweringPlayer', id: string, text?: string | null }> }, board: { __typename?: 'Board', answersNumber: number, discoveredAnswers: Array<{ __typename?: 'Answer', id: string, label: string, order: number, points: number }>, teams: Array<{ __typename?: 'AnsweringTeam', color: TeamColor, failures: number, points: number }> } } | null };
 
 
 export const CreateGameDocument = gql`

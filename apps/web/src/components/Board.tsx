@@ -9,9 +9,23 @@ import {
   Stack,
 } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
+import type { FC } from 'react'
 
-const Board = () => {
+import { COLORS } from '../configuration/theme'
+import type { Game } from '../graphql/generated'
+import { useRoundSubscription } from '../graphql/generated'
+
+interface Props {
+  gameId: Game['id']
+}
+
+const Board: FC<Props> = ({ gameId }) => {
   const { t } = useTranslation()
+  const { data: data2, error } = useRoundSubscription({
+    variables: { gameId },
+  })
+  console.log('data2', data2)
+  console.log('error2', error)
 
   const answers = [
     { position: 1, text: 'Lama', score: 45 },
@@ -23,7 +37,7 @@ const Board = () => {
       sx={{
         bgcolor: 'black',
         borderRadius: 4,
-        color: 'greenyellow',
+        color: COLORS.BOARD.SUBTITLES,
       }}
     >
       <Grid container>

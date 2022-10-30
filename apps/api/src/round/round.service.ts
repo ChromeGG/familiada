@@ -26,16 +26,7 @@ const getStage = async ({ gameQuestions }: RoundData): Promise<Stage> => {
   }
 }
 
-const getBoard = async ({
-  gameQuestions,
-  status,
-}: RoundData): Promise<Board> => {
-  if (status === GameStatus.LOBBY || GameStatus.FINISHED) {
-    throw new GraphQLOperationalError(
-      'Game is in lobby or finished status, no board'
-    )
-  }
-
+const getBoard = async ({ gameQuestions }: RoundData): Promise<Board> => {
   const currentRound = gameQuestions.at(-1)
   if (!currentRound) {
     throw new TypeError('No current round')
@@ -76,8 +67,13 @@ const getBoard = async ({
   }
 }
 
-export const getRoundInfo = async (gameId: Game['id']): Promise<Round> => {
+export const getRoundInfo = async (
+  gameId: Game['id']
+): Promise<Round | null> => {
   const data = await roundRepository.getDataForRound(gameId)
+  if (!data.gameQuestions.length) {
+    return null
+  }
   const stage = await getStage(data)
   const board = await getBoard(data)
   return {

@@ -1,6 +1,11 @@
 import type { NormalizedCacheObject } from '@apollo/client'
-
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import {
+  from,
+  HttpLink,
+  split,
+  ApolloClient,
+  InMemoryCache,
+} from '@apollo/client'
 
 import type { GetServerSidePropsContext } from 'next'
 import { useMemo } from 'react'
@@ -8,7 +13,7 @@ import { useMemo } from 'react'
 import { config } from '../configuration'
 import { isServerSide } from '../helpers/common'
 
-import { YogaLink } from './MyYogaLink'
+import { SubscriptionLink } from './SubscriptionLink'
 
 export { useApolloClient as useGqlClient } from '@apollo/client'
 
@@ -16,12 +21,30 @@ const { apiUrl } = config
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
+const getHttpLink = () => {
+  const token = !isServerSide() && sessionStorage.getItem('token')
+
+  return new HttpLink({
+    uri: `${apiUrl}/graphql`,
+    credentials: 'include',
+    headers: { ...(token ? { authorization: token } : {}) },
+  })
+}
+
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: isServerSide(),
-    link: new YogaLink({
-      endpoint: `${apiUrl}/graphql`,
-    }),
+    link: from([
+      // TODO the while split is hax, Subscription link is swallowing headers
+      split(
+        // @ts-ignore: Hax
+        ({ query }) => query.definitions[0].operation === 'subscription',
+        new SubscriptionLink({
+          endpoint: `${apiUrl}/graphql`,
+        }),
+        getHttpLink()
+      ),
+    ]),
     cache: new InMemoryCache(),
   })
 }

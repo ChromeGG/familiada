@@ -129,6 +129,7 @@ const RoundGql = builder.objectRef<Round>('Round').implement({
 builder.subscriptionFields((t) => ({
   state: t.field({
     type: RoundGql,
+    nullable: true,
     args: {
       gameId: t.arg.id({ required: true }),
     },

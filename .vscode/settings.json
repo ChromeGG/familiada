@@ -4,6 +4,7 @@
     "familiada",
     "fastify",
     "graphiql",
+    "greenyellow",
     "mercurius",
     "pino",
     "pnpm",
@@ -17,7 +18,14 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
-  "conventionalCommits.scopes": ["player", "game", "team", "round", "question", "answer"],
+  "conventionalCommits.scopes": [
+    "player",
+    "game",
+    "team",
+    "round",
+    "question",
+    "answer"
+  ],
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.promptBody": false
 }

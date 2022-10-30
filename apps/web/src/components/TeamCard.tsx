@@ -8,7 +8,7 @@ import {
 } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 
-import { colors } from '../configuration/theme'
+import { COLORS } from '../configuration/theme'
 
 import type { Player, Team } from '../interfaces/common'
 
@@ -29,7 +29,7 @@ const TeamCard = ({ team }: Props) => {
       <CardHeader
         title={isRed ? t`team-red` : t`team-blue`}
         sx={{
-          color: isRed ? colors.red.main : colors.blue.main,
+          color: isRed ? COLORS.RED.MAIN : COLORS.BLUE.MAIN,
         }}
       />
       <CardContent>

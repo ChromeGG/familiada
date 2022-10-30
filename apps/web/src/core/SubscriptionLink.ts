@@ -60,7 +60,7 @@ function createYogaApolloRequestHandler(
   }
 }
 
-export class YogaLink extends apollo.ApolloLink {
+export class SubscriptionLink extends apollo.ApolloLink {
   constructor(options: YogaLinkOptions) {
     super(createYogaApolloRequestHandler(options))
   }
