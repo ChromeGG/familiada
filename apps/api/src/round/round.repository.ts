@@ -13,7 +13,7 @@ export const roundRepository = {
               orderBy: { priority: 'asc' },
               include: { answer: true, player: { include: { team: true } } },
             },
-            question: { include: { answers: true } },
+            question: { include: { answers: { orderBy: { points: 'desc' } } } },
           },
         },
       },

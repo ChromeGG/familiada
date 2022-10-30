@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 
-import Board from '../components/Board'
+import Board from '../components/Board/Board'
 import JoinToGameForm from '../components/JoinToGameForm'
 
 import TeamsSection from '../components/TeamsSection'
@@ -24,7 +24,6 @@ const GameId = () => {
   const { data, error } = useGameSubscription({
     variables: { gameId },
   })
-  console.log('error', error)
 
   const me = useMe()
   const [, setGame] = useRecoilState(globalGameState)
@@ -49,14 +48,14 @@ const GameId = () => {
   const isGameInLobby = gameInfo.status === GameStatus.Lobby
 
   return (
-    <Container>
+    <Container disableGutters sx={{ p: 0.5 }}>
       <NextSeo title={gameId} />
-      <Grid container spacing={2} p={1}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <Board gameId={gameInfo.id} />
         </Grid>
         <Grid item xs={12}>
-          <StageController status={gameInfo.status} />
+          <StageController gameId={gameInfo.id} status={gameInfo.status} />
         </Grid>
         <TeamsSection />
       </Grid>

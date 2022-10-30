@@ -5,7 +5,12 @@ export const AnswerGql = builder.prismaObject('Answer', {
     id: t.exposeID('id'),
     points: t.exposeInt('points'),
     // TODO: resolve it
-    order: t.int({ resolve: (root) => 5 }),
+    order: t.int({
+      resolve: (root) => {
+        // @ts-ignore: hax, order is always from the parent
+        return root.order
+      },
+    }),
     label: t.exposeString('label'),
     alternatives: t.relation('alternatives'),
   }),

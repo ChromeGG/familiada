@@ -1,15 +1,21 @@
 import type { FC } from 'react'
 
-import { GameStatus } from '../../graphql/generated'
+import type { Game } from '../../graphql/generated'
+import { GameStatus, useRoundSubscription } from '../../graphql/generated'
 
 import LobbyStage from './LobbyStage'
 import WaitingForQuestionStage from './WaitingForQuestionStage'
 
 interface Props {
+  gameId: Game['id']
   status: GameStatus
 }
 
-const StageController: FC<Props> = ({ status }) => {
+const StageController: FC<Props> = ({ status, gameId }) => {
+  const { data: data2, error } = useRoundSubscription({
+    variables: { gameId },
+  })
+
   if (status === GameStatus.Lobby) {
     return <LobbyStage />
   }

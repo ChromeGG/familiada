@@ -9,7 +9,7 @@ import type { Board, Stage, Round, AnsweringTeam } from './round.schema'
 // TODO persist it at the end
 type RoundData = Awaited<ReturnType<typeof roundRepository.getDataForRound>>
 
-const getStage = async ({ gameQuestions }: RoundData): Promise<Stage> => {
+const getStage = ({ gameQuestions }: RoundData): Stage => {
   const currentRound = gameQuestions.at(-1)
   if (!currentRound) {
     throw new TypeError('No current round')
@@ -26,7 +26,7 @@ const getStage = async ({ gameQuestions }: RoundData): Promise<Stage> => {
   }
 }
 
-const getBoard = async ({ gameQuestions }: RoundData): Promise<Board> => {
+const getBoard = ({ gameQuestions }: RoundData): Board => {
   const currentRound = gameQuestions.at(-1)
   if (!currentRound) {
     throw new TypeError('No current round')
@@ -35,8 +35,13 @@ const getBoard = async ({ gameQuestions }: RoundData): Promise<Board> => {
   const discoveredAnswers = currentRound.gameQuestionsAnswers
     .map(({ answer }) => answer)
     .filter((answer): answer is Answer => !!answer)
+    .map((answer) => {
+      const order =
+        currentRound.question.answers.findIndex(({ id }) => answer.id === id) +
+        1
+      return { ...answer, order }
+    })
   const answersNumber = currentRound.question.answers.length
-
   const currentGameQuestionsAnswers = currentRound.gameQuestionsAnswers
 
   const aggregatedTeams = currentGameQuestionsAnswers.reduce<
@@ -74,8 +79,8 @@ export const getRoundInfo = async (
   if (!data.gameQuestions.length) {
     return null
   }
-  const stage = await getStage(data)
-  const board = await getBoard(data)
+  const stage = getStage(data)
+  const board = getBoard(data)
   return {
     stage,
     board,
