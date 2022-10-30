@@ -45,6 +45,7 @@ const JoinToGameForm: FC = () => {
     }
     if (typeof window !== 'undefined') {
       sessionStorage?.setItem('token', data.joinToGame.id)
+      sessionStorage?.setItem('me', JSON.stringify(data.joinToGame))
     }
     setMe(data.joinToGame)
   }

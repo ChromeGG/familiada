@@ -208,6 +208,13 @@ export type JoinToGameMutationVariables = Exact<{
 
 export type JoinToGameMutation = { __typename?: 'Mutation', joinToGame: { __typename?: 'Player', id: string, name: string, team: { __typename?: 'Team', id: string, color: string } } };
 
+export type SendAnswerMutationVariables = Exact<{
+  answer: Scalars['String'];
+}>;
+
+
+export type SendAnswerMutation = { __typename?: 'Mutation', sendAnswer: boolean };
+
 export type StartGameMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -313,6 +320,37 @@ export function useJoinToGameMutation(baseOptions?: Apollo.MutationHookOptions<J
 export type JoinToGameMutationHookResult = ReturnType<typeof useJoinToGameMutation>;
 export type JoinToGameMutationResult = Apollo.MutationResult<JoinToGameMutation>;
 export type JoinToGameMutationOptions = Apollo.BaseMutationOptions<JoinToGameMutation, JoinToGameMutationVariables>;
+export const SendAnswerDocument = gql`
+    mutation SendAnswer($answer: String!) {
+  sendAnswer(answer: $answer)
+}
+    `;
+export type SendAnswerMutationFn = Apollo.MutationFunction<SendAnswerMutation, SendAnswerMutationVariables>;
+
+/**
+ * __useSendAnswerMutation__
+ *
+ * To run a mutation, you first call `useSendAnswerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendAnswerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendAnswerMutation, { data, loading, error }] = useSendAnswerMutation({
+ *   variables: {
+ *      answer: // value for 'answer'
+ *   },
+ * });
+ */
+export function useSendAnswerMutation(baseOptions?: Apollo.MutationHookOptions<SendAnswerMutation, SendAnswerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendAnswerMutation, SendAnswerMutationVariables>(SendAnswerDocument, options);
+      }
+export type SendAnswerMutationHookResult = ReturnType<typeof useSendAnswerMutation>;
+export type SendAnswerMutationResult = Apollo.MutationResult<SendAnswerMutation>;
+export type SendAnswerMutationOptions = Apollo.BaseMutationOptions<SendAnswerMutation, SendAnswerMutationVariables>;
 export const StartGameDocument = gql`
     mutation StartGame {
   startGame {

@@ -32,7 +32,7 @@ const seedDb = async () => {
   await prisma.question.create({
     data: {
       language: Language.PL,
-      text: 'Więcej niz jedno zwierze to...',
+      text: 'Więcej niż jedno zwierze to...',
       answers: {
         createMany: {
           data: [

@@ -25,8 +25,8 @@ const Board: FC<Props> = ({ gameId }) => {
   const { data, error } = useRoundSubscription({
     variables: { gameId },
   })
-  console.log('data2', data)
-  console.log('error2', error)
+  // console.log('data2', data)
+  // console.log('error2', error)
 
   if (!data) {
     return <div>loading</div>

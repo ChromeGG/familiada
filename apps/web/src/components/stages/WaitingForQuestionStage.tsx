@@ -2,11 +2,11 @@ import { Stack, Box, Button } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 
 import { useYieldQuestionMutation } from '../../graphql/generated'
-import { useGame } from '../../store/game'
+
+import TextSection from './TextSection'
 
 const WaitingForQuestionStage = () => {
   const { t } = useTranslation()
-  const game = useGame()
 
   const [yieldQuestionMutation] = useYieldQuestionMutation()
   const handler = async () => {
@@ -15,7 +15,7 @@ const WaitingForQuestionStage = () => {
 
   return (
     <Stack>
-      {/* <TextSection text={t`waiting-for-other-players`} /> */}
+      <TextSection text={t`waiting-for-question`} />
       <Box>
         <Button onClick={() => handler()}>{t`get-question`}</Button>
       </Box>

@@ -1,10 +1,14 @@
 import { Typography } from '@mui/material'
 import { useConditionalEffect } from '@react-hookz/web'
+import type { FC } from 'react'
 import { useState } from 'react'
 
-const Question = () => {
-  const text = 'Więcej niż jedno zwierze to ...'
-  const textChunks = text.split('')
+interface Props {
+  content: string
+}
+
+const Question: FC<Props> = ({ content }) => {
+  const textChunks = content.split('')
 
   const [displayed, setDisplayed] = useState('')
 

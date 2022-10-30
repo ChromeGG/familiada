@@ -6,7 +6,7 @@ import type {
   Player as GqlPlayer,
 } from '../graphql/generated'
 
-export type { TeamColor } from '../graphql/generated'
+export { TeamColor } from '../graphql/generated'
 
 export type Game = Omit<GqlGame, 'teams' | '__typename'>
 export type Team = Omit<GqlTeam, 'players' | '__typename'>

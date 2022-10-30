@@ -1,6 +1,7 @@
 import { atom, selector, useRecoilValue } from 'recoil'
 
 import type { Player, Team } from '../graphql/generated'
+import { isServerSide } from '../helpers/common'
 
 interface Me {
   id: Player['id']
@@ -17,9 +18,14 @@ export const meAtom = atom<Me | null>({
 })
 
 const meState = selector({
-  key: 'charCountState',
+  key: 'meSelector',
   get: ({ get }) => {
-    return get(meAtom)
+    const recoilState = get(meAtom)
+    if (!recoilState && !isServerSide()) {
+      const meJSON = sessionStorage.getItem('me') || 'null'
+      return JSON.parse(meJSON) as Me
+    }
+    return recoilState
   },
 })
 
