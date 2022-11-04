@@ -5,6 +5,7 @@ import type { Context } from '../src/graphqlServer'
 import { getAnswerTester } from './helpers/answer.helper'
 
 import { getGameTester } from './helpers/game.helper'
+import { getMiscellaneousTester } from './helpers/miscellaneous.helper'
 import { getPlayerTester } from './helpers/player.helper'
 import { getQuestionTester } from './helpers/question.helper'
 import { getTeamTester } from './helpers/team.helper'
@@ -17,6 +18,7 @@ export const getTester = async (context: Context) => {
     question: await getQuestionTester(context),
     answer: await getAnswerTester(context),
     db: context.prisma,
+    miscellaneous: await getMiscellaneousTester(context),
   }
 }
 
