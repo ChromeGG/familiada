@@ -168,7 +168,7 @@ describe('game.service.ts', () => {
 
     test.todo('should throw an error if team is full')
 
-    test.todo('should throw an error if team is not in lobby state')
+    test.todo('should throw an error if game is not in lobby state')
   })
 
   describe(startGame.name, () => {
@@ -218,21 +218,19 @@ describe('game.service.ts', () => {
   })
 
   describe(yieldQuestion.name, () => {
-    test('should return question and set nextAnsweringPlayerIds, rounds, questions', async () => {
+    test('should setup round and answering players', async () => {
       const question = await Tester.question.create({ language: Language.PL })
       const game = await Tester.game.create({
         playerTeam: TeamColor.RED,
       })
 
-      const [readTeam, blueTeam] = game.teams
+      const [, blueTeam] = game.teams
       const redPlayer1 = await Tester.db.player.findFirstOrThrow({
         orderBy: { id: 'asc' },
       })
-      const redPlayer2 = await Tester.game.joinToGame({ teamId: readTeam.id })
       const bluePlayer1 = await Tester.game.joinToGame({
         teamId: blueTeam.id,
       })
-      const bluePlayer2 = await Tester.game.joinToGame({ teamId: blueTeam.id })
       await Tester.game.startGame(game.id)
 
       const result = await yieldQuestion(game.id, integrationContext)
@@ -276,9 +274,6 @@ describe('game.service.ts', () => {
         text: null,
         answerId: null,
       })
-
-      expect(dbGame?.teams[0].nextAnsweringPlayerId).toEqual(redPlayer2.id)
-      expect(dbGame?.teams[1].nextAnsweringPlayerId).toEqual(bluePlayer2.id)
     })
 
     test.todo(
@@ -289,7 +284,10 @@ describe('game.service.ts', () => {
   })
 
   describe(answerQuestion.name, () => {
-    // ! NEXT: Before each test create game with two teams and two players in each team
+    beforeEach(async () => {
+      //
+    })
+
     test('should throw an error if player is not answering player', async () => {
       await Tester.question.create()
       const game = await Tester.game.create({
@@ -357,7 +355,7 @@ describe('game.service.ts', () => {
       })
     })
 
-    test('should return false if answer was correct', async () => {
+    test('should return false if answer was incorrect', async () => {
       const question = await Tester.question.create()
       await Tester.answer.create({ label: 'cat', questionId: question.id })
       const game = await Tester.game.create({
@@ -432,5 +430,138 @@ describe('game.service.ts', () => {
         answerId: null,
       })
     })
+
+    test('should not set next answering players after first answer', async () => {
+      const question = await Tester.question.create()
+      await Tester.answer.create({ label: 'XXX', questionId: question.id })
+      const game = await Tester.game.create({
+        playerTeam: TeamColor.RED,
+      })
+      const [redTeam, blueTeam] = game.teams
+      const bluePlayer1 = await Tester.game.joinToGame({
+        teamId: blueTeam.id,
+      })
+      await Tester.game.joinToGame({
+        teamId: blueTeam.id,
+      })
+      const redPlayer1 = await Tester.db.player.findFirst({
+        where: { team: { color: TeamColor.RED } },
+      })
+      await Tester.game.joinToGame({
+        teamId: redTeam.id,
+      })
+      await Tester.game.startGame(game.id)
+      await Tester.game.yieldQuestion(game.id)
+
+      const bluePlayer1Context = await Tester.db.player.findUniqueOrThrow({
+        include: { team: { include: { game: true } } },
+        where: { id: bluePlayer1.id },
+      })
+
+      await answerQuestion('any', {
+        ...integrationContext,
+        player: bluePlayer1Context,
+      })
+
+      const dbTeams = await Tester.db.team.findMany()
+      const dbAnsweringPlayers = await Tester.db.gameQuestionsAnswers.findMany()
+
+      expect(dbTeams).toMatchObject([
+        {
+          nextAnsweringPlayerId: redPlayer1?.id,
+        },
+        {
+          nextAnsweringPlayerId: bluePlayer1.id,
+        },
+      ])
+
+      expect(dbAnsweringPlayers).toMatchObject([
+        {
+          text: null,
+        },
+        { text: 'any' },
+      ])
+    })
+
+    test('should set next answering players if second player answered', async () => {
+      const question = await Tester.question.create()
+      await Tester.answer.create({ label: 'XXX', questionId: question.id })
+      const game = await Tester.game.create({
+        playerTeam: TeamColor.RED,
+      })
+      const [redTeam, blueTeam] = game.teams
+      const bluePlayer1 = await Tester.game.joinToGame({
+        teamId: blueTeam.id,
+      })
+      const bluePlayer2 = await Tester.game.joinToGame({
+        teamId: blueTeam.id,
+      })
+      const redPlayer2 = await Tester.game.joinToGame({
+        teamId: redTeam.id,
+      })
+      await Tester.game.startGame(game.id)
+      await Tester.game.yieldQuestion(game.id)
+
+      const redPlayer1Context = await Tester.db.player.findFirstOrThrow({
+        include: { team: { include: { game: true } } },
+        where: { team: { color: TeamColor.RED } },
+        orderBy: { id: 'asc' },
+      })
+
+      const bluePlayer1Context = await Tester.db.player.findUniqueOrThrow({
+        include: { team: { include: { game: true } } },
+        where: { id: bluePlayer1.id },
+      })
+
+      await Tester.game.answerQuestion('any', { player: redPlayer1Context })
+
+      await answerQuestion('any', {
+        ...integrationContext,
+        player: bluePlayer1Context,
+      })
+
+      const dbTeams = await Tester.db.team.findMany()
+      const dbAnsweringPlayers = await Tester.db.gameQuestionsAnswers.findMany()
+
+      expect(dbTeams).toMatchObject([
+        {
+          nextAnsweringPlayerId: redPlayer2.id,
+        },
+        {
+          nextAnsweringPlayerId: bluePlayer2.id,
+        },
+      ])
+
+      expect(dbAnsweringPlayers).toMatchObject([
+        {
+          playerId: redPlayer1Context.id,
+          priority: 0,
+          text: 'any',
+        },
+        {
+          playerId: bluePlayer1Context.id,
+          priority: 0,
+          text: 'any',
+        },
+        {
+          playerId: redPlayer2.id,
+          priority: 1,
+          text: null,
+        },
+        {
+          playerId: bluePlayer2.id,
+          priority: 1,
+          text: null,
+        },
+      ])
+    })
+
+    test.skip('should finish round if 3 times in row no one answered correctly', () => {
+      expect(true).toBe(true)
+    })
+
+    test.todo('should finish round if all answers were used')
+
+    test.todo('should finish game if all questions answered')
   })
 })

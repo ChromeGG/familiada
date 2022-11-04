@@ -15,10 +15,19 @@ interface PrepareQuestions {
   currentQuestionId: Question['id']
   answeringPlayersIds: Player['id'][]
   gameId: Game['id']
-  redTeamId: Team['id']
+}
+
+interface SetNextAnsweringPlayersInTeam {
+  gameId: Game['id']
+  status: GameStatus
   redPlayerId: Player['id']
-  blueTeamId: Team['id']
   bluePlayerId: Player['id']
+}
+
+interface SetNextAnsweringPlayersInRound
+  extends Pick<SetNextAnsweringPlayersInTeam, 'redPlayerId' | 'bluePlayerId'> {
+  gameQuestionId: GameQuestionsAnswers['id']
+  priority: number
 }
 
 export const gameRepository = {
@@ -76,11 +85,7 @@ export const gameRepository = {
         id,
       },
       include: {
-        teams: {
-          include: {
-            players: { orderBy: { id: 'asc' } },
-          },
-        },
+        teams: true,
         gameOptions: true,
         gameQuestions: {
           include: {
@@ -101,10 +106,6 @@ export const gameRepository = {
     currentQuestionId,
     answeringPlayersIds,
     gameId,
-    redTeamId,
-    redPlayerId,
-    blueTeamId,
-    bluePlayerId,
   }: PrepareQuestions) => {
     return prisma.game.update({
       data: {
@@ -123,26 +124,6 @@ export const gameRepository = {
             },
           },
         },
-        teams: {
-          updateMany: [
-            {
-              data: {
-                nextAnsweringPlayerId: redPlayerId,
-              },
-              where: {
-                id: redTeamId,
-              },
-            },
-            {
-              data: {
-                nextAnsweringPlayerId: bluePlayerId,
-              },
-              where: {
-                id: blueTeamId,
-              },
-            },
-          ],
-        },
       },
       where: {
         id: gameId,
@@ -152,7 +133,11 @@ export const gameRepository = {
   getGameForAnswerQuestion: async (gameId: Game['id']) => {
     return prisma.game.findUniqueOrThrow({
       include: {
-        teams: true,
+        gameOptions: true,
+        teams: {
+          orderBy: { color: 'desc' },
+          include: { players: { orderBy: { id: 'asc' } } },
+        },
         gameQuestions: {
           include: {
             question: {
@@ -192,6 +177,56 @@ export const gameRepository = {
       },
       where: {
         id: gameQuestionAnswerId,
+      },
+    })
+  },
+  setNextAnsweringPlayersInTeam: async ({
+    gameId,
+    status,
+    bluePlayerId: nextBlueAnsweringPlayerId,
+    redPlayerId: nextRedAnsweringPlayerId,
+  }: SetNextAnsweringPlayersInTeam) => {
+    return prisma.game.update({
+      data: {
+        status,
+        teams: {
+          updateMany: [
+            {
+              data: { nextAnsweringPlayerId: nextRedAnsweringPlayerId },
+              where: { color: TeamColor.RED },
+            },
+            {
+              data: { nextAnsweringPlayerId: nextBlueAnsweringPlayerId },
+              where: { color: TeamColor.BLUE },
+            },
+          ],
+        },
+      },
+      where: {
+        id: gameId,
+      },
+    })
+  },
+  setNextAnsweringPlayersInRound: async ({
+    gameQuestionId,
+    bluePlayerId,
+    redPlayerId,
+    priority,
+  }: SetNextAnsweringPlayersInRound) => {
+    return prisma.gameQuestionsAnswers.createMany({
+      data: [
+        { priority, playerId: redPlayerId, gameQuestionId },
+        { priority, playerId: bluePlayerId, gameQuestionId },
+      ],
+    })
+  },
+  setGameStatus: async (gameId: Game['id'], status: GameStatus) => {
+    return prisma.game.update({
+      where: {
+        id: gameId,
+      },
+      data: {
+        status,
       },
     })
   },

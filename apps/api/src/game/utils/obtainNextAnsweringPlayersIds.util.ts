@@ -18,7 +18,7 @@ export const obtainNextAnsweringPlayersIds = (teams: Input): Output => {
   const blueTeam = teams.find(({ color }) => color === TeamColor.BLUE)
 
   if (!redTeam || !blueTeam) {
-    throw new TypeError(`One of the teams is missing`)
+    throw new TypeError(`One or both of the teams are missing`)
   }
 
   const redPlayers = redTeam.players

@@ -140,17 +140,9 @@ export const yieldQuestion = async (
     nextAnsweringPlayerId ? [nextAnsweringPlayerId] : []
   )
 
-  const { bluePlayerId, redPlayerId } = obtainNextAnsweringPlayersIds(
-    game.teams
-  )
-
   await gameRepository.prepareQuestions({
     answeringPlayersIds,
     gameId,
-    bluePlayerId,
-    redPlayerId,
-    redTeamId: game.teams[0].id,
-    blueTeamId: game.teams[1].id,
     currentQuestionId: question.id,
     currentRound: game.gameQuestions.length + 1,
   })
@@ -158,6 +150,25 @@ export const yieldQuestion = async (
   return question
 }
 
+const finishRound = async (
+  game: Awaited<ReturnType<typeof gameRepository.getGameForAnswerQuestion>>
+) => {
+  const gameId = game.id
+  const { redPlayerId, bluePlayerId } = obtainNextAnsweringPlayersIds(
+    game.teams
+  )
+
+  const isLastRound = game.gameOptions?.rounds === game.gameQuestions.length
+
+  await gameRepository.setNextAnsweringPlayersInTeam({
+    gameId,
+    redPlayerId: redPlayerId,
+    bluePlayerId: bluePlayerId,
+    status: isLastRound ? GameStatus.FINISHED : GameStatus.WAITING_FOR_QUESTION,
+  })
+}
+
+// TODO Test this method with Promise.all
 export const answerQuestion = async (
   rawAnswerText: string,
   { player, pubSub }: AuthenticatedContext
@@ -200,19 +211,59 @@ export const answerQuestion = async (
     ({ answerId }) => answerId === answer?.id
   )
 
+  let isCorrect = false
+
   if (!answer || isDuplicate) {
     await gameRepository.updateGameQuestionAnswer(
       answeringRecord.id,
       rawAnswerText
     )
-    return false
+  } else {
+    await gameRepository.updateGameQuestionAnswer(
+      answeringRecord.id,
+      rawAnswerText,
+      answer.id
+    )
+    isCorrect = true
   }
 
-  await gameRepository.updateGameQuestionAnswer(
-    answeringRecord.id,
-    rawAnswerText,
-    answer.id
+  const priority = answeringRecord.priority + 1
+
+  // TODO if 3 pairs of players answered incorrectly then finish round
+
+  const isLastCorrectAnswer =
+    currentQuestion.gameQuestionsAnswers.reduce(
+      (acc, { answerId }) => (answerId !== null ? acc + 1 : acc),
+      0
+    ) === currentQuestion.question.answers.length
+
+  const isLastAnsweringPlayer = currentQuestion.gameQuestionsAnswers.some(
+    ({ text }) => text
   )
 
-  return true
+  if (!isLastCorrectAnswer && !isLastAnsweringPlayer) {
+    // nothing ?
+  } else if (!isLastCorrectAnswer) {
+    const { redPlayerId, bluePlayerId } = obtainNextAnsweringPlayersIds(
+      game.teams
+    )
+    await gameRepository.setNextAnsweringPlayersInTeam({
+      gameId,
+      redPlayerId: redPlayerId,
+      bluePlayerId: bluePlayerId,
+      // TODO we don't need to update status here
+      status: GameStatus.WAITING_FOR_ANSWERS,
+    })
+
+    await gameRepository.setNextAnsweringPlayersInRound({
+      bluePlayerId,
+      gameQuestionId: currentQuestion.id,
+      priority,
+      redPlayerId,
+    })
+  } else {
+    await finishRound(game)
+  }
+
+  return isCorrect
 }

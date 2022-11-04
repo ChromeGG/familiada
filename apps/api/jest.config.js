@@ -2,7 +2,6 @@
 export default {
   roots: ['<rootDir>'],
   preset: 'ts-jest',
-  transform: {},
   setupFiles: ['<rootDir>/jest.setup.ts'],
   extensionsToTreatAsEsm: ['.ts'],
   moduleFileExtensions: ['js', 'ts'],
