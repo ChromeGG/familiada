@@ -1,8 +1,8 @@
-import type { GameQuestionsAnswers, Player } from '../../generated/prisma'
+import type { GameQuestionsAnswers } from '../../generated/prisma'
 
-export const getAnsweringPlayersIds = (
+export const getAnsweringPlayersRecords = (
   gameQuestionsAnswers: GameQuestionsAnswers[]
-): Player['id'][] => {
+): GameQuestionsAnswers[] => {
   if (gameQuestionsAnswers.length === 0) {
     throw new TypeError('gameQuestionsAnswers cannot be empty')
   }
@@ -12,9 +12,7 @@ export const getAnsweringPlayersIds = (
     0
   )
 
-  const highestPriorityPlayers = gameQuestionsAnswers.filter(
+  return gameQuestionsAnswers.filter(
     ({ priority }) => priority === highestPriority
   )
-
-  return highestPriorityPlayers.map(({ playerId }) => playerId)
 }

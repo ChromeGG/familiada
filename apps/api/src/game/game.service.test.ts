@@ -3,13 +3,13 @@ import { AlreadyExistError } from '../errors/AlreadyExistError'
 import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
 import type {
   Answer,
-  Game,
   GameOptions,
   Player,
   Question,
   Team,
 } from '../generated/prisma'
 import { Language, GameStatus, TeamColor } from '../generated/prisma'
+import type { AuthenticatedPlayer } from '../server'
 
 import {
   startGame,
@@ -179,10 +179,13 @@ describe('game.service.ts', () => {
   })
 
   describe(startGame.name, () => {
+    let game: Awaited<ReturnType<typeof Tester.game.create>>
+
+    beforeEach(async () => {
+      game = await Tester.game.create()
+    })
+
     test('should start a game with two players in different teams', async () => {
-      const game = await Tester.game.create({
-        playerTeam: TeamColor.RED,
-      })
       const [, blueTeam] = game.teams
       await Tester.game.joinToGame({ teamId: blueTeam.id })
 
@@ -195,9 +198,6 @@ describe('game.service.ts', () => {
     })
 
     test('should throw an error if one of teams has no players', async () => {
-      const game = await Tester.game.create({
-        playerTeam: TeamColor.RED,
-      })
       const [redTeam] = game.teams
       await Tester.game.joinToGame({ teamId: redTeam.id })
 
@@ -209,9 +209,6 @@ describe('game.service.ts', () => {
     })
 
     test('should throw an error if game is not in lobby status', async () => {
-      const game = await Tester.game.create({
-        playerTeam: TeamColor.RED,
-      })
       const [, blueTeam] = game.teams
       await Tester.game.joinToGame({ teamId: blueTeam.id })
       await Tester.game.startGame(game.id)
@@ -293,13 +290,11 @@ describe('game.service.ts', () => {
   describe(answerQuestion.name, () => {
     let question: Question
     let answer: Answer
-    let game: Game & {
-      teams: Team[]
-    }
-    let redPlayer1: Player
-    let redPlayer2: Player
-    let bluePlayer1: Player
-    let bluePlayer2: Player
+    let game: Awaited<ReturnType<typeof Tester.game.create>>
+    let redPlayer1: AuthenticatedPlayer
+    let redPlayer2: AuthenticatedPlayer
+    let bluePlayer1: AuthenticatedPlayer
+    let bluePlayer2: AuthenticatedPlayer
 
     beforeEach(async () => {
       question = await Tester.question.create()
@@ -311,31 +306,31 @@ describe('game.service.ts', () => {
         playerTeam: TeamColor.RED,
       })
       const [redTeam, blueTeam] = game.teams
-      // @ts-ignore: it's still `| null`, even after null assertion
-      redPlayer1 = await Tester.db.player.findFirst({
+      const red1 = await Tester.db.player.findFirstOrThrow({
         where: { team: { color: TeamColor.RED } },
       })
-      redPlayer2 = await Tester.game.joinToGame({
+      const blue1 = await Tester.game.joinToGame({
+        teamId: blueTeam.id,
+      })
+      const red2 = await Tester.game.joinToGame({
         teamId: redTeam.id,
       })
-      bluePlayer1 = await Tester.game.joinToGame({
+      const blue2 = await Tester.game.joinToGame({
         teamId: blueTeam.id,
       })
-      bluePlayer2 = await Tester.game.joinToGame({
-        teamId: blueTeam.id,
-      })
+
+      redPlayer1 = await Tester.miscellaneous.getPlayerContext(red1.id)
+      redPlayer2 = await Tester.miscellaneous.getPlayerContext(red2.id)
+      bluePlayer1 = await Tester.miscellaneous.getPlayerContext(blue1.id)
+      bluePlayer2 = await Tester.miscellaneous.getPlayerContext(blue2.id)
       await Tester.game.startGame(game.id)
       await Tester.game.yieldQuestion(game.id)
     })
 
     test('should throw an error if player is not answering player', async () => {
-      const redPlayer2context = await Tester.miscellaneous.getPlayerContext(
-        redPlayer2.id
-      )
-
       const answerQuestionFunc = answerQuestion('lol', {
         ...integrationContext,
-        player: redPlayer2context,
+        player: redPlayer2,
       })
 
       await expect(answerQuestionFunc).rejects.toThrow(
@@ -344,13 +339,9 @@ describe('game.service.ts', () => {
     })
 
     test('should return true if answer was correct', async () => {
-      const bluePlayer1Context = await Tester.miscellaneous.getPlayerContext(
-        bluePlayer1.id
-      )
-
       const result = await answerQuestion('cat', {
         ...integrationContext,
-        player: bluePlayer1Context,
+        player: bluePlayer1,
       })
 
       const answerRecord = await Tester.db.gameQuestionsAnswers.findFirst({
@@ -366,13 +357,9 @@ describe('game.service.ts', () => {
     })
 
     test('should return false if answer was incorrect', async () => {
-      const bluePlayer1Context = await Tester.miscellaneous.getPlayerContext(
-        bluePlayer1.id
-      )
-
       const result = await answerQuestion('dog', {
         ...integrationContext,
-        player: bluePlayer1Context,
+        player: bluePlayer1,
       })
 
       const answerRecord = await Tester.db.gameQuestionsAnswers.findFirst({
@@ -388,18 +375,12 @@ describe('game.service.ts', () => {
     })
 
     test('should return false if answer was used', async () => {
-      const bluePlayer1Context = await Tester.miscellaneous.getPlayerContext(
-        bluePlayer1.id
-      )
-      const redPlayer1Context = await Tester.miscellaneous.getPlayerContext(
-        redPlayer1.id
-      )
-
-      await Tester.game.answerQuestion('cat', { player: redPlayer1Context })
+      await Tester.answer.create({ questionId: question.id, label: 'kitty' })
+      await Tester.game.answerQuestion('cat', { player: redPlayer1 })
 
       const result = await answerQuestion('cat', {
         ...integrationContext,
-        player: bluePlayer1Context,
+        player: bluePlayer1,
       })
 
       const answerRecord = await Tester.db.gameQuestionsAnswers.findFirst({
@@ -415,13 +396,9 @@ describe('game.service.ts', () => {
     })
 
     test('should not set next answering players after first answer', async () => {
-      const bluePlayer1Context = await Tester.miscellaneous.getPlayerContext(
-        bluePlayer1.id
-      )
-
       await answerQuestion('any', {
         ...integrationContext,
-        player: bluePlayer1Context,
+        player: bluePlayer1,
       })
 
       const dbTeams = await Tester.db.team.findMany()
@@ -445,19 +422,11 @@ describe('game.service.ts', () => {
     })
 
     test('should set next answering players if second player answered', async () => {
-      const redPlayer1Context = await Tester.miscellaneous.getPlayerContext(
-        redPlayer1.id
-      )
-
-      const bluePlayer1Context = await Tester.miscellaneous.getPlayerContext(
-        bluePlayer1.id
-      )
-
-      await Tester.game.answerQuestion('any', { player: redPlayer1Context })
+      await Tester.game.answerQuestion('any', { player: redPlayer1 })
 
       await answerQuestion('any', {
         ...integrationContext,
-        player: bluePlayer1Context,
+        player: bluePlayer1,
       })
 
       const dbTeams = await Tester.db.team.findMany()
@@ -474,12 +443,12 @@ describe('game.service.ts', () => {
 
       expect(dbAnsweringPlayers).toMatchObject([
         {
-          playerId: redPlayer1Context.id,
+          playerId: redPlayer1.id,
           priority: 0,
           text: 'any',
         },
         {
-          playerId: bluePlayer1Context.id,
+          playerId: bluePlayer1.id,
           priority: 0,
           text: 'any',
         },
@@ -496,12 +465,115 @@ describe('game.service.ts', () => {
       ])
     })
 
-    test.skip('should finish round if 3 times in row no one answered correctly', () => {
-      expect(true).toBe(true)
+    test('should finish round if 3 times in row no one answered correctly', async () => {
+      await Tester.question.create()
+      await Tester.game.answerQuestion('any', { player: redPlayer1 })
+      await Tester.game.answerQuestion('any', { player: bluePlayer1 })
+      await Tester.game.answerQuestion('any', { player: redPlayer2 })
+      await Tester.game.answerQuestion('any', { player: bluePlayer2 })
+      await Tester.game.answerQuestion('any', { player: redPlayer1 })
+
+      const result = await answerQuestion('any', {
+        ...integrationContext,
+        player: bluePlayer1,
+      })
+
+      const game = await Tester.db.game.findFirstOrThrow()
+
+      expect(result).toEqual(false)
+      expect(game.status).toEqual(GameStatus.WAITING_FOR_QUESTION)
     })
 
-    test.todo('should finish round if all answers were used')
+    test('should finish round if all the answers were used by second player', async () => {
+      await Tester.answer.create({ questionId: question.id, label: 'kitty' })
+      await Tester.game.answerQuestion('cat', { player: redPlayer1 })
 
-    test.todo('should finish game if all questions answered')
+      const result = await answerQuestion('kitty', {
+        ...integrationContext,
+        player: bluePlayer1,
+      })
+
+      const game = await Tester.db.game.findFirstOrThrow()
+      const gameQuestionsAnswers =
+        await Tester.db.gameQuestionsAnswers.findMany()
+
+      expect(result).toEqual(true)
+      expect(game.status).toEqual(GameStatus.WAITING_FOR_QUESTION)
+      expect(gameQuestionsAnswers).toMatchObject([
+        {
+          text: 'cat',
+        },
+        {
+          text: 'kitty',
+        },
+      ])
+    })
+
+    test('should finish round if all the answers were used by first player', async () => {
+      await Tester.answer.create({ questionId: question.id, label: 'kitty' })
+      await Tester.answer.create({ questionId: question.id, label: 'pusheen' })
+      await Tester.game.answerQuestion('cat', { player: redPlayer1 })
+      await Tester.game.answerQuestion('kitty', { player: bluePlayer1 })
+
+      const result = await answerQuestion('pusheen', {
+        ...integrationContext,
+        player: redPlayer2,
+      })
+
+      const game = await Tester.db.game.findFirstOrThrow()
+      const gameQuestionsAnswers =
+        await Tester.db.gameQuestionsAnswers.findMany()
+
+      expect(result).toEqual(true)
+      expect(game.status).toEqual(GameStatus.WAITING_FOR_QUESTION)
+      expect(gameQuestionsAnswers).toMatchObject([
+        {
+          text: 'cat',
+        },
+        {
+          text: 'kitty',
+        },
+        {
+          text: 'pusheen',
+        },
+        {
+          // answers pool is empty, so this player has empty answer
+          text: '',
+        },
+      ])
+    })
+
+    test('should finish game if all the questions were answered', async () => {
+      const question2 = await Tester.question.create()
+      const question3 = await Tester.question.create()
+      await Tester.answer.create({
+        questionId: question2.id,
+        label: 'question2answer',
+      })
+      await Tester.answer.create({
+        questionId: question3.id,
+        label: 'question3answer',
+      })
+      await Tester.game.answerQuestion('cat', { player: redPlayer1 })
+      await Tester.game.yieldQuestion(game.id)
+      await Tester.game.answerQuestion('question2answer', {
+        player: redPlayer2,
+      })
+
+      await Tester.game.yieldQuestion(game.id)
+      await answerQuestion('question3answer', {
+        ...integrationContext,
+        player: redPlayer1,
+      })
+
+      const dbGame = await Tester.db.game.findFirstOrThrow()
+      const rounds = await Tester.db.gameQuestions.findMany()
+      const gameQuestionsAnswers =
+        await Tester.db.gameQuestionsAnswers.findMany()
+
+      expect(dbGame.status).toEqual(GameStatus.FINISHED)
+      expect(rounds).toHaveLength(3)
+      expect(gameQuestionsAnswers).toHaveLength(6)
+    })
   })
 })

@@ -9,10 +9,11 @@ import { playerRepository } from '../player/player.repository'
 import { getRandomQuestion } from '../question/question.service'
 import { teamRepository } from '../team/team.repository'
 import { setNextAnsweringPlayer } from '../team/team.service'
+import { ensure } from '../utils/utils'
 
 import { gameRepository } from './game.repository'
 import { checkAnswer } from './utils/checkAnswer.util'
-import { getAnsweringPlayersIds } from './utils/getAnsweringPlayers.util'
+import { getAnsweringPlayersRecords } from './utils/getAnsweringPlayers.util'
 import { obtainNextAnsweringPlayersIds } from './utils/obtainNextAnsweringPlayersIds.util'
 
 interface CreateGameInput {
@@ -134,7 +135,10 @@ export const yieldQuestion = async (
     throw new GraphQLOperationalError('No more questions')
   }
 
-  const question = await getRandomQuestion(Language.PL)
+  const question = await getRandomQuestion(
+    Language.PL,
+    game.gameQuestions.map(({ questionId }) => questionId)
+  )
 
   const answeringPlayersIds = game.teams.flatMap(({ nextAnsweringPlayerId }) =>
     nextAnsweringPlayerId ? [nextAnsweringPlayerId] : []
@@ -169,12 +173,14 @@ const finishRound = async (
 }
 
 // TODO Test this method with Promise.all
+// TODO refactor it and remove eslint-disable
+/* eslint-disable sonarjs/cognitive-complexity */
 export const answerQuestion = async (
   rawAnswerText: string,
   { player, pubSub }: AuthenticatedContext
 ) => {
+  /* eslint-enable sonarjs/cognitive-complexity */
   const gameId = player.team.gameId
-  const playerId = player.id
   const game = await gameRepository.getGameForAnswerQuestion(gameId)
 
   if (game.status !== GameStatus.WAITING_FOR_ANSWERS) {
@@ -185,21 +191,17 @@ export const answerQuestion = async (
 
   const currentQuestion = game.gameQuestions[game.gameQuestions.length - 1]
 
-  const answeringPlayers = getAnsweringPlayersIds(
+  const answeringPlayers = getAnsweringPlayersRecords(
     currentQuestion.gameQuestionsAnswers
   )
 
-  if (!answeringPlayers.some((id) => id === playerId)) {
+  if (!answeringPlayers.some(({ playerId }) => playerId === player.id)) {
     throw new GraphQLOperationalError('Player is not answering now')
   }
 
-  const answeringRecord = currentQuestion.gameQuestionsAnswers.find(
-    ({ playerId }) => playerId === player.id
+  const answeringRecord = ensure(
+    answeringPlayers.find(({ playerId }) => playerId === player.id)
   )
-
-  if (!answeringRecord) {
-    throw new TypeError('Answer must be there')
-  }
 
   if (answeringRecord.text) {
     throw new GraphQLOperationalError('Player already answered')
@@ -229,41 +231,66 @@ export const answerQuestion = async (
 
   const priority = answeringRecord.priority + 1
 
-  // TODO if 3 pairs of players answered incorrectly then finish round
-
   const isLastCorrectAnswer =
+    isCorrect &&
     currentQuestion.gameQuestionsAnswers.reduce(
       (acc, { answerId }) => (answerId !== null ? acc + 1 : acc),
       0
-    ) === currentQuestion.question.answers.length
+    ) ===
+      currentQuestion.question.answers.length - 1
 
-  const isLastAnsweringPlayer = currentQuestion.gameQuestionsAnswers.some(
-    ({ text }) => text
+  const isLastAnsweringPlayer = !answeringPlayers.every(
+    ({ text }) => text === null
   )
 
-  if (!isLastCorrectAnswer && !isLastAnsweringPlayer) {
-    // nothing ?
-  } else if (!isLastCorrectAnswer) {
-    const { redPlayerId, bluePlayerId } = obtainNextAnsweringPlayersIds(
-      game.teams
-    )
-    await gameRepository.setNextAnsweringPlayersInTeam({
-      gameId,
-      redPlayerId: redPlayerId,
-      bluePlayerId: bluePlayerId,
-      // TODO we don't need to update status here
-      status: GameStatus.WAITING_FOR_ANSWERS,
-    })
+  const isLast6AnswersIncorrect =
+    currentQuestion.gameQuestionsAnswers.reduce(
+      (acc, { answerId }) => (answerId === null ? acc + 1 : 0),
+      0
+    ) >= 6
 
-    await gameRepository.setNextAnsweringPlayersInRound({
-      bluePlayerId,
-      gameQuestionId: currentQuestion.id,
-      priority,
-      redPlayerId,
-    })
-  } else {
+  if (isLast6AnswersIncorrect && isLastAnsweringPlayer) {
     await finishRound(game)
+    // TODO publish all answers
+    return isCorrect
   }
 
+  if (isLastCorrectAnswer) {
+    if (!isLastAnsweringPlayer) {
+      const secondAnsweringPlayer = ensure(
+        answeringPlayers.find(({ playerId }) => playerId !== player.id)
+      )
+
+      await gameRepository.updateGameQuestionAnswer(
+        secondAnsweringPlayer.id,
+        ''
+      )
+    }
+
+    await finishRound(game)
+    return isCorrect
+  }
+
+  if (!isLastCorrectAnswer && !isLastAnsweringPlayer) {
+    return isCorrect
+  }
+
+  // last case: !isLastCorrectAnswer && isLastAnsweringPlayer
+  const { redPlayerId, bluePlayerId } = obtainNextAnsweringPlayersIds(
+    game.teams
+  )
+  await gameRepository.setNextAnsweringPlayersInTeam({
+    gameId,
+    redPlayerId: redPlayerId,
+    bluePlayerId: bluePlayerId,
+    status: GameStatus.WAITING_FOR_ANSWERS,
+  })
+
+  await gameRepository.setNextAnsweringPlayersInRound({
+    bluePlayerId,
+    gameQuestionId: currentQuestion.id,
+    priority,
+    redPlayerId,
+  })
   return isCorrect
 }

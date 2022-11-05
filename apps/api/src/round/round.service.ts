@@ -1,19 +1,14 @@
-import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
 import type { Answer, Game, TeamColor } from '../generated/prisma'
-import { GameStatus } from '../generated/prisma'
+import { ensure } from '../utils/utils'
 
 import { roundRepository } from './round.repository'
 
 import type { Board, Stage, Round, AnsweringTeam } from './round.schema'
 
-// TODO persist it at the end
 type RoundData = Awaited<ReturnType<typeof roundRepository.getDataForRound>>
 
 const getStage = ({ gameQuestions }: RoundData): Stage => {
-  const currentRound = gameQuestions.at(-1)
-  if (!currentRound) {
-    throw new TypeError('No current round')
-  }
+  const currentRound = ensure(gameQuestions.at(-1))
   const { question, gameQuestionsAnswers } = currentRound
   const questionText = question.text
 
@@ -27,10 +22,7 @@ const getStage = ({ gameQuestions }: RoundData): Stage => {
 }
 
 const getBoard = ({ gameQuestions }: RoundData): Board => {
-  const currentRound = gameQuestions.at(-1)
-  if (!currentRound) {
-    throw new TypeError('No current round')
-  }
+  const currentRound = ensure(gameQuestions.at(-1))
 
   const discoveredAnswers = currentRound.gameQuestionsAnswers
     .map(({ answer }) => answer)

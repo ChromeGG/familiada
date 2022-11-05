@@ -5,7 +5,6 @@ import type {
   GameQuestionsAnswers,
   Player,
   Question,
-  Team,
 } from '../generated/prisma'
 import { GameStatus, TeamColor } from '../generated/prisma'
 import { prisma } from '../prisma'
@@ -19,9 +18,9 @@ interface PrepareQuestions {
 
 interface SetNextAnsweringPlayersInTeam {
   gameId: Game['id']
-  status: GameStatus
   redPlayerId: Player['id']
   bluePlayerId: Player['id']
+  status?: GameStatus
 }
 
 interface SetNextAnsweringPlayersInRound
@@ -182,7 +181,7 @@ export const gameRepository = {
   },
   setNextAnsweringPlayersInTeam: async ({
     gameId,
-    status,
+    status = GameStatus.WAITING_FOR_ANSWERS,
     bluePlayerId: nextBlueAnsweringPlayerId,
     redPlayerId: nextRedAnsweringPlayerId,
   }: SetNextAnsweringPlayersInTeam) => {
