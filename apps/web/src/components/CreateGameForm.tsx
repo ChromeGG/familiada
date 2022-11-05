@@ -42,8 +42,8 @@ const CreateGameForm = () => {
       const { data: gameData } = data.createGame
       const player = gameData.teams.flatMap(({ players }) => players)[0]
       if (!isServerSide()) {
-        sessionStorage?.setItem('token', player.id)
-        sessionStorage?.setItem('me', JSON.stringify(player))
+        sessionStorage.setItem('token', player.id)
+        sessionStorage.setItem('me', JSON.stringify(player))
       }
       router.push(`/${input.gameId}`)
     }

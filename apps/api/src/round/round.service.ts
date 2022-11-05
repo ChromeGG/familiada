@@ -1,3 +1,4 @@
+import { getAnsweringPlayersRecords } from '../game/utils/getAnsweringPlayers.util'
 import type { Answer, Game, TeamColor } from '../generated/prisma'
 import { ensure } from '../utils/utils'
 
@@ -12,7 +13,10 @@ const getStage = ({ gameQuestions }: RoundData): Stage => {
   const { question, gameQuestionsAnswers } = currentRound
   const questionText = question.text
 
-  const answeringPlayers = gameQuestionsAnswers.map(({ playerId, text }) => {
+  const answeringPlayersRecords =
+    getAnsweringPlayersRecords(gameQuestionsAnswers)
+
+  const answeringPlayers = answeringPlayersRecords.map(({ playerId, text }) => {
     return { id: playerId, text }
   })
   return {

@@ -113,7 +113,11 @@ builder.mutationFields((t) => {
       type: QuestionGql,
       resolve: async (_root, _args, context) => {
         const { gameId } = context.player.team
-        return yieldQuestion(gameId, context)
+        const res = await yieldQuestion(gameId, context)
+        context.pubSub.publish('gameStateUpdated', String(gameId), {
+          wtf: true,
+        })
+        return res
       },
     }),
     sendAnswer: t.withAuth({ player: true }).boolean({
@@ -122,7 +126,16 @@ builder.mutationFields((t) => {
         schema: answerQuestionValidation,
       },
       resolve: async (_, { answer }, context) => {
-        return answerQuestion(answer, context)
+        const { gameId } = context.player.team
+        const res = await answerQuestion(answer, context)
+        context.pubSub.publish('boardUpdate', String(gameId), {
+          wtf: true,
+        })
+        context.pubSub.publish('gameStateUpdated', String(gameId), {
+          wtf: true,
+        })
+
+        return res
       },
     }),
   }

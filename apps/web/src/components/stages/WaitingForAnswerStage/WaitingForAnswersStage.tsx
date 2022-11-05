@@ -29,7 +29,7 @@ const WaitingForAnswersStage: FC<Props> = ({ question, answeringPlayers }) => {
   const { redTeam, blueTeam } = useTeams()
 
   const isMeAnswering = answeringPlayers.some(
-    ({ id, text }) => !text && id === me?.id
+    ({ id, text }) => id === me?.id && text === null
   )
 
   const selectedPlayers: SelectedPlayer[] = answeringPlayers.map(
@@ -59,10 +59,10 @@ const WaitingForAnswersStage: FC<Props> = ({ question, answeringPlayers }) => {
   )
 
   return (
-    <Stack>
+    <Stack sx={{ minWidth: 300 }} spacing={2}>
       <Question content={question} />
       <Box>
-        {!isMeAnswering ? (
+        {isMeAnswering ? (
           <SendAnswerForm />
         ) : (
           <Grid2>

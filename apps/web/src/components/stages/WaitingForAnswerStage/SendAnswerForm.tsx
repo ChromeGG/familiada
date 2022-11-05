@@ -16,7 +16,7 @@ const SendAnswerForm: FC = () => {
   const answerQuestionHandler: SubmitHandler<SendAnswerSchema> = async ({
     answer,
   }) => {
-    sendAnswerMutation({
+    await sendAnswerMutation({
       variables: {
         answer,
       },
@@ -32,7 +32,7 @@ const SendAnswerForm: FC = () => {
         name="answer"
         label={t`answer`}
       />
-      <Button type="submit">{t`submit`}</Button>
+      <Button type="submit" sx={{ p: 2 }}>{t`submit`}</Button>
     </FormContainer>
   )
 }

@@ -1,5 +1,6 @@
 import type { NormalizedCacheObject } from '@apollo/client'
 import {
+  ApolloLink,
   from,
   HttpLink,
   split,
@@ -21,15 +22,25 @@ const { apiUrl } = config
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
-const getHttpLink = () => {
-  const token = !isServerSide() && sessionStorage.getItem('token')
+const authMiddleware = () =>
+  new ApolloLink((operation, forward) => {
+    const authToken = sessionStorage.getItem('token')
+    console.log('authToken', authToken)
+    if (authToken) {
+      operation.setContext({
+        headers: {
+          authorization: authToken,
+        },
+      })
+    }
 
-  return new HttpLink({
-    uri: `${apiUrl}/graphql`,
-    credentials: 'include',
-    headers: { ...(token ? { authorization: token } : {}) },
+    return forward(operation)
   })
-}
+
+const httpLink = new HttpLink({
+  uri: `${apiUrl}/graphql`,
+  credentials: 'include',
+})
 
 function createApolloClient() {
   return new ApolloClient({
@@ -42,7 +53,7 @@ function createApolloClient() {
         new SubscriptionLink({
           endpoint: `${apiUrl}/graphql`,
         }),
-        getHttpLink()
+        authMiddleware().concat(httpLink)
       ),
     ]),
     cache: new InMemoryCache(),
