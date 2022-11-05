@@ -198,7 +198,7 @@ export type CreateGameMutationVariables = Exact<{
 }>;
 
 
-export type CreateGameMutation = { __typename?: 'Mutation', createGame: { __typename?: 'AlreadyExistError', message: string } | { __typename?: 'BaseError' } | { __typename?: 'MutationCreateGameSuccess', data: { __typename?: 'Game', id: string, status: GameStatus } } };
+export type CreateGameMutation = { __typename?: 'Mutation', createGame: { __typename?: 'AlreadyExistError', message: string } | { __typename?: 'BaseError' } | { __typename?: 'MutationCreateGameSuccess', data: { __typename?: 'Game', id: string, teams: Array<{ __typename?: 'Team', players: Array<{ __typename?: 'Player', id: string, name: string, team: { __typename?: 'Team', id: string, color: string } }> }> } } };
 
 export type JoinToGameMutationVariables = Exact<{
   teamId: Scalars['ID'];
@@ -246,7 +246,16 @@ export const CreateGameDocument = gql`
     ... on MutationCreateGameSuccess {
       data {
         id
-        status
+        teams {
+          players {
+            id
+            name
+            team {
+              id
+              color
+            }
+          }
+        }
       }
     }
     ... on AlreadyExistError {

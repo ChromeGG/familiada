@@ -16,6 +16,7 @@ import {
 } from 'react-hook-form-mui'
 
 import { useCreateGameMutation } from '../graphql/generated'
+import { isServerSide } from '../helpers/common'
 import type { CreateGameSchema } from '../validators/createGame.validator'
 import { useCreateGameForm } from '../validators/createGame.validator'
 
@@ -25,18 +26,26 @@ const CreateGameForm = () => {
 
   const router = useRouter()
 
-  const createGameHandler: SubmitHandler<CreateGameSchema> = async (data) => {
-    const { data: response } = await createGameMutation({
-      variables: { input: data },
+  const createGameHandler: SubmitHandler<CreateGameSchema> = async (input) => {
+    console.log('input', input)
+    const { data, errors } = await createGameMutation({
+      variables: { input },
     })
-    if (response?.createGame.__typename === 'AlreadyExistError') {
+    console.log(data, errors)
+    if (data?.createGame.__typename === 'AlreadyExistError') {
       createGameForm.setError('gameId', {
         message: t`error:game-with-given-id-already-exists`,
       })
     }
 
-    if (response?.createGame.__typename === 'MutationCreateGameSuccess') {
-      router.push(`/${data.gameId}`)
+    if (data?.createGame.__typename === 'MutationCreateGameSuccess') {
+      const { data: gameData } = data.createGame
+      const player = gameData.teams.flatMap(({ players }) => players)[0]
+      if (!isServerSide()) {
+        sessionStorage?.setItem('token', player.id)
+        sessionStorage?.setItem('me', JSON.stringify(player))
+      }
+      router.push(`/${input.gameId}`)
     }
   }
 

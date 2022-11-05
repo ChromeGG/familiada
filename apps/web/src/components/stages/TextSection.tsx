@@ -6,7 +6,7 @@ interface Props {
 }
 
 const TextSection = ({ text }: Props) => {
-  return <Typography>{text}</Typography>
+  return <Typography variant="h6">{text}</Typography>
 }
 
 export default TextSection

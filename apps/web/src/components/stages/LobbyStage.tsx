@@ -19,12 +19,14 @@ const LobbyStage = () => {
   }
 
   return (
-    <Stack>
+    <Stack spacing={2}>
       <TextSection text={t`waiting-for-other-players`} />
       <Box>
         <Button
+          fullWidth
           disabled={!hasPlayersInBothTeams}
           onClick={() => startGame()}
+          variant="contained"
         >{t`start-game`}</Button>
       </Box>
     </Stack>

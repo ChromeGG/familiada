@@ -1,4 +1,4 @@
-import { Container, Grid } from '@mui/material'
+import { Container, Box } from '@mui/material'
 import { NextSeo } from 'next-seo'
 import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
@@ -50,16 +50,26 @@ const GameId = () => {
   return (
     <Container disableGutters sx={{ p: 0.5 }}>
       <NextSeo title={gameId} />
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Board gameId={gameInfo.id} />
-        </Grid>
-        <Grid item xs={12}>
-          <StageController gameId={gameInfo.id} status={gameInfo.status} />
-        </Grid>
+      <Board gameId={gameInfo.id} />
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          m: 4,
+        }}
+      >
+        <StageController gameId={gameInfo.id} status={gameInfo.status} />
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          m: 4,
+        }}
+      >
         <TeamsSection />
-      </Grid>
-      <Container sx={{ display: 'flex', justifyContent: 'center' }}>
+      </Box>
+      <Container sx={{ display: 'flex', justifyContent: 'center', m: 4 }}>
         {!me && isGameInLobby && <JoinToGameForm />}
       </Container>
     </Container>

@@ -17,13 +17,6 @@ const StageController: FC<Props> = ({ status, gameId }) => {
     variables: { gameId },
   })
 
-  if (!data?.state?.stage) {
-    return null
-  }
-  const question = data.state.stage.question
-  const answeringPlayers = data.state.stage.answeringPlayers
-  console.log('answeringPlayers', answeringPlayers)
-
   if (status === GameStatus.Lobby) {
     return <LobbyStage />
   }
@@ -31,6 +24,13 @@ const StageController: FC<Props> = ({ status, gameId }) => {
   if (status === GameStatus.WaitingForQuestion) {
     return <WaitingForQuestionStage />
   }
+
+  if (!data?.state?.stage) {
+    return null
+  }
+  const question = data.state.stage.question
+  const answeringPlayers = data.state.stage.answeringPlayers
+  console.log('answeringPlayers', answeringPlayers)
 
   if (status === GameStatus.WaitingForAnswers) {
     return (

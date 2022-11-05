@@ -6,7 +6,16 @@ const CREATE_GAME = gql`
       ... on MutationCreateGameSuccess {
         data {
           id
-          status
+          teams {
+            players {
+              id
+              name
+              team {
+                id
+                color
+              }
+            }
+          }
         }
       }
       ... on AlreadyExistError {

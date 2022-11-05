@@ -14,4 +14,4 @@ builder.queryType({})
 builder.mutationType({})
 builder.subscriptionType({})
 
-export const schema = builder.toSchema({ complexity: { limit: { depth: 5 } } })
+export const schema = builder.toSchema({ complexity: { limit: { depth: 6 } } })

@@ -16,6 +16,7 @@ import {
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { useJoinToGameMutation } from '../graphql/generated'
+import { isServerSide } from '../helpers/common'
 import { teamSelector } from '../store/game'
 
 import { meAtom } from '../store/me'
@@ -43,7 +44,7 @@ const JoinToGameForm: FC = () => {
     if (!data?.joinToGame) {
       throw new Error('No data')
     }
-    if (typeof window !== 'undefined') {
+    if (!isServerSide()) {
       sessionStorage?.setItem('token', data.joinToGame.id)
       sessionStorage?.setItem('me', JSON.stringify(data.joinToGame))
     }

@@ -14,10 +14,14 @@ const WaitingForQuestionStage = () => {
   }
 
   return (
-    <Stack>
+    <Stack spacing={2}>
       <TextSection text={t`waiting-for-question`} />
       <Box>
-        <Button onClick={() => handler()}>{t`get-question`}</Button>
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={() => handler()}
+        >{t`get-question`}</Button>
       </Box>
     </Stack>
   )
