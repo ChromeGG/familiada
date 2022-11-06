@@ -56,7 +56,9 @@ builder.subscriptionFields((t) => ({
     args: {
       gameId: t.arg.string(),
     },
+    // ! NEXT: test which one is triggered after first resolve and how I can pass the args
     subscribe: async (root, { gameId }, ctx) => {
+      console.log('subscribe')
       return pipe(
         Repeater.merge([
           await getGameStatus(gameId),
@@ -65,6 +67,7 @@ builder.subscriptionFields((t) => ({
       )
     },
     resolve: async (_root, { gameId }) => {
+      console.log('resolve')
       return getGameStatus(gameId)
     },
   }),
@@ -118,9 +121,6 @@ builder.mutationFields((t) => {
         context.pubSub.publish('boardUpdate', String(gameId), {
           wtf: true,
         })
-        context.pubSub.publish('gameStateUpdated', String(gameId), {
-          wtf: true,
-        })
         return res
       },
     }),
@@ -132,10 +132,32 @@ builder.mutationFields((t) => {
       resolve: async (_, { answer }, context) => {
         const { gameId } = context.player.team
         const res = await answerQuestion(answer, context)
+
+        // 1. Scenario (1st player answered and there are still some answers):
+        //   a. immediately refresh subscription
+        // 2. Scenario (2nd player answered and there are still some answers):
+        //   a. refresh subscription with response
+        //   b. after 3 seconds: set next answering players and refresh subscription
+        // 3. Scenario (1st player answered and there are no more answers):
+        //   a. refresh subscription with response
+        //   b. after 3 seconds: set state for yielding next question and refresh subscription
+        // 4. Scenario (nobody answered from 3 rounds):
+        //   a. refresh subscription with response
+        //   b. after 3 seconds: push all answers,
+        //   c. set state for yielding next question and refresh subscription
+
+        // always immediately refresh subscription
+        // 3 different scenarios to trigger after 3s delay:
+        // 1. there are still some answers, so set next answering players
+        // 2. there are no more answers, so set state for yielding next question
+        // 3. there are no more answers:
+        //   a. if it's last round, then set state for finishing game
+        //   b. if it's not last round, then set state for yielding next question
+        // 4. nobody answered from 3 rounds => show all answers => do the same as in 3(ab)
+
+        // TODO boardUpdate should include GameStatus
+        // ! maybe we can push args here like {gameId, action}
         context.pubSub.publish('boardUpdate', String(gameId), {
-          wtf: true,
-        })
-        context.pubSub.publish('gameStateUpdated', String(gameId), {
           wtf: true,
         })
 

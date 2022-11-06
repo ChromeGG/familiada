@@ -24,6 +24,7 @@ export const ROUND_SUBSCRIPTION = gql`
           points
         }
       }
+      status
     }
   }
 `

@@ -11,41 +11,18 @@ import useTranslation from 'next-translate/useTranslation'
 import type { FC } from 'react'
 
 import { COLORS } from '../../configuration/theme'
-import type { Game } from '../../graphql/generated'
-import { TeamColor, useRoundSubscription } from '../../graphql/generated'
+import { TeamColor, Board } from '../../graphql/generated'
 
 import SideColumn from './SideColumn'
 
 interface Props {
-  gameId: Game['id']
+  board: Board
 }
 
-const Board: FC<Props> = ({ gameId }) => {
+const Board: FC<Props> = ({ board }) => {
   const { t } = useTranslation()
-  const { data, error } = useRoundSubscription({
-    variables: { gameId },
-  })
-  // console.log('data2', data)
-  // console.log('error2', error)
 
-  if (!data) {
-    return <div>loading</div>
-  }
-
-  if (!data.state) {
-    return (
-      <Paper
-        sx={{
-          bgcolor: 'black',
-          borderRadius: 4,
-          color: COLORS.BOARD.SUBTITLES,
-          height: '300px',
-        }}
-      />
-    )
-  }
-
-  const { answersNumber, discoveredAnswers, teams } = data.state.board
+  const { answersNumber, discoveredAnswers, teams } = board
   const answers = [...Array(answersNumber).keys()].map((i) => {
     const answer = discoveredAnswers.find((a) => a.order === i + 1)
 
@@ -55,6 +32,7 @@ const Board: FC<Props> = ({ gameId }) => {
     return { id: null, label: '........', order: i + 1, points: null }
   })
 
+  // TODO share ensure function
   const teamRed = teams.find(({ color }) => color === TeamColor.Red)!
   const teamBlue = teams.find(({ color }) => color === TeamColor.Blue)!
 
@@ -66,6 +44,7 @@ const Board: FC<Props> = ({ gameId }) => {
         bgcolor: 'black',
         borderRadius: 4,
         color: COLORS.BOARD.SUBTITLES,
+        minHeight: '20vh',
       }}
     >
       <Grid container>

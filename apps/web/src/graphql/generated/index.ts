@@ -164,6 +164,7 @@ export type Round = {
   __typename?: 'Round';
   board: Board;
   stage: Stage;
+  status: GameStatus;
 };
 
 export type Stage = {
@@ -175,7 +176,7 @@ export type Stage = {
 export type Subscription = {
   __typename?: 'Subscription';
   gameInfo: Game;
-  state?: Maybe<Round>;
+  state: Round;
 };
 
 
@@ -237,14 +238,14 @@ export type GameSubscriptionVariables = Exact<{
 }>;
 
 
-export type GameSubscription = { __typename?: 'Subscription', gameInfo: { __typename?: 'Game', id: string, status: GameStatus, teams: Array<{ __typename?: 'Team', id: string, color: string, players: Array<{ __typename?: 'Player', id: string, name: string }> }> } };
+export type GameSubscription = { __typename?: 'Subscription', gameInfo: { __typename?: 'Game', id: string, teams: Array<{ __typename?: 'Team', id: string, color: string, players: Array<{ __typename?: 'Player', id: string, name: string }> }> } };
 
 export type RoundSubscriptionVariables = Exact<{
   gameId: Scalars['ID'];
 }>;
 
 
-export type RoundSubscription = { __typename?: 'Subscription', state?: { __typename?: 'Round', stage: { __typename?: 'Stage', question: string, answeringPlayers: Array<{ __typename?: 'AnsweringPlayer', id: string, text?: string | null }> }, board: { __typename?: 'Board', answersNumber: number, discoveredAnswers: Array<{ __typename?: 'GameAnswer', id: string, label: string, order: number, points: number }>, teams: Array<{ __typename?: 'GameTeam', color: TeamColor, failures: number, points: number }> } } | null };
+export type RoundSubscription = { __typename?: 'Subscription', state: { __typename?: 'Round', status: GameStatus, stage: { __typename?: 'Stage', question: string, answeringPlayers: Array<{ __typename?: 'AnsweringPlayer', id: string, text?: string | null }> }, board: { __typename?: 'Board', answersNumber: number, discoveredAnswers: Array<{ __typename?: 'GameAnswer', id: string, label: string, order: number, points: number }>, teams: Array<{ __typename?: 'GameTeam', color: TeamColor, failures: number, points: number }> } } };
 
 
 export const CreateGameDocument = gql`
@@ -437,7 +438,6 @@ export const GameDocument = gql`
     subscription Game($gameId: String!) {
   gameInfo(gameId: $gameId) {
     id
-    status
     teams {
       id
       color
@@ -496,6 +496,7 @@ export const RoundDocument = gql`
         points
       }
     }
+    status
   }
 }
     `;

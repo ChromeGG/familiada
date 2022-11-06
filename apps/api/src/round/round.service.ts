@@ -60,17 +60,39 @@ const getBoard = ({ gameQuestions }: RoundData): Board => {
   }
 }
 
-export const getRoundInfo = async (
-  gameId: Game['id']
-): Promise<Round | null> => {
+export const getRoundInfo = async (gameId: Game['id']): Promise<Round> => {
   const data = await roundRepository.getDataForRound(gameId)
   if (!data.gameQuestions.length) {
-    return null
+    return {
+      status: data.status,
+      stage: {
+        question: '',
+        answeringPlayers: [],
+      },
+      board: {
+        discoveredAnswers: [],
+        answersNumber: 0,
+        teams: [
+          {
+            color: TeamColor.RED,
+            points: 0,
+            failures: 0,
+          },
+          {
+            color: TeamColor.BLUE,
+            points: 0,
+            failures: 0,
+          },
+        ],
+      },
+    }
   }
   const stage = getStage(data)
   const board = getBoard(data)
+  const status = data.status
   return {
     stage,
     board,
+    status,
   }
 }

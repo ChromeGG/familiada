@@ -115,6 +115,7 @@ type Question {
 type Round {
   board: Board!
   stage: Stage!
+  status: GameStatus!
 }
 
 type Stage {
@@ -124,7 +125,7 @@ type Stage {
 
 type Subscription {
   gameInfo(gameId: String!): Game!
-  state(gameId: ID!): Round
+  state(gameId: ID!): Round!
 }
 
 type Team {

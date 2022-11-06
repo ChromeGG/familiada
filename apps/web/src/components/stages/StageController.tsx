@@ -1,22 +1,18 @@
 import type { FC } from 'react'
 
-import type { Game } from '../../graphql/generated'
-import { GameStatus, useRoundSubscription } from '../../graphql/generated'
+import type { Stage } from '../../graphql/generated'
+import { GameStatus } from '../../graphql/generated'
 
 import LobbyStage from './LobbyStage'
 import WaitingForAnswersStage from './WaitingForAnswerStage/WaitingForAnswersStage'
 import WaitingForQuestionStage from './WaitingForQuestionStage'
 
 interface Props {
-  gameId: Game['id']
+  stage: Stage
   status: GameStatus
 }
 
-const StageController: FC<Props> = ({ status, gameId }) => {
-  const { data, error } = useRoundSubscription({
-    variables: { gameId },
-  })
-
+const StageController: FC<Props> = ({ status, stage }) => {
   if (status === GameStatus.Lobby) {
     return <LobbyStage />
   }
@@ -25,11 +21,8 @@ const StageController: FC<Props> = ({ status, gameId }) => {
     return <WaitingForQuestionStage />
   }
 
-  if (!data?.state?.stage) {
-    return null
-  }
-  const question = data.state.stage.question
-  const answeringPlayers = data.state.stage.answeringPlayers
+  const question = stage.question
+  const answeringPlayers = stage.answeringPlayers
   console.log('answeringPlayers', answeringPlayers)
 
   if (status === GameStatus.WaitingForAnswers) {

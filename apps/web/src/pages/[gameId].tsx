@@ -11,7 +11,11 @@ import JoinToGameForm from '../components/JoinToGameForm'
 
 import TeamsSection from '../components/TeamsSection'
 import StageController from '../components/stages/StageController'
-import { GameStatus, useGameSubscription } from '../graphql/generated'
+import {
+  GameStatus,
+  useGameSubscription,
+  useRoundSubscription,
+} from '../graphql/generated'
 import { globalGameState } from '../store/game'
 import { useMe } from '../store/me'
 
@@ -22,6 +26,9 @@ const GameId = () => {
   const gameId = query.gameId as string
 
   const { data, error } = useGameSubscription({
+    variables: { gameId },
+  })
+  const { data: roundData, error: roundError } = useRoundSubscription({
     variables: { gameId },
   })
 
@@ -43,14 +50,23 @@ const GameId = () => {
     )
   }
 
-  const { gameInfo } = data
+  if (!roundData) {
+    return (
+      <Container>
+        <NextSeo title={t`loading`} />
+        <h1>{t`loading`}</h1>
+      </Container>
+    )
+  }
 
-  const isGameInLobby = gameInfo.status === GameStatus.Lobby
+  const { state } = roundData
+
+  const isGameInLobby = state.status === GameStatus.Lobby
 
   return (
     <Container disableGutters sx={{ p: 0.5 }}>
       <NextSeo title={gameId} />
-      <Board gameId={gameInfo.id} />
+      <Board board={state.board} />
       <Box
         sx={{
           display: 'flex',
@@ -58,7 +74,7 @@ const GameId = () => {
           my: 4,
         }}
       >
-        <StageController gameId={gameInfo.id} status={gameInfo.status} />
+        <StageController stage={state.stage} status={state.status} />
       </Box>
       <Box
         sx={{

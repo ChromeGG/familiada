@@ -1,5 +1,5 @@
 import { integrationSetup } from '../../tests/helpers'
-import { Language, TeamColor } from '../generated/prisma'
+import { GameStatus, Language, TeamColor } from '../generated/prisma'
 
 import type { Round } from './round.schema'
 
@@ -10,12 +10,34 @@ const { Tester } = await integrationSetup()
 describe('round.service.ts', () => {
   describe(getRoundInfo.name, () => {
     describe('when game is not started', () => {
-      test('should return null if game has no round yet', async () => {
+      test('should return empty board state if game has no round yet', async () => {
         const { id } = await Tester.game.create()
 
         const round = await getRoundInfo(id)
 
-        expect(round).toBeNull()
+        expect(round).toEqual<Round>({
+          board: {
+            answersNumber: 0,
+            discoveredAnswers: [],
+            teams: [
+              {
+                color: TeamColor.RED,
+                failures: 0,
+                points: 0,
+              },
+              {
+                color: TeamColor.BLUE,
+                failures: 0,
+                points: 0,
+              },
+            ],
+          },
+          stage: {
+            answeringPlayers: [],
+            question: '',
+          },
+          status: GameStatus.LOBBY,
+        })
       })
     })
 
@@ -58,6 +80,7 @@ describe('round.service.ts', () => {
               },
             ],
           },
+          status: GameStatus.WAITING_FOR_ANSWERS,
         })
       })
 
@@ -120,6 +143,7 @@ describe('round.service.ts', () => {
               },
             ],
           },
+          status: GameStatus.WAITING_FOR_ANSWERS,
         })
       })
 
@@ -190,6 +214,7 @@ describe('round.service.ts', () => {
               },
             ],
           },
+          status: GameStatus.WAITING_FOR_ANSWERS,
         })
       })
     })

@@ -1,6 +1,8 @@
 import { pipe, Repeater } from '@graphql-yoga/node'
 
 import { builder } from '../builder'
+import { GameStatusGql } from '../game/game.schema'
+import type { GameStatus } from '../generated/prisma'
 
 import type { Board } from './contract/Board.object'
 import { BoardGql } from './contract/Board.object'
@@ -13,6 +15,7 @@ import { roundArgsValidation } from './round.validator'
 export interface Round {
   stage: Stage
   board: Board
+  status: GameStatus
 }
 
 const RoundGql = builder.objectRef<Round>('Round').implement({
@@ -43,13 +46,18 @@ const RoundGql = builder.objectRef<Round>('Round').implement({
         }
       },
     }),
+    status: t.field({
+      type: GameStatusGql,
+      resolve: async (root) => {
+        return root.status
+      },
+    }),
   }),
 })
 
 builder.subscriptionFields((t) => ({
   state: t.field({
     type: RoundGql,
-    nullable: true,
     args: {
       gameId: t.arg.id({ required: true }),
     },

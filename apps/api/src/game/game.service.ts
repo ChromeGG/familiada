@@ -172,7 +172,6 @@ const finishRound = async (
   })
 }
 
-// TODO Test this method with Promise.all
 // TODO refactor it and remove eslint-disable
 /* eslint-disable sonarjs/cognitive-complexity */
 export const answerQuestion = async (
