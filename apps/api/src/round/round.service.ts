@@ -2,9 +2,11 @@ import { getAnsweringPlayersRecords } from '../game/utils/getAnsweringPlayers.ut
 import type { Answer, Game, TeamColor } from '../generated/prisma'
 import { ensure } from '../utils/utils'
 
+import type { Board } from './contract/Board.object'
+import type { GameTeam } from './contract/GameTeam.object'
+import type { Stage } from './contract/Stage.object'
 import { roundRepository } from './round.repository'
-
-import type { Board, Stage, Round, AnsweringTeam } from './round.schema'
+import type { Round } from './round.schema'
 
 type RoundData = Awaited<ReturnType<typeof roundRepository.getDataForRound>>
 
@@ -41,7 +43,7 @@ const getBoard = ({ gameQuestions }: RoundData): Board => {
   const currentGameQuestionsAnswers = currentRound.gameQuestionsAnswers
 
   const aggregatedTeams = currentGameQuestionsAnswers.reduce<
-    Record<TeamColor, AnsweringTeam>
+    Record<TeamColor, GameTeam>
   >((acc, { answer, player, gameQuestionId }) => {
     const { team } = player
     const { color } = team
@@ -57,7 +59,7 @@ const getBoard = ({ gameQuestions }: RoundData): Board => {
     }
 
     return acc
-  }, {} as Record<TeamColor, AnsweringTeam>)
+  }, {} as Record<TeamColor, GameTeam>)
 
   const teams = Object.values(aggregatedTeams)
 

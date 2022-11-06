@@ -114,6 +114,10 @@ builder.mutationFields((t) => {
       resolve: async (_root, _args, context) => {
         const { gameId } = context.player.team
         const res = await yieldQuestion(gameId, context)
+        // TODO boardUpdate should include GameStatus
+        context.pubSub.publish('boardUpdate', String(gameId), {
+          wtf: true,
+        })
         context.pubSub.publish('gameStateUpdated', String(gameId), {
           wtf: true,
         })

@@ -14,7 +14,6 @@ type Alternative {
 }
 
 type Answer {
-  alternatives: [Alternative!]!
   id: ID!
   label: String!
   order: Int!
@@ -26,20 +25,14 @@ type AnsweringPlayer {
   text: String
 }
 
-type AnsweringTeam {
-  color: TeamColor!
-  failures: Int!
-  points: Int!
-}
-
 type BaseError implements Error {
   message: String!
 }
 
 type Board {
   answersNumber: Int!
-  discoveredAnswers: [Answer!]!
-  teams: [AnsweringTeam!]!
+  discoveredAnswers: [GameAnswer!]!
+  teams: [GameTeam!]!
 }
 
 input CreateGameInput {
@@ -58,6 +51,13 @@ type Game {
   teams: [Team!]!
 }
 
+type GameAnswer {
+  id: ID!
+  label: String!
+  order: Int!
+  points: Int!
+}
+
 type GameOptions {
   id: ID!
   language: Language!
@@ -69,6 +69,12 @@ enum GameStatus {
   LOBBY
   WAITING_FOR_ANSWERS
   WAITING_FOR_QUESTION
+}
+
+type GameTeam {
+  color: TeamColor!
+  failures: Int!
+  points: Int!
 }
 
 enum Language {

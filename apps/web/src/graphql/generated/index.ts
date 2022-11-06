@@ -29,7 +29,6 @@ export type Alternative = {
 
 export type Answer = {
   __typename?: 'Answer';
-  alternatives: Array<Alternative>;
   id: Scalars['ID'];
   label: Scalars['String'];
   order: Scalars['Int'];
@@ -42,13 +41,6 @@ export type AnsweringPlayer = {
   text?: Maybe<Scalars['String']>;
 };
 
-export type AnsweringTeam = {
-  __typename?: 'AnsweringTeam';
-  color: TeamColor;
-  failures: Scalars['Int'];
-  points: Scalars['Int'];
-};
-
 export type BaseError = Error & {
   __typename?: 'BaseError';
   message: Scalars['String'];
@@ -57,8 +49,8 @@ export type BaseError = Error & {
 export type Board = {
   __typename?: 'Board';
   answersNumber: Scalars['Int'];
-  discoveredAnswers: Array<Answer>;
-  teams: Array<AnsweringTeam>;
+  discoveredAnswers: Array<GameAnswer>;
+  teams: Array<GameTeam>;
 };
 
 export type CreateGameInput = {
@@ -78,6 +70,14 @@ export type Game = {
   teams: Array<Team>;
 };
 
+export type GameAnswer = {
+  __typename?: 'GameAnswer';
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  order: Scalars['Int'];
+  points: Scalars['Int'];
+};
+
 export type GameOptions = {
   __typename?: 'GameOptions';
   id: Scalars['ID'];
@@ -91,6 +91,13 @@ export enum GameStatus {
   WaitingForAnswers = 'WAITING_FOR_ANSWERS',
   WaitingForQuestion = 'WAITING_FOR_QUESTION'
 }
+
+export type GameTeam = {
+  __typename?: 'GameTeam';
+  color: TeamColor;
+  failures: Scalars['Int'];
+  points: Scalars['Int'];
+};
 
 export enum Language {
   En = 'EN',
@@ -237,7 +244,7 @@ export type RoundSubscriptionVariables = Exact<{
 }>;
 
 
-export type RoundSubscription = { __typename?: 'Subscription', state?: { __typename?: 'Round', stage: { __typename?: 'Stage', question: string, answeringPlayers: Array<{ __typename?: 'AnsweringPlayer', id: string, text?: string | null }> }, board: { __typename?: 'Board', answersNumber: number, discoveredAnswers: Array<{ __typename?: 'Answer', id: string, label: string, order: number, points: number }>, teams: Array<{ __typename?: 'AnsweringTeam', color: TeamColor, failures: number, points: number }> } } | null };
+export type RoundSubscription = { __typename?: 'Subscription', state?: { __typename?: 'Round', stage: { __typename?: 'Stage', question: string, answeringPlayers: Array<{ __typename?: 'AnsweringPlayer', id: string, text?: string | null }> }, board: { __typename?: 'Board', answersNumber: number, discoveredAnswers: Array<{ __typename?: 'GameAnswer', id: string, label: string, order: number, points: number }>, teams: Array<{ __typename?: 'GameTeam', color: TeamColor, failures: number, points: number }> } } | null };
 
 
 export const CreateGameDocument = gql`

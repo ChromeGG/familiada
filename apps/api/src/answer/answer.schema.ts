@@ -1,10 +1,9 @@
 import { builder } from '../builder'
 
-export const AnswerGql = builder.prismaObject('Answer', {
+export const GameAnswerGql = builder.prismaObject('Answer', {
   fields: (t) => ({
     id: t.exposeID('id'),
     points: t.exposeInt('points'),
-    // TODO: resolve it
     order: t.int({
       resolve: (root) => {
         // @ts-ignore: hax, order is always from the parent
@@ -12,7 +11,7 @@ export const AnswerGql = builder.prismaObject('Answer', {
       },
     }),
     label: t.exposeString('label'),
-    alternatives: t.relation('alternatives'),
+    // alternatives: t.relation('alternatives'),
   }),
 })
 

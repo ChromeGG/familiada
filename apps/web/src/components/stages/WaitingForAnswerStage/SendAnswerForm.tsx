@@ -12,7 +12,7 @@ import { useSendAnswerForm } from '../../../validators/answerQuestion.validator'
 const SendAnswerForm: FC = () => {
   const { t } = useTranslation()
   const answerQuestionForm = useSendAnswerForm()
-  const [sendAnswerMutation] = useSendAnswerMutation()
+  const [sendAnswerMutation, { loading }] = useSendAnswerMutation()
   const answerQuestionHandler: SubmitHandler<SendAnswerSchema> = async ({
     answer,
   }) => {
@@ -30,9 +30,14 @@ const SendAnswerForm: FC = () => {
       <TextFieldElement
         control={answerQuestionForm.control}
         name="answer"
+        disabled={loading}
         label={t`answer`}
       />
-      <Button type="submit" sx={{ p: 2 }}>{t`submit`}</Button>
+      <Button
+        type="submit"
+        disabled={loading}
+        sx={{ ml: 1, p: 2 }}
+      >{t`submit`}</Button>
     </FormContainer>
   )
 }

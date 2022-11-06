@@ -55,7 +55,7 @@ const GameId = () => {
         sx={{
           display: 'flex',
           justifyContent: 'space-around',
-          m: 4,
+          my: 4,
         }}
       >
         <StageController gameId={gameInfo.id} status={gameInfo.status} />
@@ -64,7 +64,6 @@ const GameId = () => {
         sx={{
           display: 'flex',
           justifyContent: 'space-around',
-          m: 4,
         }}
       >
         <TeamsSection />

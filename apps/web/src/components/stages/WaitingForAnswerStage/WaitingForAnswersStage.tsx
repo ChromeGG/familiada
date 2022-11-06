@@ -62,14 +62,9 @@ const WaitingForAnswersStage: FC<Props> = ({ question, answeringPlayers }) => {
     <Stack sx={{ minWidth: 300 }} spacing={2}>
       <Question content={question} />
       <Box>
-        {isMeAnswering ? (
-          <SendAnswerForm />
-        ) : (
-          <Grid2>
-            <AnswersSection players={selectedPlayers} />
-          </Grid2>
-        )}
+        <AnswersSection players={selectedPlayers} />
       </Box>
+      {isMeAnswering && <SendAnswerForm />}
     </Stack>
   )
 }
