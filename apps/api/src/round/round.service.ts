@@ -1,14 +1,18 @@
 import { getAnsweringPlayersRecords } from '../game/utils/getAnsweringPlayers.util'
-import type { Answer, Game, TeamColor } from '../generated/prisma'
+import type { Answer, Game } from '../generated/prisma'
+import { TeamColor } from '../generated/prisma'
 import { ensure } from '../utils/utils'
 
 import type { Board } from './contract/Board.object'
-import type { GameTeam } from './contract/GameTeam.object'
 import type { Stage } from './contract/Stage.object'
 import { roundRepository } from './round.repository'
 import type { Round } from './round.schema'
+import { countFailures } from './utils/countFailures.utils'
+import { countScore } from './utils/countScore.util'
 
-type RoundData = Awaited<ReturnType<typeof roundRepository.getDataForRound>>
+export type RoundData = Awaited<
+  ReturnType<typeof roundRepository.getDataForRound>
+>
 
 const getStage = ({ gameQuestions }: RoundData): Stage => {
   const currentRound = ensure(gameQuestions.at(-1))
@@ -40,28 +44,14 @@ const getBoard = ({ gameQuestions }: RoundData): Board => {
       return { ...answer, order }
     })
   const answersNumber = currentRound.question.answers.length
-  const currentGameQuestionsAnswers = currentRound.gameQuestionsAnswers
 
-  const aggregatedTeams = currentGameQuestionsAnswers.reduce<
-    Record<TeamColor, GameTeam>
-  >((acc, { answer, player, gameQuestionId }) => {
-    const { team } = player
-    const { color } = team
+  const { redScore, blueScore } = countScore(gameQuestions)
+  const { redFailures, blueFailures } = countFailures(gameQuestions)
 
-    if (!acc[color]) {
-      acc[color] = { color: team.color, failures: 0, points: 0 }
-    } else {
-      if (gameQuestionId === currentRound.id) {
-        acc[color].failures += answer ? 0 : 1
-      }
-
-      acc[color].points += answer?.points || 0
-    }
-
-    return acc
-  }, {} as Record<TeamColor, GameTeam>)
-
-  const teams = Object.values(aggregatedTeams)
+  const teams = [
+    { color: TeamColor.RED, points: redScore, failures: redFailures },
+    { color: TeamColor.BLUE, points: blueScore, failures: blueFailures },
+  ]
 
   return {
     discoveredAnswers,
