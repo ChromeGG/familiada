@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close'
 import {
   Typography,
   Grid,
@@ -6,14 +7,16 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  Box,
 } from '@mui/material'
+import Grid2 from '@mui/material/Unstable_Grid2'
 import useTranslation from 'next-translate/useTranslation'
 import type { FC } from 'react'
 
 import { COLORS } from '../../configuration/theme'
 import { TeamColor, Board } from '../../graphql/generated'
 
-import SideColumn from './SideColumn'
+import BoardTypography from './BoardTypography'
 
 interface Props {
   board: Board
@@ -29,7 +32,7 @@ const Board: FC<Props> = ({ board }) => {
     if (answer) {
       return answer
     }
-    return { id: null, label: '........', order: i + 1, points: null }
+    return { id: null, label: '..........', order: i + 1, points: null }
   })
 
   // TODO share ensure function
@@ -44,60 +47,91 @@ const Board: FC<Props> = ({ board }) => {
         bgcolor: 'black',
         borderRadius: 4,
         color: COLORS.BOARD.SUBTITLES,
-        minHeight: '20vh',
+        minHeight: 300,
       }}
     >
-      <Grid container>
-        <Grid container item>
-          <Grid item xs={1}>
-            <SideColumn failures={teamRed.failures} score={teamRed.points} />
-          </Grid>
-          <Grid item xs={10}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          height: 300,
+        }}
+      >
+        <Grid2 container>
+          <Grid2
+            xs={1}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="100%"
+          >
+            {!!teamRed.failures && <CloseIcon fontSize="large" />}
+          </Grid2>
+          <Grid xs>
             <List dense>
               {answers.map((answer) => {
                 return (
                   <ListItem
                     key={answer.order}
                     secondaryAction={
-                      <Typography
-                        fontFamily={`"Press Start 2P"`}
-                        fontWeight="bold"
-                      >
+                      <BoardTypography fontWeight="bold">
                         {answer.points || '-'}
-                      </Typography>
+                      </BoardTypography>
                     }
                   >
                     <ListItemIcon sx={{ minWidth: 26 }}>
-                      <Typography
-                        color="greenyellow"
-                        fontFamily={`"Press Start 2P"`}
-                      >
+                      <BoardTypography color={COLORS.BOARD.SUBTITLES}>
                         {answer.order}
-                      </Typography>
+                      </BoardTypography>
                     </ListItemIcon>
                     <ListItemText>
-                      <Typography fontFamily={`"Press Start 2P"`}>
-                        {answer.label}
-                      </Typography>
+                      <BoardTypography>{answer.label}</BoardTypography>
                     </ListItemText>
                   </ListItem>
                 )
               })}
             </List>
-            <Typography
-              pr={2}
-              fontFamily={`"Press Start 2P"`}
-              textAlign="right"
-              textTransform="uppercase"
-            >
+          </Grid>
+          <Grid2
+            xs={1}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            {!!teamBlue.failures && <CloseIcon fontSize="large" />}
+          </Grid2>
+        </Grid2>
+        <Grid2
+          container
+          columnGap={2}
+          sx={{
+            mt: 'auto',
+          }}
+        >
+          <Grid2
+            xs={1}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <BoardTypography>{teamRed.points}</BoardTypography>
+          </Grid2>
+          <Grid xs>
+            <BoardTypography textAlign={'right'}>
               {t`sum`} {sum}
-            </Typography>
+            </BoardTypography>
           </Grid>
-          <Grid item xs={1}>
-            <SideColumn failures={teamBlue.failures} score={teamBlue.points} />
-          </Grid>
-        </Grid>
-      </Grid>
+          <Grid2
+            xs={1}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <BoardTypography>{teamBlue.points}</BoardTypography>
+          </Grid2>
+        </Grid2>
+      </Box>
     </Paper>
   )
 }
