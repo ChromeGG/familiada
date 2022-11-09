@@ -1,4 +1,4 @@
-import { pipe, Repeater } from '@graphql-yoga/node'
+import { pipe, Repeater } from 'graphql-yoga'
 
 import { builder } from '../builder'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
@@ -56,9 +56,7 @@ builder.subscriptionFields((t) => ({
     args: {
       gameId: t.arg.string(),
     },
-    // ! NEXT: test which one is triggered after first resolve and how I can pass the args
     subscribe: async (root, { gameId }, ctx) => {
-      console.log('subscribe')
       return pipe(
         Repeater.merge([
           await getGameStatus(gameId),
@@ -67,7 +65,6 @@ builder.subscriptionFields((t) => ({
       )
     },
     resolve: async (_root, { gameId }) => {
-      console.log('resolve')
       return getGameStatus(gameId)
     },
   }),

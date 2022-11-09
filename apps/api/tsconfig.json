@@ -4,7 +4,8 @@
     "outDir": "dist",
     "rootDir": ".",
     "lib": ["esnext"],
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "skipLibCheck": true
   },
   "include": ["src", "jest.config.js", "tests"]
 }

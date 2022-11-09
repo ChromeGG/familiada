@@ -1,4 +1,4 @@
-import { pipe, Repeater } from '@graphql-yoga/node'
+import { pipe, Repeater } from 'graphql-yoga'
 
 import { builder } from '../builder'
 import { GameStatusGql } from '../game/game.schema'
@@ -59,7 +59,7 @@ builder.subscriptionFields((t) => ({
   state: t.field({
     type: RoundGql,
     args: {
-      gameId: t.arg.id({ required: true }),
+      gameId: t.arg.id(),
     },
     validate: {
       schema: roundArgsValidation,

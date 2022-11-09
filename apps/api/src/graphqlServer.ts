@@ -1,11 +1,10 @@
 import { useGraphQlJit } from '@envelop/graphql-jit'
-import type { PubSub, YogaInitialContext } from '@graphql-yoga/node'
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
+import type { PubSub, YogaInitialContext } from 'graphql-yoga'
 import {
   createPubSub as createYogaPubSub,
-  createServer,
-} from '@graphql-yoga/node'
-
-import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
+  createYoga as createServer,
+} from 'graphql-yoga'
 
 import type { Game } from './generated/prisma'
 
@@ -27,7 +26,7 @@ export interface AuthenticatedContext extends Context {
 }
 
 type PubSubArgs = {
-  gameStateUpdated: [gameId: Game['id'], payload: { wtf: true }]
+  gameStateUpdated: [gameStateUpdated: Game['id'], payload: { wtf: true }]
   boardUpdate: [gameId: Game['id'], payload: { wtf: true }]
 }
 
@@ -79,13 +78,21 @@ export const createGraphqlServer = async (server: FastifyInstance) => {
     url: '/graphql',
     method: ['GET', 'POST', 'OPTIONS'],
     handler: async (req, reply) => {
-      const response = await graphQLServer.handleIncomingMessage(req, {
+      const response = await graphQLServer.handleNodeRequest(req, {
         req,
         reply,
       })
       response.headers.forEach((value, key) => {
         reply.header(key, value)
       })
+
+      // remap content type given by graphql-yoga to more common one
+      if (
+        reply.getHeader('content-type') ===
+        'application/graphql-response+json; charset=utf-8'
+      ) {
+        reply.header('content-type', 'application/json; charset=utf-8')
+      }
 
       reply.status(response.status)
       reply.send(response.body)
