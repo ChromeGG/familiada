@@ -5,32 +5,6 @@ const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 // TODO seed should be from file
 
 const seedDb = async () => {
-  const game = await prisma.game.create({
-    data: {
-      id: 'ASD',
-      gameOptions: {
-        create: {
-          language: Language.PL,
-          rounds: 3,
-        },
-      },
-    },
-  })
-
-  const redTeam = await prisma.team.create({
-    data: { gameId: game.id, color: 'RED' },
-  })
-  const blueTeam = await prisma.team.create({
-    data: { gameId: game.id, color: 'BLUE' },
-  })
-
-  await prisma.player.create({
-    data: { name: 'Red Player', teamId: redTeam.id },
-  })
-  await prisma.player.create({
-    data: { name: 'Blue Player', teamId: blueTeam.id },
-  })
-
   await prisma.question.create({
     data: {
       language: Language.PL,

@@ -3,6 +3,8 @@ import type { FC } from 'react'
 import type { Stage } from '../../graphql/generated'
 import { GameStatus } from '../../graphql/generated'
 
+import GameFinishedStage from './GameFinishedStage'
+
 import LobbyStage from './LobbyStage'
 import WaitingForAnswersStage from './WaitingForAnswerStage/WaitingForAnswersStage'
 import WaitingForQuestionStage from './WaitingForQuestionStage'
@@ -34,7 +36,12 @@ const StageController: FC<Props> = ({ status, stage }) => {
     )
   }
 
-  return <h1>{status}</h1>
+  if (status === GameStatus.Finished) {
+    return <GameFinishedStage />
+  }
+
+  // should be unreachable
+  return null
 }
 
 export default StageController

@@ -2,9 +2,11 @@
   "add": "Dodaj",
   "answer": "Odpowiedź",
   "app-name": "Familiada",
+  "back-to-main-page": "Wróć do strony głównej",
   "blue": "Niebieski",
   "create": "stwórz",
   "create-new-game": "Stwórz nową grę",
+  "game-has-been-finished": "Gra została zakończona! 🎉",
   "game-id": "ID gry",
   "get-question": "Weź pytanie",
   "join-to-game": "Dołącz do gry",
@@ -15,9 +17,9 @@
   "start-game": "Rozpocznij grę",
   "submit": "Wyślij",
   "sum": "Suma",
-  "waiting-for-question": "Oczekiwanie na pytanie ...",
   "team-blue": "Drużyna niebieska",
   "team-color": "Kolor drużyny",
   "team-red": "Drużyna czerwona",
-  "waiting-for-other-players": "Oczekiwanie na innych graczy ..."
+  "waiting-for-other-players": "Oczekiwanie na innych graczy ...",
+  "waiting-for-question": "Oczekiwanie na pytanie ..."
 }
