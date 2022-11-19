@@ -7,5 +7,5 @@
     "types": ["jest", "node"],
     "skipLibCheck": true
   },
-  "include": ["src", "jest.config.js", "tests"]
+  "include": ["src", "jest.config.js", "tests", "node_modules/@types"]
 }

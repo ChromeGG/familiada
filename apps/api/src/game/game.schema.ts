@@ -46,7 +46,6 @@ const GameGql = builder.prismaObject('Game', {
     id: t.exposeID('id'),
     status: t.expose('status', { type: GameStatusGql }),
     teams: t.relation('teams'),
-    // options: t.relation('gameOptions'),
   }),
 })
 
@@ -56,12 +55,10 @@ builder.subscriptionFields((t) => ({
     args: {
       gameId: t.arg.string(),
     },
-    subscribe: async (root, { gameId }, ctx) => {
+    subscribe: async (_root, _args, { pubSub }) => {
+      const initialState = undefined
       return pipe(
-        Repeater.merge([
-          await getGameStatus(gameId),
-          ctx.pubSub.subscribe('gameStateUpdated', String(gameId)),
-        ])
+        Repeater.merge([initialState, pubSub.subscribe('gameStateUpdated')])
       )
     },
     resolve: async (_root, { gameId }) => {
@@ -114,10 +111,7 @@ builder.mutationFields((t) => {
       resolve: async (_root, _args, context) => {
         const { gameId } = context.player.team
         const res = await yieldQuestion(gameId, context)
-        // TODO boardUpdate should include GameStatus
-        context.pubSub.publish('boardUpdate', String(gameId), {
-          wtf: true,
-        })
+        context.pubSub.publish('boardUpdate', { revealAll: false })
         return res
       },
     }),
@@ -127,38 +121,7 @@ builder.mutationFields((t) => {
         schema: answerQuestionValidation,
       },
       resolve: async (_, { answer }, context) => {
-        const { gameId } = context.player.team
-        const res = await answerQuestion(answer, context)
-
-        // 1. Scenario (1st player answered and there are still some answers):
-        //   a. immediately refresh subscription
-        // 2. Scenario (2nd player answered and there are still some answers):
-        //   a. refresh subscription with response
-        //   b. after 3 seconds: set next answering players and refresh subscription
-        // 3. Scenario (1st player answered and there are no more answers):
-        //   a. refresh subscription with response
-        //   b. after 3 seconds: set state for yielding next question and refresh subscription
-        // 4. Scenario (nobody answered from 3 rounds):
-        //   a. refresh subscription with response
-        //   b. after 3 seconds: push all answers,
-        //   c. set state for yielding next question and refresh subscription
-
-        // always immediately refresh subscription
-        // 3 different scenarios to trigger after 3s delay:
-        // 1. there are still some answers, so set next answering players
-        // 2. there are no more answers, so set state for yielding next question
-        // 3. there are no more answers:
-        //   a. if it's last round, then set state for finishing game
-        //   b. if it's not last round, then set state for yielding next question
-        // 4. nobody answered from 3 rounds => show all answers => do the same as in 3(ab)
-
-        // TODO boardUpdate should include GameStatus
-        // ! maybe we can push args here like {gameId, action}
-        context.pubSub.publish('boardUpdate', String(gameId), {
-          wtf: true,
-        })
-
-        return res
+        return answerQuestion(answer, context)
       },
     }),
   }

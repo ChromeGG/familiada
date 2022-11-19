@@ -6,9 +6,8 @@ import {
   createYoga as createServer,
 } from 'graphql-yoga'
 
-import type { Game } from './generated/prisma'
-
 import { prisma } from './prisma'
+import type { BoardOptions } from './round/round.service'
 
 import { schema } from './schema'
 import type { AuthenticatedPlayer } from './server'
@@ -26,8 +25,8 @@ export interface AuthenticatedContext extends Context {
 }
 
 type PubSubArgs = {
-  gameStateUpdated: [gameStateUpdated: Game['id'], payload: { wtf: true }]
-  boardUpdate: [gameId: Game['id'], payload: { wtf: true }]
+  gameStateUpdated: []
+  boardUpdate: [options: BoardOptions]
 }
 
 export const createPubSub = () => createYogaPubSub<PubSubArgs>()

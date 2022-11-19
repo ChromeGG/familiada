@@ -9,6 +9,7 @@ import { BoardGql } from './contract/Board.object'
 import type { Stage } from './contract/Stage.object'
 import { StageGql } from './contract/Stage.object'
 
+import type { BoardOptions } from './round.service'
 import { getRoundInfo } from './round.service'
 import { roundArgsValidation } from './round.validator'
 
@@ -64,16 +65,14 @@ builder.subscriptionFields((t) => ({
     validate: {
       schema: roundArgsValidation,
     },
-    subscribe: async (_root, { gameId }, ctx) => {
+    subscribe: async (_root, _args, { pubSub }) => {
+      const initialOptions: BoardOptions = { revealAll: false }
       return pipe(
-        Repeater.merge([
-          await getRoundInfo(String(gameId)),
-          ctx.pubSub.subscribe('boardUpdate', String(gameId)),
-        ])
+        Repeater.merge([initialOptions, pubSub.subscribe('boardUpdate')])
       )
     },
-    resolve: async (_root, { gameId }) => {
-      return getRoundInfo(String(gameId))
+    resolve: async (subscriptionOptions, { gameId }) => {
+      return getRoundInfo(String(gameId), subscriptionOptions)
     },
   }),
 }))

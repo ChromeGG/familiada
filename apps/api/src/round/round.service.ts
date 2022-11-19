@@ -1,6 +1,7 @@
 import { getAnsweringPlayersRecords } from '../game/utils/getAnsweringPlayers.util'
 import type { Answer, Game } from '../generated/prisma'
 import { TeamColor } from '../generated/prisma'
+
 import { ensure } from '../utils/utils'
 
 import type { Board } from './contract/Board.object'
@@ -31,18 +32,30 @@ const getStage = ({ gameQuestions }: RoundData): Stage => {
   }
 }
 
-const getBoard = ({ gameQuestions }: RoundData): Board => {
+export interface BoardOptions {
+  revealAll?: boolean
+}
+
+const getBoard = (
+  { gameQuestions }: RoundData,
+  { revealAll }: BoardOptions = {}
+): Board => {
   const currentRound = ensure(gameQuestions.at(-1))
 
-  const discoveredAnswers = currentRound.gameQuestionsAnswers
-    .map(({ answer }) => answer)
-    .filter((answer): answer is Answer => !!answer)
-    .map((answer) => {
-      const order =
-        currentRound.question.answers.findIndex(({ id }) => answer.id === id) +
-        1
-      return { ...answer, order }
-    })
+  const discoveredAnswers = revealAll
+    ? currentRound.question.answers.map((answer, i) => {
+        return { ...answer, order: i + 1 }
+      })
+    : currentRound.gameQuestionsAnswers
+        .map(({ answer }) => answer)
+        .filter((answer): answer is Answer => !!answer)
+        .map((answer) => {
+          const order =
+            currentRound.question.answers.findIndex(
+              ({ id }) => answer.id === id
+            ) + 1
+          return { ...answer, order }
+        })
   const answersNumber = currentRound.question.answers.length
 
   const { redScore, blueScore } = countScore(gameQuestions)
@@ -60,7 +73,10 @@ const getBoard = ({ gameQuestions }: RoundData): Board => {
   }
 }
 
-export const getRoundInfo = async (gameId: Game['id']): Promise<Round> => {
+export const getRoundInfo = async (
+  gameId: Game['id'],
+  options: BoardOptions = {}
+): Promise<Round> => {
   const data = await roundRepository.getDataForRound(gameId)
   if (!data.gameQuestions.length) {
     return {
@@ -88,7 +104,7 @@ export const getRoundInfo = async (gameId: Game['id']): Promise<Round> => {
     }
   }
   const stage = getStage(data)
-  const board = getBoard(data)
+  const board = getBoard(data, options)
   const status = data.status
   return {
     stage,

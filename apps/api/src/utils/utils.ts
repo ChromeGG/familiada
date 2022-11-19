@@ -1,10 +1,14 @@
-export function ensure<T>(
+export const ensure = <T>(
   argument: T | undefined | null,
   message = 'This value was promised to be there.'
-): T {
+): T => {
   if (argument === undefined || argument === null) {
     throw new TypeError(message)
   }
 
   return argument
+}
+
+export const assertNever = (x: never): never => {
+  throw new Error('Unexpected object: ' + x)
 }

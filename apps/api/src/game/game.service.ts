@@ -7,9 +7,10 @@ import { GameStatus } from '../generated/prisma'
 import type { Context, AuthenticatedContext } from '../graphqlServer'
 import { playerRepository } from '../player/player.repository'
 import { getRandomQuestion } from '../question/question.service'
+import type { AuthenticatedPlayer } from '../server'
 import { teamRepository } from '../team/team.repository'
 import { setNextAnsweringPlayer } from '../team/team.service'
-import { ensure } from '../utils/utils'
+import { assertNever, ensure } from '../utils/utils'
 
 import { gameRepository } from './game.repository'
 import { checkAnswer } from './utils/checkAnswer.util'
@@ -87,7 +88,7 @@ export const joinToGame = async (
     await setNextAnsweringPlayer(player.id, teamId)
   }
 
-  pubSub.publish('gameStateUpdated', game.id, { wtf: true })
+  pubSub.publish('gameStateUpdated')
 
   return player
 }
@@ -111,7 +112,7 @@ export const startGame = async (gameId: Game['id'], { pubSub }: Context) => {
     gameId,
     GameStatus.WAITING_FOR_QUESTION
   )
-  pubSub.publish('gameStateUpdated', gameId, { wtf: true })
+  pubSub.publish('gameStateUpdated')
   return updatedGame
 }
 
@@ -150,14 +151,13 @@ export const yieldQuestion = async (
     currentQuestionId: question.id,
     currentRound: game.gameQuestions.length + 1,
   })
-  // pubSub.publish('gameStateUpdated', gameId, { wtf: true })
+
   return question
 }
 
 const finishRound = async (
   game: Awaited<ReturnType<typeof gameRepository.getGameForAnswerQuestion>>
 ) => {
-  const gameId = game.id
   const { redPlayerId, bluePlayerId } = obtainNextAnsweringPlayersIds(
     game.teams
   )
@@ -165,30 +165,35 @@ const finishRound = async (
   const isLastRound = game.gameOptions?.rounds === game.gameQuestions.length
 
   await gameRepository.setNextAnsweringPlayersInTeam({
-    gameId,
+    gameId: game.id,
     redPlayerId: redPlayerId,
     bluePlayerId: bluePlayerId,
     status: isLastRound ? GameStatus.FINISHED : GameStatus.WAITING_FOR_QUESTION,
   })
 }
 
-// TODO refactor it and remove eslint-disable
-/* eslint-disable sonarjs/cognitive-complexity */
-export const answerQuestion = async (
-  rawAnswerText: string,
-  { player, pubSub }: AuthenticatedContext
-) => {
-  /* eslint-enable sonarjs/cognitive-complexity */
-  const gameId = player.team.gameId
-  const game = await gameRepository.getGameForAnswerQuestion(gameId)
+enum AnswerQuestionResult {
+  LAST_6_WERE_INCORRECT = 'LAST_6_WERE_INCORRECT',
+  LAST_CORRECT_ANSWER = 'LAST_CORRECT_ANSWER',
+  FIRST_PLAYER_ANSWERED = 'FIRST_PLAYER_ANSWERED',
+  SECOND_PLAYER_ANSWERED = 'SECOND_PLAYER_ANSWERED',
+}
 
+// TODO Refactor it
+// TODO use transaction here
+/* eslint-disable sonarjs/cognitive-complexity */
+const processQuestion = async (
+  rawAnswerText: string,
+  player: AuthenticatedPlayer,
+  game: Awaited<ReturnType<typeof gameRepository.getGameForAnswerQuestion>>
+): Promise<AnswerQuestionResult> => {
   if (game.status !== GameStatus.WAITING_FOR_ANSWERS) {
     throw new GraphQLOperationalError(
-      'Game is not in waiting for answer status'
+      'Game is not in waiting for answers status'
     )
   }
 
-  const currentQuestion = game.gameQuestions[game.gameQuestions.length - 1]
+  const currentQuestion = ensure(game.gameQuestions.at(-1))
 
   const answeringPlayers = getAnsweringPlayersRecords(
     currentQuestion.gameQuestionsAnswers
@@ -202,7 +207,7 @@ export const answerQuestion = async (
     answeringPlayers.find(({ playerId }) => playerId === player.id)
   )
 
-  if (answeringRecord.text) {
+  if (answeringRecord.text !== null) {
     throw new GraphQLOperationalError('Player already answered')
   }
 
@@ -228,8 +233,6 @@ export const answerQuestion = async (
     isCorrect = true
   }
 
-  const priority = answeringRecord.priority + 1
-
   const isLastCorrectAnswer =
     isCorrect &&
     currentQuestion.gameQuestionsAnswers.reduce(
@@ -249,9 +252,7 @@ export const answerQuestion = async (
     ) >= 6
 
   if (isLast6AnswersIncorrect && isLastAnsweringPlayer) {
-    await finishRound(game)
-    // TODO publish all answers
-    return isCorrect
+    return AnswerQuestionResult.LAST_6_WERE_INCORRECT
   }
 
   if (isLastCorrectAnswer) {
@@ -266,30 +267,83 @@ export const answerQuestion = async (
       )
     }
 
-    await finishRound(game)
-    return isCorrect
+    return AnswerQuestionResult.LAST_CORRECT_ANSWER
   }
 
   if (!isLastCorrectAnswer && !isLastAnsweringPlayer) {
-    return isCorrect
+    return AnswerQuestionResult.FIRST_PLAYER_ANSWERED
   }
 
-  // last case: !isLastCorrectAnswer && isLastAnsweringPlayer
+  return AnswerQuestionResult.SECOND_PLAYER_ANSWERED
+}
+
+export const answerQuestion = async (
+  rawAnswerText: string,
+  { player, pubSub }: AuthenticatedContext
+) => {
+  const { gameId } = player.team
+
+  const game = await gameRepository.getGameForAnswerQuestion(gameId)
+
+  const currentQuestion = ensure(game.gameQuestions.at(-1))
+  const answeringPlayers = getAnsweringPlayersRecords(
+    currentQuestion.gameQuestionsAnswers
+  )
+  const answeringRecord = ensure(
+    answeringPlayers.find(({ playerId }) => playerId === player.id)
+  )
+  const priority = answeringRecord.priority + 1
   const { redPlayerId, bluePlayerId } = obtainNextAnsweringPlayersIds(
     game.teams
   )
-  await gameRepository.setNextAnsweringPlayersInTeam({
-    gameId,
-    redPlayerId: redPlayerId,
-    bluePlayerId: bluePlayerId,
-    status: GameStatus.WAITING_FOR_ANSWERS,
-  })
 
-  await gameRepository.setNextAnsweringPlayersInRound({
-    bluePlayerId,
-    gameQuestionId: currentQuestion.id,
-    priority,
-    redPlayerId,
-  })
-  return isCorrect
+  const results = await processQuestion(rawAnswerText, player, game)
+
+  switch (results) {
+    case AnswerQuestionResult.FIRST_PLAYER_ANSWERED:
+      pubSub.publish('boardUpdate', { revealAll: false })
+      break
+    case AnswerQuestionResult.SECOND_PLAYER_ANSWERED:
+      pubSub.publish('boardUpdate', { revealAll: false })
+      setTimeout(async () => {
+        await gameRepository.setNextAnsweringPlayersInTeam({
+          gameId: game.id,
+          redPlayerId,
+          bluePlayerId,
+          status: GameStatus.WAITING_FOR_ANSWERS,
+        })
+
+        await gameRepository.setNextAnsweringPlayersInRound({
+          bluePlayerId,
+          gameQuestionId: currentQuestion.id,
+          priority,
+          redPlayerId,
+        })
+        pubSub.publish('boardUpdate', { revealAll: false })
+      }, 3000)
+      break
+    case AnswerQuestionResult.LAST_CORRECT_ANSWER:
+      pubSub.publish('boardUpdate', { revealAll: false })
+      setTimeout(async () => {
+        await finishRound(game)
+      }, 3000)
+      break
+    case AnswerQuestionResult.LAST_6_WERE_INCORRECT:
+      pubSub.publish('boardUpdate', { revealAll: false })
+      setTimeout(async () => {
+        pubSub.publish('boardUpdate', { revealAll: true })
+      }, 3000)
+
+      setTimeout(async () => {
+        await finishRound(game)
+        pubSub.publish('boardUpdate', { revealAll: false })
+      }, 7000)
+
+      break
+    default:
+      return assertNever(results)
+  }
+
+  return true
 }
+/* eslint-enable sonarjs/cognitive-complexity */
