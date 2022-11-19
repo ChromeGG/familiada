@@ -28,6 +28,7 @@ const SendAnswerForm: FC = () => {
       onSuccess={answerQuestionHandler}
     >
       <TextFieldElement
+        autoComplete="off"
         control={answerQuestionForm.control}
         name="answer"
         disabled={loading}

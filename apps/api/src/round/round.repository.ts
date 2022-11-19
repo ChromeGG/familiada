@@ -7,7 +7,7 @@ export const roundRepository = {
       where: { id: gameId },
       include: {
         gameQuestions: {
-          orderBy: { round: 'desc' },
+          orderBy: { round: 'asc' },
           include: {
             gameQuestionsAnswers: {
               orderBy: { priority: 'asc' },

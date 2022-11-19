@@ -112,7 +112,7 @@ export const startGame = async (gameId: Game['id'], { pubSub }: Context) => {
     gameId,
     GameStatus.WAITING_FOR_QUESTION
   )
-  pubSub.publish('gameStateUpdated')
+  pubSub.publish('boardUpdate', { revealAll: false })
   return updatedGame
 }
 
@@ -326,6 +326,7 @@ export const answerQuestion = async (
       pubSub.publish('boardUpdate', { revealAll: false })
       setTimeout(async () => {
         await finishRound(game)
+        pubSub.publish('boardUpdate', { revealAll: false })
       }, 3000)
       break
     case AnswerQuestionResult.LAST_6_WERE_INCORRECT:
@@ -336,7 +337,7 @@ export const answerQuestion = async (
 
       setTimeout(async () => {
         await finishRound(game)
-        pubSub.publish('boardUpdate', { revealAll: false })
+        pubSub.publish('boardUpdate', { revealAll: true })
       }, 7000)
 
       break

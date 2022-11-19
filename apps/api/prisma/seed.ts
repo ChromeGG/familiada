@@ -2,6 +2,8 @@ import { Language, PrismaClient } from '../src/generated/prisma'
 
 const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 
+// TODO seed should be from file
+
 const seedDb = async () => {
   const game = await prisma.game.create({
     data: {
