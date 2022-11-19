@@ -1,0 +1,21 @@
+{
+  "title": "Frequently asked questions",
+  "qna": [
+    {
+      "question": "How does the game work?",
+      "answer": "Players always answer in pairs. Points are immediately added to the team. In case the correct answer was not given for 3 rounds of answers, the game goes to the next question."
+    },
+    {
+      "question": "How are answers processed?",
+      "answer": "Spaces before and after the answer are removed, capital letters are changed to lowercase, accents are removed (ä, ö etc.). Example: 'Vögel ' => 'vogel'"
+    },
+    {
+      "question": "Where can I send my questions?",
+      "answer": "Currently the only way is to create <ghIssuesLink>issue</ghIssuesLink> on GitHub"
+    },
+    {
+      "question": "Where can I report a bug?",
+      "answer": "You can report bugs using <ghIssuesLink>issues</ghIssuesLink> on GitHub"
+    }
+  ]
+}

@@ -1,11 +1,13 @@
 {
   "cSpell.words": [
+    "bobr",
     "Codegen",
     "familiada",
     "fastify",
     "graphiql",
     "greenyellow",
     "mercurius",
+    "nextjs",
     "pino",
     "pnpm",
     "pothos",
@@ -14,7 +16,8 @@
     "schemaname",
     "tablename",
     "tozod",
-    "turborepo"
+    "turborepo",
+    "Vögel"
   ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"

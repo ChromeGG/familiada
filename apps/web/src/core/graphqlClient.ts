@@ -25,7 +25,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject>
 const authMiddleware = () =>
   new ApolloLink((operation, forward) => {
     const authToken = sessionStorage.getItem('token')
-    console.log('authToken', authToken)
+
     if (authToken) {
       operation.setContext({
         headers: {

@@ -1,0 +1,21 @@
+{
+  "title": "Najczęściej zadawane pytania",
+  "qna": [
+    {
+      "question": "Jak wygląda rozgrywka?",
+      "answer": "Gracze zawsze odpowiadają parami. Punkty są natychmiastowo dodawane do drużyny. W przypadku gdy poprawna odpowiedź nie padła od 3 rund odpowiedzi, gra przechodzi do następnego pytania."
+    },
+    {
+      "question": "Jak przetwarzane są odpowiedzi?",
+      "answer": "Z odpowiedzi są usuwane spacje przed i po, duże litery zamienia się na małe, usuwane są akcenty (ą, ę etc.). Przykład: 'Bóbr ' => 'bobr'"
+    },
+    {
+      "question": "Gdzie mogę wysłać swoje pytania?",
+      "answer": "Aktualnie jedynym sposobem jest stworzenie <ghIssuesLink>issue</ghIssuesLink> w serwisie GitHub"
+    },
+    {
+      "question": "Gdzie mogę zgłosić błąd?",
+      "answer": "Błędy możesz zgłaszać używając <ghIssuesLink>issues</ghIssuesLink> na GitHubie"
+    }
+  ]
+}

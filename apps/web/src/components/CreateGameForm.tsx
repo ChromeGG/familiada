@@ -27,11 +27,9 @@ const CreateGameForm = () => {
   const router = useRouter()
 
   const createGameHandler: SubmitHandler<CreateGameSchema> = async (input) => {
-    console.log('input', input)
-    const { data, errors } = await createGameMutation({
+    const { data } = await createGameMutation({
       variables: { input },
     })
-    console.log(data, errors)
     if (data?.createGame.__typename === 'AlreadyExistError') {
       createGameForm.setError('gameId', {
         message: t`error:game-with-given-id-already-exists`,

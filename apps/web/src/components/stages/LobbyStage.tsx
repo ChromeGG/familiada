@@ -3,12 +3,14 @@ import useTranslation from 'next-translate/useTranslation'
 
 import { useStartGameMutation } from '../../graphql/generated'
 import { useTeams } from '../../store/game'
+import { useMe } from '../../store/me'
 
 import TextSection from './TextSection'
 
 const LobbyStage = () => {
   const { t } = useTranslation()
   const { redTeam, blueTeam } = useTeams()
+  const me = useMe()
 
   const hasPlayersInBothTeams =
     !!redTeam.players.length && !!blueTeam.players.length
@@ -24,7 +26,7 @@ const LobbyStage = () => {
       <Box>
         <Button
           fullWidth
-          disabled={!hasPlayersInBothTeams}
+          disabled={!hasPlayersInBothTeams || !me}
           onClick={() => startGame()}
           variant="contained"
         >{t`start-game`}</Button>

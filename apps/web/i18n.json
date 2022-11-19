@@ -3,6 +3,7 @@
   "defaultLocale": "pl",
   "defaultNS": "common",
   "pages": {
-    "*": ["common", "error"]
+    "*": ["common", "error"],
+    "/faq": ["faq"]
   }
 }
