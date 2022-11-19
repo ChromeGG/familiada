@@ -2,6 +2,11 @@
   "name": "web",
   "version": "0.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChromeGG/familiada.git",
+    "directory": "apps/web"
+  },
   "type": "module",
   "scripts": {
     "build": "next build",
