@@ -17,7 +17,7 @@
     "migrate:deploy": "prisma migrate deploy",
     "migrate:dev": "prisma migrate dev && prisma generate && pnpm migrate:test:dev",
     "migrate:test:dev": "dotenv -e .env.test -- pnpm prisma db push",
-    "start": "node dist/index",
+    "start": "node --experimental-specifier-resolution=node --loader ts-node/esm dist/src",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "NODE_OPTIONS=--experimental-vm-modules pnpm jest --runInBand 2>&1",
