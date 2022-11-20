@@ -1,4 +1,5 @@
-import type { Game } from '../generated/prisma'
+import type { Game } from '@prisma/client'
+
 import { prisma } from '../prisma'
 
 export const roundRepository = {

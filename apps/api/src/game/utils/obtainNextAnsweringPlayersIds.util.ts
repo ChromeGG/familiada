@@ -1,5 +1,5 @@
-import type { Player, Team } from '../../generated/prisma'
-import { TeamColor } from '../../generated/prisma'
+import type { Player, Team } from '@prisma/client'
+import { TeamColor } from '@prisma/client'
 
 type InputTeam = Pick<Team, 'color' | 'nextAnsweringPlayerId'>
 type InputPlayer = Pick<Player, 'id'>

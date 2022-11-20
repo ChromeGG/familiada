@@ -1,4 +1,5 @@
-import type { Player, Team } from '../generated/prisma'
+import type { Player, Team } from '@prisma/client'
+
 import { prisma } from '../prisma'
 
 export const teamRepository = {

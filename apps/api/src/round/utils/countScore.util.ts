@@ -1,4 +1,5 @@
-import { TeamColor } from '../../generated/prisma'
+import { TeamColor } from '@prisma/client'
+
 import type { RoundData } from '../round.service'
 
 export const countScore = (

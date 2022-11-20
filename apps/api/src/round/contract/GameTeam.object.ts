@@ -1,5 +1,6 @@
+import type { TeamColor } from '@prisma/client'
+
 import { builder } from '../../builder'
-import type { TeamColor } from '../../generated/prisma'
 import { TeamColorGql } from '../../team/team.schema'
 
 export interface GameTeam {

@@ -1,4 +1,4 @@
-import type { Language, Question, Team } from '../generated/prisma'
+import type { Language, Question, Team } from '@prisma/client'
 
 import { gameRepository } from './question.repository'
 

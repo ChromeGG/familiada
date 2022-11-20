@@ -1,5 +1,6 @@
+import type { Answer } from '@prisma/client'
+
 import { builder } from '../../builder'
-import type { Answer } from '../../generated/prisma'
 
 export type GameAnswer = Pick<Answer, 'id' | 'label' | 'points'> & {
   order: number

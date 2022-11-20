@@ -1,4 +1,5 @@
-import type { Player } from '../../src/generated/prisma'
+import type { Player } from '@prisma/client'
+
 import type { Context } from '../../src/graphqlServer'
 
 export const getMiscellaneousTester = async ({ prisma }: Context) => {

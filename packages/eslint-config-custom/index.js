@@ -19,6 +19,7 @@ module.exports = {
   parserOptions: {
     sourceType: 'module',
   },
+  ignorePatterns: ['node_modules', 'dist', 'generated'],
   rules: {
     curly: 'error',
     '@typescript-eslint/consistent-type-imports': 'error',

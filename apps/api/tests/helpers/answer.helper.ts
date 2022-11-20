@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 
-import type { Answer } from '../../src/generated/prisma'
+import type { Answer } from '@prisma/client'
+
 import type { Context } from '../../src/graphqlServer'
 
 type AnswerInput = Omit<Answer, 'id'>

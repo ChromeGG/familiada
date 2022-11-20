@@ -1,4 +1,5 @@
-import { TeamColor } from '../../generated/prisma'
+import { TeamColor } from '@prisma/client'
+
 import { ensure } from '../../utils/utils'
 import type { RoundData } from '../round.service'
 

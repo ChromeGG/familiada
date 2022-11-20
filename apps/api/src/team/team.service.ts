@@ -1,4 +1,5 @@
-import type { Player, Team } from '../generated/prisma'
+import type { Player, Team } from '@prisma/client'
+
 import { teamRepository } from '../team/team.repository'
 
 export const setNextAnsweringPlayer = async (

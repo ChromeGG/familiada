@@ -1,6 +1,7 @@
+import type { Answer, Game } from '@prisma/client'
+import { TeamColor } from '@prisma/client'
+
 import { getAnsweringPlayersRecords } from '../game/utils/getAnsweringPlayers.util'
-import type { Answer, Game } from '../generated/prisma'
-import { TeamColor } from '../generated/prisma'
 
 import { ensure } from '../utils/utils'
 

@@ -1,4 +1,4 @@
-import type { Alternative, Answer } from '../../generated/prisma'
+import type { Alternative, Answer } from '@prisma/client'
 
 import { simplifyAnswer } from './simplifyAnswer.util'
 

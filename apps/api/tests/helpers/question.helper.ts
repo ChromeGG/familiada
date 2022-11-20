@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker'
 
-import type { Question } from '../../src/generated/prisma'
-import { Language } from '../../src/generated/prisma'
+import type { Question } from '@prisma/client'
+import { Language } from '@prisma/client'
+
 import type { Context } from '../../src/graphqlServer'
 
 type QuestionInput = Pick<Question, 'language' | 'text'>

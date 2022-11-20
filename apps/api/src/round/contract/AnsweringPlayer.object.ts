@@ -1,5 +1,6 @@
+import type { Player } from '@prisma/client'
+
 import { builder } from '../../builder'
-import type { Player } from '../../generated/prisma'
 
 export interface AnsweringPlayer {
   id: Player['id']

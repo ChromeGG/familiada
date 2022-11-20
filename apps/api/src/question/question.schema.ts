@@ -1,5 +1,6 @@
+import { GameStatus, Language } from '@prisma/client'
+
 import { builder } from '../builder'
-import { GameStatus, Language } from '../generated/prisma'
 
 export const LanguageGql = builder.enumType(Language, {
   name: 'Language',

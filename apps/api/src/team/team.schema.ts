@@ -1,5 +1,6 @@
+import { TeamColor } from '@prisma/client'
+
 import { builder } from '../builder'
-import { TeamColor } from '../generated/prisma'
 
 export const TeamColorGql = builder.enumType(TeamColor, {
   name: 'TeamColor',

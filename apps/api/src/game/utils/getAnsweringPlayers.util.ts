@@ -1,4 +1,4 @@
-import type { GameQuestionsAnswers } from '../../generated/prisma'
+import type { GameQuestionsAnswers } from '@prisma/client'
 
 export const getAnsweringPlayersRecords = (
   gameQuestionsAnswers: GameQuestionsAnswers[]

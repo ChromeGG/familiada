@@ -1,4 +1,4 @@
-import { TeamColor } from '../../generated/prisma'
+import { TeamColor } from '@prisma/client'
 
 import { obtainNextAnsweringPlayersIds } from './obtainNextAnsweringPlayersIds.util'
 

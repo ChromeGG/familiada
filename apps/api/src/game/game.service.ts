@@ -1,9 +1,9 @@
-import { Language } from '@prisma/client'
+import type { Game, Question, Team } from '@prisma/client'
+import { Language, GameStatus } from '@prisma/client'
 
 import { AlreadyExistError } from '../errors/AlreadyExistError'
 import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
-import type { Game, Question, Team } from '../generated/prisma'
-import { GameStatus } from '../generated/prisma'
+
 import type { Context, AuthenticatedContext } from '../graphqlServer'
 import { playerRepository } from '../player/player.repository'
 import { getRandomQuestion } from '../question/question.service'

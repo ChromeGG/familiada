@@ -1,4 +1,5 @@
-import { GameStatus, TeamColor } from '../../src/generated/prisma'
+import { GameStatus, TeamColor } from '@prisma/client'
+
 import { functionalSetup } from '../helpers'
 
 const { Tester } = await functionalSetup()

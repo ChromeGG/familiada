@@ -1,8 +1,8 @@
+import type { GameStatus } from '@prisma/client'
 import { pipe, Repeater } from 'graphql-yoga'
 
 import { builder } from '../builder'
 import { GameStatusGql } from '../game/game.schema'
-import type { GameStatus } from '../generated/prisma'
 
 import type { Board } from './contract/Board.object'
 import { BoardGql } from './contract/Board.object'

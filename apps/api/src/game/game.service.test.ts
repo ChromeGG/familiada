@@ -1,14 +1,17 @@
-import { integrationSetup } from '../../tests/helpers'
-import { AlreadyExistError } from '../errors/AlreadyExistError'
-import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
 import type {
   Answer,
   GameOptions,
   Player,
   Question,
   Team,
-} from '../generated/prisma'
-import { Language, GameStatus, TeamColor } from '../generated/prisma'
+} from '@prisma/client'
+
+import { Language, GameStatus, TeamColor } from '@prisma/client'
+
+import { integrationSetup } from '../../tests/helpers'
+import { AlreadyExistError } from '../errors/AlreadyExistError'
+import { GraphQLOperationalError } from '../errors/GraphQLOperationalError'
+
 import type { AuthenticatedPlayer } from '../server'
 
 import {

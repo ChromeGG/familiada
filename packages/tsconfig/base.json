@@ -13,7 +13,8 @@
     "preserveWatchOutput": true,
     "stripInternal": false,
     "sourceMap": true,
-    "strict": true
+    "strict": true,
+    "allowJs": true
   },
   "exclude": ["node_modules"]
 }

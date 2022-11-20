@@ -1,4 +1,6 @@
 import { faker } from '@faker-js/faker'
+import type { Game } from '@prisma/client'
+import { Language, TeamColor } from '@prisma/client'
 import type { PartialDeep } from 'type-fest'
 
 import type { JoinToGameInput } from '../../src/game/game.service'
@@ -9,8 +11,7 @@ import {
   startGame,
   yieldQuestion,
 } from '../../src/game/game.service'
-import type { Game } from '../../src/generated/prisma'
-import { Language, TeamColor } from '../../src/generated/prisma'
+
 import type { AuthenticatedContext, Context } from '../../src/graphqlServer'
 
 export const getGameTester = async (context: Context) => {

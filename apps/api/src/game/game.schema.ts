@@ -1,8 +1,8 @@
+import { GameStatus, Language } from '@prisma/client'
 import { pipe, Repeater } from 'graphql-yoga'
 
 import { builder } from '../builder'
 import { AlreadyExistError } from '../errors/AlreadyExistError'
-import { GameStatus, Language } from '../generated/prisma'
 import { PlayerGql } from '../player/player.schema'
 import { LanguageGql, QuestionGql } from '../question/question.schema'
 

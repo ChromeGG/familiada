@@ -1,9 +1,8 @@
 import helmet from '@fastify/helmet'
 
+import type { Game, Player, Team } from '@prisma/client'
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import fastify from 'fastify'
-
-import type { Game, Player, Team } from './generated/prisma'
 
 import { createGraphqlServer } from './graphqlServer'
 

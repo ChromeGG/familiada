@@ -1,4 +1,5 @@
-import type { Language, Question } from '../generated/prisma'
+import type { Language, Question } from '@prisma/client'
+
 import { prisma } from '../prisma'
 
 export const gameRepository = {

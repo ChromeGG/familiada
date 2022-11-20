@@ -18,6 +18,8 @@
     "migrate:dev": "prisma migrate dev && prisma generate && pnpm migrate:test:dev",
     "migrate:test:dev": "dotenv -e .env.test -- pnpm prisma db push",
     "start": "node dist/index",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "NODE_OPTIONS=--experimental-vm-modules pnpm jest --runInBand 2>&1",
     "type-check": "tsc --noEmit"
   },

@@ -1,5 +1,6 @@
+import { GameStatus, Language, TeamColor } from '@prisma/client'
+
 import { integrationSetup } from '../../tests/helpers'
-import { GameStatus, Language, TeamColor } from '../generated/prisma'
 
 import type { Round } from './round.schema'
 

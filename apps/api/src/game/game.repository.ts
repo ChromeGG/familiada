@@ -5,8 +5,9 @@ import type {
   GameQuestionsAnswers,
   Player,
   Question,
-} from '../generated/prisma'
-import { GameStatus, TeamColor } from '../generated/prisma'
+} from '@prisma/client'
+import { GameStatus, TeamColor } from '@prisma/client'
+
 import { prisma } from '../prisma'
 
 interface PrepareQuestions {
