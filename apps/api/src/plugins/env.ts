@@ -13,7 +13,8 @@ declare module 'fastify' {
 type ENV = z.infer<typeof envSchema>
 
 const envSchema = z.object({
-  PORT: z.number(),
+  HOST: z.string().default('127.0.0.1'),
+  PORT: z.number().default(3000),
   CORS_ORIGINS: z.string(),
 })
 

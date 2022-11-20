@@ -6,7 +6,7 @@ import { createServer } from './server'
 const server = await createServer()
 
 try {
-  await server.listen({ host: '127.0.0.1', port: server.config.PORT })
+  await server.listen({ host: server.config.HOST, port: server.config.PORT })
 } catch (err) {
   server.log.error(err)
   process.exit(1)

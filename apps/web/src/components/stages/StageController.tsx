@@ -25,7 +25,6 @@ const StageController: FC<Props> = ({ status, stage }) => {
 
   const question = stage.question
   const answeringPlayers = stage.answeringPlayers
-  console.log('answeringPlayers', answeringPlayers)
 
   if (status === GameStatus.WaitingForAnswers) {
     return (

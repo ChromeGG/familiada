@@ -18,7 +18,7 @@ interface QnA {
 const FAQ = () => {
   const { t } = useTranslation('faq')
   const questions = t<QnA[]>('qna', {}, { returnObjects: true, ns: 'faq' })
-  console.log(questions)
+
   return (
     <Container>
       <Typography
