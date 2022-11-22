@@ -25,7 +25,7 @@
     "start:api": "pnpm --filter api run start",
     "start:web": "pnpm --filter web run start",
     "migrate": "pnpm --filter api run migrate:dev",
-    "prepare": "husky install",
+    "prepare": "pnpm husky install",
     "type-check": "turbo run type-check"
   },
   "dependencies": {},
