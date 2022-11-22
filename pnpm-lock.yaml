@@ -143,7 +143,7 @@ importers:
       recoil: 0.7.6
       tsconfig: workspace:*
       typescript: 4.8.3
-      urlcat: 2.0.4
+      urlcat: 3.0.0
       zod: 3.19.1
     dependencies:
       '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
@@ -176,7 +176,7 @@ importers:
       react-hook-form: 7.37.0_react@18.2.0
       react-hook-form-mui: 5.7.2_6oj66xmt26sqay4mrvkpqkxa5y
       recoil: 0.7.6_biqbaboplfbrettd7655fr4n2y
-      urlcat: 2.0.4
+      urlcat: 3.0.0
       zod: 3.19.1
     devDependencies:
       '@graphql-codegen/add': 3.2.1_graphql@16.6.0
@@ -7576,6 +7576,13 @@ packages:
     resolution: {integrity: sha512-pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==}
     engines: {node: '>=6.0.0'}
 
+  /qs/6.11.0:
+    resolution: {integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==}
+    engines: {node: '>=0.6'}
+    dependencies:
+      side-channel: 1.0.4
+    dev: false
+
   /queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -8665,8 +8672,10 @@ packages:
     dependencies:
       punycode: 2.1.1
 
-  /urlcat/2.0.4:
-    resolution: {integrity: sha512-12c4Vi40DHVdZ/8mOLjZjp0asCzM6hi8Gj116fpImRP1FN4gBMCtMi9XhLNOmre/FEQYNqHbZmX8iyYAtIcy8Q==}
+  /urlcat/3.0.0:
+    resolution: {integrity: sha512-SSXrIzInzKdWjBfm5iOrPfO6E5Nt0aFs5PTZCauxJTjJE3qhfePAWz8tjGm7dnWMYIAdPGjio51aakunyZHMXQ==}
+    dependencies:
+      qs: 6.11.0
     dev: false
 
   /use-sync-external-store/1.2.0_react@18.2.0:
