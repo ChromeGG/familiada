@@ -133,7 +133,7 @@ importers:
       next-secure-headers: 2.2.0
       next-seo: 5.5.0
       next-translate: 1.6.0
-      next-transpile-modules: 9.0.0
+      next-transpile-modules: 10.0.0
       notistack: 2.0.5
       pino: 8.6.1
       react: 18.2.0
@@ -194,7 +194,7 @@ importers:
       eslint-config-next: 12.3.1_e24lxsqdqt3oba6r3j443w4ftm
       eslint-plugin-react: 7.31.8_eslint@8.25.0
       get-graphql-schema: 2.1.2
-      next-transpile-modules: 9.0.0
+      next-transpile-modules: 10.0.0
       tsconfig: link:../../packages/tsconfig
       typescript: 4.8.3
 
@@ -6961,11 +6961,10 @@ packages:
       react: 18.2.0
     dev: false
 
-  /next-transpile-modules/9.0.0:
-    resolution: {integrity: sha512-VCNFOazIAnXn1hvgYYSTYMnoWgKgwlYh4lm1pKbSfiB3kj5ZYLcKVhfh3jkPOg1cnd9DP+pte9yCUocdPEUBTQ==}
+  /next-transpile-modules/10.0.0:
+    resolution: {integrity: sha512-FyeJ++Lm2Fq31gbThiRCrJlYpIY9QaI7A3TjuhQLzOix8ChQrvn5ny4MhfIthS5cy6+uK1AhDRvxVdW17y3Xdw==}
     dependencies:
       enhanced-resolve: 5.10.0
-      escalade: 3.1.1
     dev: true
 
   /next/12.3.1_qugu52izettqdqqm5qcjcltcia:
