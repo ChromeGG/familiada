@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@envelop/core": "2.6.0",
-    "@envelop/graphql-jit": "4.6.0",
+    "@envelop/graphql-jit": "5.0.4",
     "@fastify/env": "4.1.0",
     "@fastify/helmet": "10.0.1",
     "@pothos/core": "3.22.5",
