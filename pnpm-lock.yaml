@@ -18,7 +18,7 @@ importers:
 
   apps/api:
     specifiers:
-      '@envelop/core': 2.6.0
+      '@envelop/core': 3.0.4
       '@envelop/graphql-jit': 4.6.0
       '@faker-js/faker': 7.5.0
       '@fastify/env': 4.1.0
@@ -55,8 +55,8 @@ importers:
       zod: 3.19.1
       zod-to-json-schema: 3.18.1
     dependencies:
-      '@envelop/core': 2.6.0_graphql@16.6.0
-      '@envelop/graphql-jit': 4.6.0_4hr55tbjlvoppd2sokdhrbpreq
+      '@envelop/core': 3.0.4
+      '@envelop/graphql-jit': 4.6.0_a6sekiasy2tqr6d5gj7n2wtjli
       '@fastify/env': 4.1.0
       '@fastify/helmet': 10.0.1
       '@pothos/core': 3.22.5_graphql@16.6.0
@@ -1139,16 +1139,6 @@ packages:
     resolution: {integrity: sha512-AHPmaAx+RYfZz0eYu6Gviiagpmiyw98ySSlQvCUhVGDRtDFe4DBS0x1bSjdF3gqUDYOczB+yYvBTtEylYSdRhg==}
     dev: false
 
-  /@envelop/core/2.6.0_graphql@16.6.0:
-    resolution: {integrity: sha512-yTptKinJN//i6m1kXUbnLBl/FobzddI4ehURAMS08eRUOQwAuXqJU9r8VdTav8nIZLb4t6cuDWFb3n331LiwLw==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      '@envelop/types': 2.4.0_graphql@16.6.0
-      graphql: 16.6.0
-      tslib: 2.4.0
-    dev: false
-
   /@envelop/core/3.0.3:
     resolution: {integrity: sha512-GXIb7HhsSYerMJR/AhJ6nN9F+w17bYRdUfu7ZXTixJEjS/3SXXK29qvr42iLLEqrnum57nk6cDyA3DBZLnuJ9w==}
     dependencies:
@@ -1156,13 +1146,20 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@envelop/graphql-jit/4.6.0_4hr55tbjlvoppd2sokdhrbpreq:
+  /@envelop/core/3.0.4:
+    resolution: {integrity: sha512-AybIZxQsDlFQTWHy6YtX/MSQPVuw+eOFtTW90JsHn6EbmcQnD6N3edQfSiTGjggPRHLoC0+0cuYXp2Ly2r3vrQ==}
+    dependencies:
+      '@envelop/types': 3.0.1
+      tslib: 2.4.0
+    dev: false
+
+  /@envelop/graphql-jit/4.6.0_a6sekiasy2tqr6d5gj7n2wtjli:
     resolution: {integrity: sha512-6RM+uSfKN7i9rlEcaAvraF/GsFNB4JoCuEUDEdMjOxJVoADvg1MsmzgGPoIAlpZZIQ//A8Pp+A+qWkJW4Wn4PA==}
     peerDependencies:
       '@envelop/core': ^2.6.0
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
-      '@envelop/core': 2.6.0_graphql@16.6.0
+      '@envelop/core': 3.0.4
       graphql: 16.6.0
       graphql-jit: 0.7.4_graphql@16.6.0
       lru-cache: 6.0.0
@@ -1181,17 +1178,14 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@envelop/types/2.4.0_graphql@16.6.0:
-    resolution: {integrity: sha512-pjxS98cDQBS84X29VcwzH3aJ/KiLCGwyMxuj7/5FkdiaCXAD1JEvKEj9LARWlFYj1bY43uII4+UptFebrhiIaw==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+  /@envelop/types/3.0.0:
+    resolution: {integrity: sha512-ohcZE+XNvgNqURdCA5RLN0yW3nbvi4Pkq8TA6RpG16PKakl3yDgzXBLit1SR6+9By0/XCBfto/9r48ZH25kmvw==}
     dependencies:
-      graphql: 16.6.0
       tslib: 2.4.0
     dev: false
 
-  /@envelop/types/3.0.0:
-    resolution: {integrity: sha512-ohcZE+XNvgNqURdCA5RLN0yW3nbvi4Pkq8TA6RpG16PKakl3yDgzXBLit1SR6+9By0/XCBfto/9r48ZH25kmvw==}
+  /@envelop/types/3.0.1:
+    resolution: {integrity: sha512-Ok62K1K+rlS+wQw77k8Pis8+1/h7+/9Wk5Fgcc2U6M5haEWsLFAHcHsk8rYlnJdEUl2Y3yJcCSOYbt1dyTaU5w==}
     dependencies:
       tslib: 2.4.0
     dev: false
