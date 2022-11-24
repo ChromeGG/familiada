@@ -19,7 +19,7 @@ importers:
   apps/api:
     specifiers:
       '@envelop/core': 2.6.0
-      '@envelop/graphql-jit': 4.6.0
+      '@envelop/graphql-jit': 5.0.4
       '@faker-js/faker': 7.5.0
       '@fastify/env': 4.1.0
       '@fastify/helmet': 10.0.1
@@ -56,7 +56,7 @@ importers:
       zod-to-json-schema: 3.18.1
     dependencies:
       '@envelop/core': 2.6.0_graphql@16.6.0
-      '@envelop/graphql-jit': 4.6.0_4hr55tbjlvoppd2sokdhrbpreq
+      '@envelop/graphql-jit': 5.0.4_4hr55tbjlvoppd2sokdhrbpreq
       '@fastify/env': 4.1.0
       '@fastify/helmet': 10.0.1
       '@pothos/core': 3.22.5_graphql@16.6.0
@@ -1156,10 +1156,10 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@envelop/graphql-jit/4.6.0_4hr55tbjlvoppd2sokdhrbpreq:
-    resolution: {integrity: sha512-6RM+uSfKN7i9rlEcaAvraF/GsFNB4JoCuEUDEdMjOxJVoADvg1MsmzgGPoIAlpZZIQ//A8Pp+A+qWkJW4Wn4PA==}
+  /@envelop/graphql-jit/5.0.4_4hr55tbjlvoppd2sokdhrbpreq:
+    resolution: {integrity: sha512-gharYCai8YzebaHm+kL9dIr3VytUOLGFEdoB9DhZnEnRumnB9WzFB431WPqKtbuegaF9Hhz926O1qsrBggFz/A==}
     peerDependencies:
-      '@envelop/core': ^2.6.0
+      '@envelop/core': ^3.0.4
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       '@envelop/core': 2.6.0_graphql@16.6.0
