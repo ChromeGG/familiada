@@ -115,7 +115,7 @@ importers:
       '@mui/system': 5.10.8
       '@mui/x-data-grid': 5.17.6
       '@mui/x-date-pickers': 5.0.4
-      '@react-hookz/web': 15.1.0
+      '@react-hookz/web': 20.0.1
       '@sentry/nextjs': 7.14.2
       '@types/apollo-upload-client': 17.0.1
       '@types/node': 18.7.18
@@ -159,7 +159,7 @@ importers:
       '@mui/system': 5.10.8_h33l6npc22g7vcra72cibfsrvm
       '@mui/x-data-grid': 5.17.6_osxcty6uua6tpd2pecy625tjxq
       '@mui/x-date-pickers': 5.0.4_yav2f3w5t4hpavni7kp5sfxq3q
-      '@react-hookz/web': 15.1.0_biqbaboplfbrettd7655fr4n2y
+      '@react-hookz/web': 20.0.1_biqbaboplfbrettd7655fr4n2y
       '@sentry/nextjs': 7.14.2_next@12.3.1+react@18.2.0
       apollo-upload-client: 17.0.0_vyimhitoszmgfhxzjgw5jdtad4
       date-fns: 2.29.3
@@ -2709,8 +2709,8 @@ packages:
     resolution: {integrity: sha512-lGZR5l3YRjzeIOHtJhiq96vQKrsq+9lsCyv+0fROMQeSNWtLLzX3R+psHNi6nsoP3XEhspiZ92nsiPmdNo8ztQ==}
     dev: false
 
-  /@react-hookz/web/15.1.0_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-AsmqeZDg22JnpQS1hGIjLbue4LPmcsgyoPzgmKt6WDeqIUWFL20cgowiGBMFNLvL5Cc9XdusVY720S+CpLyT4Q==}
+  /@react-hookz/web/20.0.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-Khb2ytw9qknGAklFSTXEOTvS2cEAZ0uLgMvh2i4agWPneCvP5Et1FKffwxD0THU8R96+Ut9NDrGrQhg9lxJteQ==}
     peerDependencies:
       js-cookie: ^3.0.1
       react: ^16.8 || ^17 || ^18
