@@ -22,7 +22,7 @@
 
 FROM node:18.6.0-bullseye-slim
 
-COPY scratch.js .
+COPY /apps/api/scratch.js .
 EXPOSE 8083
 
 CMD [ "node", "scratch.js" ]
