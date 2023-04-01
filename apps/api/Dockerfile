@@ -1,5 +1,5 @@
 #FROM node:18.6.0-bullseye-slim as builder
-#ARG PNPM_VERSION=7.13.4
+#ARG PNPM_VERSION=8.1.0
 #RUN npm --global install pnpm@${PNPM_VERSION}
 #ENV PRISMA_SKIP_POSTINSTALL_GENERATE=1
 #
@@ -20,9 +20,9 @@
 ## CMD [ "pnpm", "run", "start:api" ]
 
 
-FROM node:18.6.0-bullseye-slim
+# FROM node:18.6.0-bullseye-slim
 
-COPY /apps/api/scratch.js .
-EXPOSE 8083
+# COPY /apps/api/scratch.js .
+# EXPOSE 8083
 
-CMD [ "node", "scratch.js" ]
+# CMD [ "node", "scratch.js" ]
