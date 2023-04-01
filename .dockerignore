@@ -1,0 +1,100 @@
+# flyctl launch added from .gitignore
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+#builds
+**/**/dist
+
+# dependencies
+**/node_modules
+**/.pnp
+**/.pnp.js
+
+# testing
+**/coverage
+
+# next.js
+**/.next
+**/out
+**/build
+
+# misc
+**/.DS_Store
+**/*.pem
+
+# debug
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/.pnpm-debug.log*
+
+# local env files
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+# idea
+.idea
+
+# flyctl launch added from .husky/_/.gitignore
+.husky/_/**/*
+
+# flyctl launch added from .idea/.gitignore
+# Default ignored files
+.idea/shelf
+.idea/workspace.xml
+# Editor-based HTTP Client requests
+.idea/httpRequests
+# Datasource local storage ignored files
+.idea/dataSources
+.idea/dataSources.local.xml
+
+# flyctl launch added from apps/api/.gitignore
+apps/api/**/src/generated
+
+# flyctl launch added from out/full/.gitignore
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+#builds
+out/full/**/**/dist
+
+# dependencies
+out/full/**/node_modules
+out/full/**/.pnp
+out/full/**/.pnp.js
+
+# testing
+out/full/**/coverage
+
+# next.js
+out/full/**/.next
+out/full/**/out
+out/full/**/build
+
+# misc
+out/full/**/.DS_Store
+out/full/**/*.pem
+
+# debug
+out/full/**/npm-debug.log*
+out/full/**/yarn-debug.log*
+out/full/**/yarn-error.log*
+out/full/**/.pnpm-debug.log*
+
+# local env files
+out/full/**/.env
+out/full/**/.env.local
+out/full/**/.env.development.local
+out/full/**/.env.test.local
+out/full/**/.env.production.local
+
+# turbo
+out/full/**/.turbo
+
+# idea
+out/full/.idea
+
+# flyctl launch added from out/full/apps/api/.gitignore
+out/full/apps/api/**/src/generated
+fly.toml
