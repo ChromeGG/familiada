@@ -25,11 +25,11 @@ export async function createHttpServer(
 
   server.register(shutdownPlugin)
   server.register(statusPlugin)
-  server.register(helmet, {
-    // TODO enable it on production (GraphiQL 1.0 bug )
-    contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false,
-  })
+  // server.register(helmet, {
+  //   // TODO enable it on production (GraphiQL 1.0 bug )
+  //   contentSecurityPolicy: false,
+  //   crossOriginEmbedderPolicy: false,
+  // })
 
   return server
 }

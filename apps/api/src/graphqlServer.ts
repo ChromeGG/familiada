@@ -64,11 +64,11 @@ export const createGraphqlServer = async (server: FastifyInstance) => {
         player,
       }
     },
-    cors: {
-      origin: server.config.CORS_ORIGINS.split(','),
-      credentials: true,
-      methods: ['POST', 'GET', 'OPTIONS'],
-    },
+    // cors: {
+    //   origin: server.config.CORS_ORIGINS.split(','),
+    //   credentials: true,
+    //   methods: ['POST', 'GET', 'OPTIONS'],
+    // },
     graphiql: true, // FIXME Check it on production mode
     plugins: [useGraphQlJit()],
   })
