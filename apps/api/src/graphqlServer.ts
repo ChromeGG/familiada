@@ -11,6 +11,7 @@ import type { BoardOptions } from './round/round.service'
 
 import { schema } from './schema'
 import type { AuthenticatedPlayer } from './server'
+import { isProduction } from './utils/utils'
 
 export interface Context extends YogaInitialContext {
   prisma: typeof prisma
@@ -64,8 +65,8 @@ export const createGraphqlServer = async (server: FastifyInstance) => {
         player,
       }
     },
-    cors: false,
-    graphiql: true, // FIXME Check it on production mode
+    cors: false, // CORS are handled by fastify
+    graphiql: isProduction,
     plugins: [useGraphQlJit()],
   })
 
