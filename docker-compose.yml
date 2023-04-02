@@ -35,6 +35,15 @@ services:
       - postgres
     ports:
       - '0.0.0.0:3000:3000'
+  web:
+    build: 
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    restart: always
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+    ports:
+      - '0.0.0.0:8080:8080'
 
 volumes:
   postgres:
