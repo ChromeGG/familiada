@@ -9,9 +9,9 @@ const nextConfig = {
   swcMinify: true,
   reactStrictMode: true,
   poweredByHeader: false,
-  async headers() {
-    return [{ source: '/(.*)', headers: createSecureHeaders() }]
-  },
+  // async headers() {
+  //   return [{ source: '/(.*)', headers: createSecureHeaders() }]
+  // },
 }
 
 export default withTM([])(nextTranslate(nextConfig))
