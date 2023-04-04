@@ -1,3 +1,4 @@
+import cors from '@fastify/cors'
 import helmet from '@fastify/helmet'
 
 import type { Game, Player, Team } from '@prisma/client'
@@ -25,10 +26,10 @@ export async function createHttpServer(
 
   server.register(shutdownPlugin)
   server.register(statusPlugin)
-  server.register(helmet, {
-    // TODO enable it on production (GraphiQL 1.0 bug )
-    contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false,
+  server.register(helmet)
+  server.register(cors, {
+    origin: server.config.CORS_ORIGINS,
+    credentials: true,
   })
 
   return server

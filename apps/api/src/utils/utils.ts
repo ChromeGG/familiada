@@ -12,3 +12,5 @@ export const ensure = <T>(
 export const assertNever = (x: never): never => {
   throw new Error('Unexpected object: ' + x)
 }
+
+export const isProduction = process.env.NODE_ENV === 'production'

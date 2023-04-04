@@ -15,7 +15,7 @@ type ENV = z.infer<typeof envSchema>
 const envSchema = z.object({
   HOST: z.string().default('127.0.0.1'),
   PORT: z.number().default(3000),
-  CORS_ORIGINS: z.string(),
+  CORS_ORIGINS: z.string().transform((s) => s.split(',')),
 })
 
 export const envPlugin = envPluginFastify
