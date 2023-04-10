@@ -31,7 +31,7 @@ Each package/app is:
 
 ```bash
 # api
-http://127.0.0.1:3000/
+http://localhost:3000/
 
 # web
 http://localhost:8080/
