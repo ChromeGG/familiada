@@ -43,6 +43,7 @@
     "graphql": "16.6.0",
     "graphql-scalars": "1.21.3",
     "graphql-yoga": "3.8.0",
+    "memphis-dev": "1.0.1",
     "remove-accents": "0.4.4",
     "tozod": "3.0.0",
     "zod": "3.21.4",
