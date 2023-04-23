@@ -6,9 +6,9 @@ import {
   Typography,
 } from '@mui/material'
 import { Container } from '@mui/system'
+import Link from 'next/link'
 import TransText from 'next-translate/TransText'
 import useTranslation from 'next-translate/useTranslation'
-import Link from 'next/link'
 
 interface QnA {
   question: string

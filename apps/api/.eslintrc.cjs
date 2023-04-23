@@ -7,5 +7,14 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 2020,
   },
-  extends: ['custom'],
+  extends: ['custom', 'plugin:import/recommended'],
+  rules: {
+    'import/order': [
+      'error',
+      {
+        'newlines-between': 'always-and-inside-groups',
+        alphabetize: { order: 'asc' },
+      },
+    ],
+  },
 }
