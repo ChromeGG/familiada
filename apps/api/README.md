@@ -19,7 +19,6 @@ Useful commands:
 # (re)generate prisma client
 pnpm prisma generate
 
-# run test
 pnpm run test <pattern>
 ```
 
