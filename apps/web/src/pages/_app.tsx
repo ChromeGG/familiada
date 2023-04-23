@@ -2,8 +2,8 @@ import { ApolloProvider } from '@apollo/client'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { DefaultSeo } from 'next-seo'
 import type { AppProps } from 'next/app'
+import { DefaultSeo } from 'next-seo'
 import { SnackbarProvider } from 'notistack'
 import { RecoilRoot } from 'recoil'
 
@@ -50,7 +50,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           ],
         }}
         titleTemplate="%s | #appTitle"
-        defaultTitle="Familiada lol"
+        // defaultTitle="Familiada lol"
         description="Familiada online"
       />
       <CssBaseline />

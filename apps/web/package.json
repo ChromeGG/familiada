@@ -38,7 +38,7 @@
     "date-fns": "2.29.3",
     "graphql": "16.6.0",
     "mdi-material-ui": "7.5.0",
-    "next": "12.3.1",
+    "next": "13.3.1",
     "next-secure-headers": "2.2.0",
     "next-seo": "5.5.0",
     "next-translate": "1.6.0",
@@ -46,11 +46,10 @@
     "pino": "8.6.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "7.37.0",
-    "react-hook-form-mui": "5.7.2",
+    "react-hook-form": "7.43.9",
+    "react-hook-form-mui": "6.0.1",
     "recoil": "0.7.6",
-    "urlcat": "2.0.4",
-    "zod": "3.19.1"
+    "zod": "3.21.4"
   },
   "devDependencies": {
     "@graphql-codegen/add": "3.2.1",
@@ -65,10 +64,10 @@
     "@types/react": "18.0.21",
     "eslint": "8.25.0",
     "eslint-config-custom": "workspace:*",
-    "eslint-config-next": "12.3.1",
+    "eslint-config-next": "13.3.1",
     "eslint-plugin-react": "7.31.8",
+    "next-translate-plugin": "2.0.5",
     "get-graphql-schema": "2.1.2",
-    "next-transpile-modules": "9.0.0",
     "tsconfig": "workspace:*",
     "typescript": "4.8.3"
   }
