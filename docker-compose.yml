@@ -21,29 +21,6 @@ services:
       POSTGRES_PASSWORD: test
     ports:
       - '5433:5432'
-  api:
-    build: 
-      context: .
-      dockerfile: ./apps/api/Dockerfile
-    restart: always
-    environment:
-      CORS_ORIGINS: http://localhost:8080,http://localhost:3000
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/familiada
-      DISABLE_REQUEST_LOGGING: false
-      HOST: '0.0.0.0'
-    depends_on:
-      - postgres
-    ports:
-      - '0.0.0.0:3000:3000'
-  web:
-    build: 
-      context: .
-      dockerfile: ./apps/web/Dockerfile
-    restart: always
-    environment:
-      NEXT_PUBLIC_API_URL: http://localhost:3000
-    ports:
-      - '0.0.0.0:8080:8080'
 
 volumes:
   postgres:
