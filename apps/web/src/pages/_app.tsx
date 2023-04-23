@@ -50,7 +50,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           ],
         }}
         titleTemplate="%s | #appTitle"
-        // defaultTitle="Familiada lol"
+        defaultTitle="Familiada lol"
         description="Familiada online"
       />
       <CssBaseline />
