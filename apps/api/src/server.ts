@@ -28,6 +28,7 @@ export async function createHttpServer(
   server.register(shutdownPlugin)
   server.register(statusPlugin)
   server.register(helmet, {
+    // GraphiQL was not loading on localhost because of these settings
     contentSecurityPolicy: isProduction,
     crossOriginEmbedderPolicy: isProduction,
   })
