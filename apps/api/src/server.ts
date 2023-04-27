@@ -10,6 +10,7 @@ import { createGraphqlServer } from './graphqlServer'
 import { envPlugin, envOptions } from './plugins/env'
 import shutdownPlugin from './plugins/shutdown'
 import statusPlugin from './plugins/status'
+import { isProduction } from './utils/utils'
 
 export interface AuthenticatedPlayer extends Player {
   team: Team & {
@@ -26,7 +27,11 @@ export async function createHttpServer(
 
   server.register(shutdownPlugin)
   server.register(statusPlugin)
-  server.register(helmet)
+  server.register(helmet, {
+    // GraphiQL was not loading on localhost because of these settings
+    contentSecurityPolicy: isProduction,
+    crossOriginEmbedderPolicy: isProduction,
+  })
   server.register(cors, {
     origin: server.config.CORS_ORIGINS,
     credentials: true,

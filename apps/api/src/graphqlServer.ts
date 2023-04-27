@@ -66,7 +66,7 @@ export const createGraphqlServer = async (server: FastifyInstance) => {
       }
     },
     cors: false, // CORS are handled by fastify
-    graphiql: isProduction,
+    graphiql: !isProduction,
     plugins: [useGraphQlJit()],
   })
 
