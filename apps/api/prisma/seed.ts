@@ -251,7 +251,7 @@ const seedDb = async () => {
       answers: {
         createMany: {
           data: [
-            { label: 'Trener sportowy', points: 43 },
+            { label: 'Trener', points: 43 },
             { label: 'Nauczyciel', points: 35 },
             { label: 'Policjant', points: 28 },
             { label: 'Strażak', points: 12 },
@@ -261,6 +261,7 @@ const seedDb = async () => {
       },
     },
   })
+
   await prisma.question.create({
     data: {
       language: Language.EN,
