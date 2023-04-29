@@ -10,7 +10,7 @@ describe('Game', () => {
       const res = await Tester.sendGraphql({
         query: `#graphql
         mutation {
-          createGame(gameInput: {gameId: "Game1", playerName: "Player1", playerTeam: RED}) {
+          createGame(gameInput: {gameId: "Game1", playerName: "Player1", playerTeam: RED, language: PL}) {
             ... on MutationCreateGameSuccess {
               data {
                 id
@@ -42,7 +42,7 @@ describe('Game', () => {
       const response = await Tester.sendGraphql({
         query: `#graphql
         mutation {
-          createGame(gameInput: {gameId: "EXIST", playerName: "Player1", playerTeam: RED}) {
+          createGame(gameInput: {gameId: "EXIST", playerName: "Player1", playerTeam: RED, language: PL}) {
            ... on AlreadyExistError {
              message
            }

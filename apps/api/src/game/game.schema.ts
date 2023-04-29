@@ -79,12 +79,12 @@ builder.mutationFields((t) => {
         types: [AlreadyExistError],
       },
       resolve: async (_root, { gameInput }, context) => {
-        const { gameId, playerName, playerTeam } = gameInput
+        const { gameId, playerName, playerTeam, language } = gameInput
         return createGame({
           gameId,
           playerName,
           playerTeam,
-          language: Language.PL,
+          language,
           rounds: 3,
         })
       },

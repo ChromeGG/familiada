@@ -2,7 +2,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form-mui'
 import { z } from 'zod'
 
-import { TeamColor } from '../graphql/generated'
+import { Language, TeamColor } from '../graphql/generated'
+
+export type CreateGameSchema = z.infer<typeof schema>
+type CreateGameDefaults = Partial<CreateGameSchema>
 
 const schema = z.object({
   gameId: z
@@ -13,12 +16,12 @@ const schema = z.object({
     .regex(/[A-Za-z0-9_]/),
   playerName: z.string().min(3).max(30),
   playerTeam: z.nativeEnum(TeamColor),
+  language: z.nativeEnum(Language),
 })
 
-export type CreateGameSchema = z.infer<typeof schema>
-
-export const useCreateGameForm = () => {
+export const useCreateGameForm = (defaults?: CreateGameDefaults) => {
   return useForm<CreateGameSchema>({
+    defaultValues: defaults,
     // @ts-ignore: FIX IT !!!
     resolver: zodResolver(schema),
   })

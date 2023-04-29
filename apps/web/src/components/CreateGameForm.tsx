@@ -15,10 +15,21 @@ import {
   TextFieldElement,
 } from 'react-hook-form-mui'
 
-import { useCreateGameMutation } from '../graphql/generated'
+import { Language, useCreateGameMutation } from '../graphql/generated'
 import { isServerSide } from '../helpers/common'
 import type { CreateGameSchema } from '../validators/createGame.validator'
 import { useCreateGameForm } from '../validators/createGame.validator'
+
+const toLocale = (language?: string): Language => {
+  switch (language) {
+    case 'pl':
+      return Language.Pl
+    case 'en':
+      return Language.En
+    default:
+      return Language.Pl
+  }
+}
 
 const CreateGameForm = () => {
   const { t } = useTranslation()
@@ -47,7 +58,9 @@ const CreateGameForm = () => {
     }
   }
 
-  const createGameForm = useCreateGameForm()
+  const createGameForm = useCreateGameForm({
+    language: toLocale(router.locale),
+  })
 
   return (
     <Card>
@@ -65,15 +78,26 @@ const CreateGameForm = () => {
               name="playerName"
               label={t`player-name`}
             />
-            <RadioButtonGroup
-              control={createGameForm.control}
-              name="playerTeam"
-              label={t`team-color`}
-              options={[
-                { id: 'RED', label: t`red` },
-                { id: 'BLUE', label: t`blue` },
-              ]}
-            />
+            <Stack direction="row" gap={10}>
+              <RadioButtonGroup
+                control={createGameForm.control}
+                name="playerTeam"
+                label={t`team-color`}
+                options={[
+                  { id: 'RED', label: t`red` },
+                  { id: 'BLUE', label: t`blue` },
+                ]}
+              />
+              <RadioButtonGroup
+                control={createGameForm.control}
+                name="language"
+                label={t`language`}
+                options={[
+                  { id: 'PL', label: t`polish` },
+                  { id: 'EN', label: t`english` },
+                ]}
+              />
+            </Stack>
           </Stack>
         </CardContent>
         <CardActions>

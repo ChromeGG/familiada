@@ -1,6 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close'
 import {
-  Typography,
   Grid,
   Paper,
   List,
