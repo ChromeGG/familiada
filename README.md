@@ -23,11 +23,20 @@ Each package/app is:
 
 ### Develop locally
 
-1. Install all dependencies `pnpm i`
-2. Copy `.env.example` => `.env` in each `/apps`
-3. Run `docker-compose up`
-4. Run migrations `pnpm -w run migrate`
-5. Run `pnpm run dev`
+Run the following command to start the development environment:
+
+```bash
+$ dev
+```
+
+It will:
+
+1. Install all the required tools
+2. Install all dependencies `pnpm i`
+3. Copy `.env.example` => `.env` in each `/apps`
+4. Run `docker-compose up`
+5. Run migrations `pnpm -w run migrate`
+6. Run `pnpm run dev`
 
 ```bash
 # api

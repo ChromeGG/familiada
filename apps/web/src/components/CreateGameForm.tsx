@@ -91,7 +91,7 @@ const CreateGameForm = () => {
               <RadioButtonGroup
                 control={createGameForm.control}
                 name="language"
-                label={t`language`}
+                label={t`questions-language`}
                 options={[
                   { id: 'PL', label: t`polish` },
                   { id: 'EN', label: t`english` },
