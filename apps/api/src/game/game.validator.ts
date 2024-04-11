@@ -1,6 +1,5 @@
-import { TeamColor } from '@prisma/client'
+import { TeamColor, Language } from '@prisma/client'
 
-import { Language } from '../generated/prisma'
 import { z } from '../validation'
 import type { Z } from '../validation'
 

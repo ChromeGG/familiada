@@ -32,8 +32,9 @@ export async function createHttpServer(
     contentSecurityPolicy: isProduction,
     crossOriginEmbedderPolicy: isProduction,
   })
+  const corsOrigins = server.config.CORS_ORIGINS.split(',')
   server.register(cors, {
-    origin: server.config.CORS_ORIGINS,
+    origin: corsOrigins,
     credentials: true,
   })
 

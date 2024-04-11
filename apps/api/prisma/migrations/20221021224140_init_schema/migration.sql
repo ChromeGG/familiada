@@ -12,7 +12,6 @@ CREATE TABLE "Player" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "teamId" INTEGER NOT NULL,
-
     CONSTRAINT "Player_pkey" PRIMARY KEY ("id")
 );
 
@@ -22,7 +21,6 @@ CREATE TABLE "Team" (
     "color" "TeamColor" NOT NULL,
     "nextAnsweringPlayerId" INTEGER,
     "gameId" TEXT NOT NULL,
-
     CONSTRAINT "Team_pkey" PRIMARY KEY ("id")
 );
 
@@ -30,7 +28,6 @@ CREATE TABLE "Team" (
 CREATE TABLE "Game" (
     "id" TEXT NOT NULL,
     "status" "GameStatus" NOT NULL DEFAULT 'LOBBY',
-
     CONSTRAINT "Game_pkey" PRIMARY KEY ("id")
 );
 
@@ -39,7 +36,6 @@ CREATE TABLE "GameOptions" (
     "id" TEXT NOT NULL,
     "rounds" INTEGER NOT NULL,
     "language" "Language" NOT NULL,
-
     CONSTRAINT "GameOptions_pkey" PRIMARY KEY ("id")
 );
 
@@ -49,7 +45,6 @@ CREATE TABLE "GameQuestions" (
     "round" INTEGER NOT NULL,
     "questionId" INTEGER NOT NULL,
     "gameId" TEXT NOT NULL,
-
     CONSTRAINT "GameQuestions_pkey" PRIMARY KEY ("id")
 );
 
@@ -61,7 +56,6 @@ CREATE TABLE "GameQuestionsAnswers" (
     "priority" INTEGER NOT NULL,
     "text" TEXT,
     "answerId" INTEGER,
-
     CONSTRAINT "GameQuestionsAnswers_pkey" PRIMARY KEY ("id")
 );
 
@@ -70,7 +64,6 @@ CREATE TABLE "Question" (
     "id" SERIAL NOT NULL,
     "text" TEXT NOT NULL,
     "language" "Language" NOT NULL,
-
     CONSTRAINT "Question_pkey" PRIMARY KEY ("id")
 );
 
@@ -80,7 +73,6 @@ CREATE TABLE "Answer" (
     "label" TEXT NOT NULL,
     "points" INTEGER NOT NULL,
     "questionId" INTEGER NOT NULL,
-
     CONSTRAINT "Answer_pkey" PRIMARY KEY ("id")
 );
 
@@ -89,7 +81,6 @@ CREATE TABLE "Alternative" (
     "id" SERIAL NOT NULL,
     "text" TEXT NOT NULL,
     "answerId" INTEGER NOT NULL,
-
     CONSTRAINT "Alternative_pkey" PRIMARY KEY ("id")
 );
 
